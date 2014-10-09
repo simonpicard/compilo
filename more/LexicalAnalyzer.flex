@@ -1,4 +1,5 @@
 import java.util.regex.PatternSyntaxException;
+import java.util.HashMap;
 
 %%// Options of the scanner
 
@@ -10,6 +11,13 @@ import java.util.regex.PatternSyntaxException;
 %type Symbol
 %yylexthrow PatternSyntaxException
 
+
+%{
+    private static HashMap<Integer, Symbol> identifiersMap = new HashMap<Integer, Symbol>();
+    public static HashMap<Integer, Symbol> getIdentifiersMap() {
+        return identifiersMap;
+    }
+%}
 
 %eofval{
 	return new Symbol(LexicalUnit.END_OF_STREAM,yyline, yycolumn);
@@ -137,7 +145,13 @@ Real = (\+|-)?[1-9][0-9]*\.[0-9]+
 {If} {return new Symbol(LexicalUnit.IF, yyline, yycolumn, yytext());}
 {Else} {return new Symbol(LexicalUnit.ELSE, yyline, yycolumn, yytext());}
 {Elseif} {return new Symbol(LexicalUnit.ELSE_IF, yyline, yycolumn, yytext());}
-{Identifier} {return new Symbol(LexicalUnit.IDENTIFIER, yyline, yycolumn, yytext());}
+{Identifier} {
+    Symbol identifier = new Symbol(LexicalUnit.IDENTIFIER, yyline, yycolumn, yytext());
+    if(!identifiersMap.containsKey(identifier.hashCode())) {
+        identifiersMap.put(identifier.hashCode(), identifier);
+    }
+    return identifier;
+}
 {Integer} {return new Symbol(LexicalUnit.INTEGER, yyline, yycolumn, yytext());}
 {Real} {return new Symbol(LexicalUnit.REAL, yyline, yycolumn, yytext());}
 
