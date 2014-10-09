@@ -16,7 +16,9 @@ public class Main {
         Symbol symbol = null;
             do {
                 symbol = scanner.nextToken();
-                System.out.println(symbol);
+                if (symbol.getType() != LexicalUnit.END_OF_STREAM) {
+                    System.out.println(symbol);
+                }
             } while(symbol.getType() != LexicalUnit.END_OF_STREAM);
             
         }

@@ -18,4 +18,3 @@ function main()
 end
 
 main()
-return
