@@ -1,0 +1,64 @@
+token: a	lexical unit: IDENTIFIER
+token: ::	lexical unit: TYPE_DEFINITION
+token: Integer	lexical unit: INTEGER_TYPE
+token: b	lexical unit: IDENTIFIER
+token: ::	lexical unit: TYPE_DEFINITION
+token: Integer	lexical unit: INTEGER_TYPE
+token: c	lexical unit: IDENTIFIER
+token: ::	lexical unit: TYPE_DEFINITION
+token: Integer	lexical unit: INTEGER_TYPE
+token: function	lexical unit: FUNCTION
+token: main	lexical unit: IDENTIFIER
+token: (	lexical unit: LEFT_PARENTHESIS
+token: )	lexical unit: RIGHT_PARENTHESIS
+token: a	lexical unit: IDENTIFIER
+token: =	lexical unit: ASSIGNATION
+token: readint	lexical unit: READ_INTEGER
+token: (	lexical unit: LEFT_PARENTHESIS
+token: )	lexical unit: RIGHT_PARENTHESIS
+token: b	lexical unit: IDENTIFIER
+token: =	lexical unit: ASSIGNATION
+token: readint	lexical unit: READ_INTEGER
+token: (	lexical unit: LEFT_PARENTHESIS
+token: )	lexical unit: RIGHT_PARENTHESIS
+token: while	lexical unit: WHILE
+token: (	lexical unit: LEFT_PARENTHESIS
+token: b	lexical unit: IDENTIFIER
+token: )	lexical unit: RIGHT_PARENTHESIS
+token: c	lexical unit: IDENTIFIER
+token: =	lexical unit: ASSIGNATION
+token: b	lexical unit: IDENTIFIER
+token: ;	lexical unit: END_OF_INSTRUCTION
+token: while	lexical unit: WHILE
+token: (	lexical unit: LEFT_PARENTHESIS
+token: a	lexical unit: IDENTIFIER
+token: >=	lexical unit: GREATER_OR_EQUALS_THAN
+token: b	lexical unit: IDENTIFIER
+token: )	lexical unit: RIGHT_PARENTHESIS
+token: a	lexical unit: IDENTIFIER
+token: =	lexical unit: ASSIGNATION
+token: a	lexical unit: IDENTIFIER
+token: -	lexical unit: MINUS
+token: b	lexical unit: IDENTIFIER
+token: end	lexical unit: END
+token: b	lexical unit: IDENTIFIER
+token: =	lexical unit: ASSIGNATION
+token: a	lexical unit: IDENTIFIER
+token: ;	lexical unit: END_OF_INSTRUCTION
+token: a	lexical unit: IDENTIFIER
+token: =	lexical unit: ASSIGNATION
+token: c	lexical unit: IDENTIFIER
+token: end	lexical unit: END
+token: println	lexical unit: PRINTLN
+token: (	lexical unit: LEFT_PARENTHESIS
+token: a	lexical unit: IDENTIFIER
+token: )	lexical unit: RIGHT_PARENTHESIS
+token: end	lexical unit: END
+token: main	lexical unit: IDENTIFIER
+token: (	lexical unit: LEFT_PARENTHESIS
+token: )	lexical unit: RIGHT_PARENTHESIS
+Identifiers
+a	1
+b	2
+c	3
+main	7
