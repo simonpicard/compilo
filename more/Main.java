@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Main {
     public static void main (String[] args){
@@ -28,13 +30,13 @@ public class Main {
             System.out.println(e);
         }
         System.out.println("Identifiers");
-//         to do : trier les identifiers par ordre lexicographique
-        HashMap<Integer, Symbol> identifiersMap = scanner.getIdentifiersMap();
-        Set<Integer> keys = identifiersMap.keySet();
+
+        HashMap<Object, Integer> identifiersMap = scanner.getIdentifiersMap();
+        TreeSet<Object> keys = new TreeSet<Object>(identifiersMap.keySet());
         Iterator it = keys.iterator();
         while (it.hasNext()) {
-            Symbol symbol = identifiersMap.get(it.next());
-            System.out.println(symbol.getValue() + "  " + symbol.getLine());
+        	Object identifier = it.next();
+            System.out.println(identifier + "  " + identifiersMap.get(identifier));
         }
     }
 }

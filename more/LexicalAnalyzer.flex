@@ -13,8 +13,8 @@ import java.util.HashMap;
 
 
 %{
-    private static HashMap<Integer, Symbol> identifiersMap = new HashMap<Integer, Symbol>();
-    public static HashMap<Integer, Symbol> getIdentifiersMap() {
+    private static HashMap<Object, Integer> identifiersMap = new HashMap<Object, Integer>();
+    public static HashMap<Object, Integer> getIdentifiersMap() {
         return identifiersMap;
     }
 %}
@@ -147,8 +147,8 @@ Real = (\+|-)?[1-9][0-9]*\.[0-9]+
 {Elseif} {return new Symbol(LexicalUnit.ELSE_IF, yyline, yycolumn, yytext());}
 {Identifier} {
     Symbol identifier = new Symbol(LexicalUnit.IDENTIFIER, yyline, yycolumn, yytext());
-    if(!identifiersMap.containsKey(identifier.hashCode())) {
-        identifiersMap.put(identifier.hashCode(), identifier);
+    if(!identifiersMap.containsKey(identifier.getValue())) {
+        identifiersMap.put(identifier.getValue(), identifier.getLine());
     }
     return identifier;
 }
