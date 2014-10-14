@@ -81,8 +81,10 @@ If = if
 Else = else
 Elseif = elseif
 Identifier = ([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)*
-Integer = (\+|-)?[1-9][0-9]*
-Real = (\+|-)?[1-9][0-9]*\.[0-9]+
+Integer = (\+|-)?(([1-9][0-9]*) | 0)
+Real = {Integer}\.[0-9]+
+Space = " "
+Tab = \t
 
 
 
@@ -155,6 +157,8 @@ Real = (\+|-)?[1-9][0-9]*\.[0-9]+
 {Integer} {return new Symbol(LexicalUnit.INTEGER, yyline, yycolumn, yytext());}
 {Real} {return new Symbol(LexicalUnit.REAL, yyline, yycolumn, yytext());}
 
-
+{Space} {}
+{EndOfLine} {}
+{Tab} {}
 
 [^] {}
