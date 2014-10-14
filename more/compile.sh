@@ -1,3 +1,3 @@
 #!/bin/sh
-java -cp .:JFLex.jar JFlex.Main LexicalAnalyzer.flex
+java -cp .:JFlex.jar JFlex.Main LexicalAnalyzer.flex
 javac *.java
