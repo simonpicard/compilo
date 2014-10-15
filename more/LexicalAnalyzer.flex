@@ -99,17 +99,16 @@ Tab = \t
 {Tilde} {return new Symbol(LexicalUnit.BITWISE_NOT, yyline, yycolumn, yytext());}
 {Ampersand} {return new Symbol(LexicalUnit.BITWISE_AND, yyline, yycolumn, yytext());}
 {Pipe} {return new Symbol(LexicalUnit.BITWISE_OR, yyline, yycolumn, yytext());}
-
+{Dollar} {return new Symbol(LexicalUnit.BITWISE_XOR, yyline, yycolumn, yytext());}
 {DubbleGreater} {return new Symbol(LexicalUnit.ARITHMETIC_SHIFT_RIGHT, yyline, yycolumn, yytext());}
 {DubbleLower} {return new Symbol(LexicalUnit.ARITHMETIC_SHIFT_LEFT, yyline, yycolumn, yytext());}
 {DubbleEqual} {return new Symbol(LexicalUnit.EQUALITY, yyline, yycolumn, yytext());}
 {ExclamationEqual} {return new Symbol(LexicalUnit.INEQUALITY, yyline, yycolumn, yytext());}
 {Function} {return new Symbol(LexicalUnit.FUNCTION, yyline, yycolumn, yytext());}
 {Return} {return new Symbol(LexicalUnit.RETURN, yyline, yycolumn, yytext());}
-
 {QuestionMark} {return new Symbol(LexicalUnit.TERNARY_IF, yyline, yycolumn, yytext());}
 {ExclamationMark} {return new Symbol(LexicalUnit.NEGATION, yyline, yycolumn, yytext());}
-
+{Colon} {return new Symbol(LexicalUnit.TERNARY_ELSE, yyline, yycolumn, yytext());}
 {DubbleAmpersand} {return new Symbol(LexicalUnit.LAZY_AND, yyline, yycolumn, yytext());}
 {DubblePipe} {return new Symbol(LexicalUnit.LAZY_OR, yyline, yycolumn, yytext());}
 {While} {return new Symbol(LexicalUnit.WHILE, yyline, yycolumn, yytext());}
