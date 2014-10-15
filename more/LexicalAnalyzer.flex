@@ -137,8 +137,8 @@ Tab = \t
 {EqualsSign} {return new Symbol(LexicalUnit.ASSIGNATION, yyline, yycolumn, yytext());}
 {Asterisk} {return new Symbol(LexicalUnit.TIMES, yyline, yycolumn, yytext());}
 {Slash} {return new Symbol(LexicalUnit.DIVIDE, yyline, yycolumn, yytext());}
-
-
+{True} {return new Symbol(LexicalUnit.BOOLEAN, yyline, yycolumn, yytext());}
+{False} {return new Symbol(LexicalUnit.BOOLEAN, yyline, yycolumn, yytext());}
 {LowerSign} {return new Symbol(LexicalUnit.LESS_THAN, yyline, yycolumn, yytext());}
 {GreaterSign} {return new Symbol(LexicalUnit.GREATER_THAN, yyline, yycolumn, yytext());}
 {LowerOrEquals} {return new Symbol(LexicalUnit.LESS_OR_EQUALS_THAN, yyline, yycolumn, yytext());}
