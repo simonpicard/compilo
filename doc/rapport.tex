@@ -1,0 +1,65 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage[a4paper]{geometry}
+\geometry{hscale=0.75,vscale=0.60,centering}
+
+%opening
+\title{INFO-F-403 : Language theory and compiling \\ Rapport projet partie 1}
+\author{Simon Picard \\ Arnaud Rosette}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Expressions régulières}
+
+Afin de décrire les mots (tokens) acceptés par le langage Iulius, nous utilisons les expressions régulières étendues.
+
+Voici le tableau qui reprend l'ensemble des tokens du langage Iulius. Chaque ligne de celui-ci est composée du nom du token, le type dans l'enum LexicalUnit qui lui est associé et de l'expression régulière qui correspond à ce token.
+
+\begin{tabular}{|l|c|r|}
+  \hline
+  Nom & Type & Expression régulière \\
+  \hline
+  Comment & / & \begin{minipage}{2in} \begin{verbatim} #.*(\\r)?\\n \end{verbatim} \end{minipage} \\
+  Circumflex ( $\widehat{}$ ) & POWER & \begin{minipage}{2in} \begin{verbatim} \^ \end{verbatim} \end{minipage} \\
+  Percentage (\%) & REMAINDER & \begin{minipage}{2in} \begin{verbatim} % \end{verbatim} \end{minipage} \\
+  Tilde (\textasciitilde) & BITWISE\_NOT & \begin{minipage}{2in} \begin{verbatim} ~ \end{verbatim} \end{minipage} \\
+  Pipe (|) & BITWISE\_OR & \begin{minipage}{2in} \begin{verbatim} \| \end{verbatim} \end{minipage} \\
+  Dollar (\$) & BITWISE\_XOR & \begin{minipage}{2in} \begin{verbatim} \$ \end{verbatim} \end{minipage} \\
+  Dubble greater (>>) & ARITHMETIC\_SHIFT\_RIGHT & \begin{minipage}{2in} \begin{verbatim} >> \end{verbatim} \end{minipage} \\
+  Dubble lower (<<) & ARITHMETIC\_SHIFT\_LEFT & \begin{minipage}{2in} \begin{verbatim} << \end{verbatim} \end{minipage} \\
+  Dubble equal (==) & EQUALITY & \begin{minipage}{2in} \begin{verbatim} == \end{verbatim} \end{minipage} \\
+  Exclamation equal (!=) & INEQUALITY & \begin{minipage}{2in} \begin{verbatim} != \end{verbatim} \end{minipage} \\
+  Function & FUNCTION & \begin{minipage}{2in} \begin{verbatim} function \end{verbatim} \end{minipage} \\
+  Return & RETURN & \begin{minipage}{2in} \begin{verbatim} return \end{verbatim} \end{minipage} \\
+  Arrow right (->) & MAP\_TO & \begin{minipage}{2in} \begin{verbatim} -> \end{verbatim} \end{minipage} \\
+  Question mark (?) & TERNARY\_IF & \begin{minipage}{2in} \begin{verbatim} \? \end{verbatim} \end{minipage} \\
+  Exclamation mark (!) & NEGATION & \begin{minipage}{2in} \begin{verbatim} ! \end{verbatim} \end{minipage} \\
+  Colon (:) & TERNARY\_ELSE & \begin{minipage}{2in} \begin{verbatim} : \end{verbatim} \end{minipage} \\
+  Dubble ampersand (\&\&) & LAZY\_AND & \begin{minipage}{2in} \begin{verbatim} && \end{verbatim} \end{minipage} \\
+  Dubble pipe (||) & LAZY\_OR & \begin{minipage}{2in} \begin{verbatim} \|\| \end{verbatim} \end{minipage} \\
+  While & WHILE & \begin{minipage}{2in} \begin{verbatim} while \end{verbatim} \end{minipage} \\
+  For & FOR & \begin{minipage}{2in} \begin{verbatim} for \end{verbatim} \end{minipage} \\
+  Semicolon (;) & END\_OF\_INSTRUCTION & \begin{minipage}{2in} \begin{verbatim} ; \end{verbatim} \end{minipage} \\
+  Println & PRINTLN & \begin{minipage}{2in} \begin{verbatim} println \end{verbatim} \end{minipage} \\
+  Const & CONST & \begin{minipage}{2in} \begin{verbatim} const \end{verbatim} \end{minipage} \\
+  Let & LET & \begin{minipage}{2in} \begin{verbatim} let \end{verbatim} \end{minipage} \\
+  Dubble colon (::) & TYPE\_DEFINITION & \begin{minipage}{2in} \begin{verbatim} :: \end{verbatim} \end{minipage} \\
+  Boolean (type)  & BOOLEAN\_TYPE & \begin{minipage}{2in} \begin{verbatim} Bool \end{verbatim} \end{minipage} \\
+  Real (type) & REAL\_TYPE & \begin{minipage}{2in} \begin{verbatim} FloatingPoint \end{verbatim} \end{minipage} \\
+  Integer (type) & INTEGER\_TYPE & \begin{minipage}{2in} \begin{verbatim} Integer \end{verbatim} \end{minipage} \\
+  Integer (cast) & INTEGER\_CAST & \begin{minipage}{2in} \begin{verbatim} int \end{verbatim} \end{minipage} \\
+  Real (cast) & REAL\_CAST & \begin{minipage}{2in} \begin{verbatim} float \end{verbatim} \end{minipage} \\
+  Read integer & READ\_INTEGER & \begin{minipage}{2in} \begin{verbatim} readint \end{verbatim} \end{minipage} \\
+  Read real & READ\_REAL & \begin{minipage}{2in} \begin{verbatim} readfloat \end{verbatim} \end{minipage} \\
+  Boolean (cast) & BOOLEAN\_CAST & \begin{minipage}{2in} \begin{verbatim} bool \end{verbatim} \end{minipage} \\
+  \hline
+\end{tabular}
+
+
+
+\end{document}
