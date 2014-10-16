@@ -40,6 +40,7 @@ DubbleEqual = ==
 ExclamationEqual = \!=
 Function = function
 Return = return
+ArrowRight = ->
 QuestionMark = \?
 ExclamationMark = \!
 Colon = :
@@ -106,6 +107,7 @@ Tab = \t
 {ExclamationEqual} {return new Symbol(LexicalUnit.INEQUALITY, yyline, yycolumn, yytext());}
 {Function} {return new Symbol(LexicalUnit.FUNCTION, yyline, yycolumn, yytext());}
 {Return} {return new Symbol(LexicalUnit.RETURN, yyline, yycolumn, yytext());}
+{ArrowRight} {return new Symbol(LexicalUnit.MAP_TO, yyline, yycolumn, yytext());}
 {QuestionMark} {return new Symbol(LexicalUnit.TERNARY_IF, yyline, yycolumn, yytext());}
 {ExclamationMark} {return new Symbol(LexicalUnit.NEGATION, yyline, yycolumn, yytext());}
 {Colon} {return new Symbol(LexicalUnit.TERNARY_ELSE, yyline, yycolumn, yytext());}
