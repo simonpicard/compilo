@@ -18,7 +18,7 @@
 
 Afin de décrire les mots (tokens) acceptés par le langage Iulius, nous utilisons les expressions régulières étendues.
 
-Voici le tableau qui reprend l'ensemble des tokens du langage Iulius. Chaque ligne de celui-ci est composée du nom du token, le type dans l'enum LexicalUnit qui lui est associé et de l'expression régulière qui correspond à ce token.
+Voici le tableau qui reprend l'ensemble des tokens du langage Iulius. Chaque ligne de celui-ci est composée du nom du token, le type dans l'enum LexicalUnit qui lui est associé et de l'expression régulière qui correspond à ce token.\\
 
 \begin{tabular}{|l|c|r|}
   \hline
@@ -39,6 +39,14 @@ Voici le tableau qui reprend l'ensemble des tokens du langage Iulius. Chaque lig
   Arrow right (->) & MAP\_TO & \begin{minipage}{2in} \begin{verbatim} -> \end{verbatim} \end{minipage} \\
   Question mark (?) & TERNARY\_IF & \begin{minipage}{2in} \begin{verbatim} \? \end{verbatim} \end{minipage} \\
   Exclamation mark (!) & NEGATION & \begin{minipage}{2in} \begin{verbatim} ! \end{verbatim} \end{minipage} \\
+\hline
+\end{tabular}
+
+
+\begin{tabular}{|l|c|r|}
+  \hline
+  Nom & Type & Expression régulière \\
+  \hline
   Colon (:) & TERNARY\_ELSE & \begin{minipage}{2in} \begin{verbatim} : \end{verbatim} \end{minipage} \\
   Dubble ampersand (\&\&) & LAZY\_AND & \begin{minipage}{2in} \begin{verbatim} && \end{verbatim} \end{minipage} \\
   Dubble pipe (||) & LAZY\_OR & \begin{minipage}{2in} \begin{verbatim} \|\| \end{verbatim} \end{minipage} \\
@@ -67,17 +75,9 @@ Minus sign (-) & MINUS & \begin{minipage}{2in} \begin{verbatim} - \end{verbatim}
 Plus sign (+) & PLUS & \begin{minipage}{2in} \begin{verbatim} \+ \end{verbatim} \end{minipage} \\
 Equal sign (=) & ASSIGNATION & \begin{minipage}{2in} \begin{verbatim} = \end{verbatim} \end{minipage} \\
 Asterisk (*) & TIMES & \begin{minipage}{2in} \begin{verbatim} \* \end{verbatim} \end{minipage} \\
-Slash (/) & DIVIDE & \begin{minipage}{2in} \begin{verbatim} \/ \end{verbatim} \end{minipage} \\
+Slash (/) & DIVIDE & \begin{minipage}{2in} \begin{verbatim} / \end{verbatim} \end{minipage} \\
 True & BOOLEAN & \begin{minipage}{2in} \begin{verbatim} true \end{verbatim} \end{minipage} \\
 False & BOOLEAN & \begin{minipage}{2in} \begin{verbatim} false \end{verbatim} \end{minipage} \\
-\hline
-\end{tabular}
-
-
-\begin{tabular}{|l|c|r|}
-  \hline
-  Nom & Type & Expression régulière \\
-  \hline
 Lower sign (<) & LESS\_THAN & \begin{minipage}{2in} \begin{verbatim} < \end{verbatim} \end{minipage} \\
 Greater sign (>) & GREATER\_THAN & \begin{minipage}{2in} \begin{verbatim} > \end{verbatim} \end{minipage} \\
 Lower or equals (<=) & LESS\_OR\_EQUALS\_THAN & \begin{minipage}{2in} \begin{verbatim} <= \end{verbatim} \end{minipage} \\
@@ -85,12 +85,31 @@ Greater or equals (>=) & GREATER\_OR\_EQUALS\_THAN & \begin{minipage}{2in} \begi
 If & IF & \begin{minipage}{2in} \begin{verbatim} if \end{verbatim} \end{minipage} \\
 Else & ELSE & \begin{minipage}{2in} \begin{verbatim} else \end{verbatim} \end{minipage} \\
 Elseif & ELSE\_IF & \begin{minipage}{2in} \begin{verbatim} elseif \end{verbatim} \end{minipage} \\
-Identifier & IDENTIFIER & \begin{minipage}{2in} \begin{verbatim} ([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)* \end{verbatim} \end{minipage} \\
-Integer & INTEGER & \begin{minipage}{2in} \begin{verbatim} (\+|-)?(([1-9][0-9]*) | 0) \end{verbatim} \end{minipage} \\
-Real & REAL & \begin{minipage}{2in} \begin{verbatim} {Integer}\.[0-9]+ \end{verbatim} \end{minipage} \\
+Identifier & IDENTIFIER & \begin{minipage}{2in} \begin{verbatim} ([a-z]|[A-Z]|_) \end{verbatim} \end{minipage} \\
+ &  & \begin{minipage}{2in} \begin{verbatim} ([a-z]|[A-Z]|[0-9]|_)* \end{verbatim} \end{minipage} \\
+Integer & INTEGER & \begin{minipage}{2in} \begin{verbatim} (([1-9][0-9]*) | 0) \end{verbatim} \end{minipage} \\
+Real & REAL & \begin{minipage}{2in} \begin{verbatim} (([1-9][0-9]*) | 0)\.[0-9]+ \end{verbatim} \end{minipage} \\
   \hline
 \end{tabular}
 
+\section{Choix d'implémentation}
 
+\subsection{Gestion des nombres et opérations}
 
+Afin de gérer les expressions arithmétiques contenant des nombres et les opérateur plus et moins, nous avons du supprimer les opérateur plus et moins dans l'expression régulière des nombres entiers et réels.\\
+Par exemple, si on a 4+5 on détectera "4", "+" et "5" avec notre implémentation tandisque si on avait laissé le plus dans l'expression régulière des entier nous aurions obtenu "4" et "+5".\\
+Par contre un entier +2 sera dectecté comme "+" et "2" mais ce sera plus simple à interpreter lors de la construction de larbre syntaxique.
+
+\subsection{DFA}
+
+Premierement, nous utilisons les notations suivante :
+\begin{itemize}
+\item [*][a-z] signifie l'ensemble des lettres minuscule de a à z
+\item [*][A-Z] signifie l'ensemble des lettres majuscue de a à z
+\item [*][0-9] signifie l'ensemble des chiffres de 0 à 9
+\item [*]Par extention [d-y] signifie l'ensemble des lettres minuscule de d à y
+\item [*][.] signifie le . dans les expressions regulières soit tout les charactères
+\end{itemize}
+
+Ensuite, dans la partie à droite de l'état initiale dans le graph, soit les différents mots clefs et les identifiers, pour plus de lisibilité nous n'avons pas inclu les transitions d'un état faisant parti d'un mot clef vers un identifier, normalement chaque état d'un mot clef devrait contenir une transition depuis lui même vers l'état identifier, la transition comprenent \{[a-z] , [A-Z], [0-9], \_\} en excluant les autres transitions sortantes de cet état.
 \end{document}
