@@ -10,6 +10,7 @@ import java.util.HashMap;
 %function nextToken
 %type Symbol
 %yylexthrow PatternSyntaxException
+%yylexthrow SyntaxErrorException
 
 
 %{
@@ -82,10 +83,12 @@ If = if
 Else = else
 Elseif = elseif
 Identifier = ([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)*
-Integer = (\+|-)?(([1-9][0-9]*) | 0)
+Integer = (([1-9][0-9]*) | 0)
 Real = {Integer}\.[0-9]+
 Space = " "
 Tab = \t
+Octal = 0+[0-9]*
+RealOctal = {Octal}\.[0-9]+
 
 
 
@@ -161,5 +164,7 @@ Tab = \t
 {Space} {}
 {EndOfLine} {}
 {Tab} {}
+{Octal} {throw new SyntaxErrorException(yytext());}
+{RealOctal} {throw new SyntaxErrorException(yytext());}
 
-[^] {}
+[^] {throw new SyntaxErrorException(yytext());}

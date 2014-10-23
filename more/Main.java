@@ -28,6 +28,9 @@ public class Main {
         catch (IOException e) {
             System.out.println(e);
         }
+	catch (SyntaxErrorException e) {
+		System.out.println(e);
+	}
         System.out.println("Identifiers");
 
         HashMap<Object, Integer> identifiersMap = scanner.getIdentifiersMap();
