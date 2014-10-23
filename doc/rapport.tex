@@ -96,20 +96,20 @@ Real & REAL & \begin{minipage}{2in} \begin{verbatim} (([1-9][0-9]*) | 0)\.[0-9]+
 
 \subsection{Gestion des nombres et opérations}
 
-Afin de gérer les expressions arithmétiques contenant des nombres et les opérateur plus et moins, nous avons du supprimer les opérateur plus et moins dans l'expression régulière des nombres entiers et réels.\\
-Par exemple, si on a 4+5 on détectera "4", "+" et "5" avec notre implémentation tandisque si on avait laissé le plus dans l'expression régulière des entier nous aurions obtenu "4" et "+5".\\
-Par contre un entier +2 sera dectecté comme "+" et "2" mais ce sera plus simple à interpreter lors de la construction de larbre syntaxique.
+Afin de gérer les expressions arithmétiques contenant des nombres et les opérateur plus et moins, nous avons du supprimer les opérateurs plus et moins dans l'expression régulière des nombres entiers et réels.\\
+Par exemple, si on a 4+5 on détectera "4", "+" et "5" avec notre implémentation tandis que si on avait laissé le plus dans l'expression régulière des entiers nous aurions obtenu "4" et "+5".\\
+Par contre un entier +2 sera détecté comme "+" et "2" mais ce sera plus simple à interpréter lors de la construction de l'arbre syntaxique.
 
 \subsection{DFA}
 
-Premierement, nous utilisons les notations suivante :
+Premièrement, nous utilisons les notations suivantes :
 \begin{itemize}
-\item [*][a-z] signifie l'ensemble des lettres minuscule de a à z
-\item [*][A-Z] signifie l'ensemble des lettres majuscue de a à z
+\item [*][a-z] signifie l'ensemble des lettres minuscules de a à z
+\item [*][A-Z] signifie l'ensemble des lettres majuscules de a à z
 \item [*][0-9] signifie l'ensemble des chiffres de 0 à 9
-\item [*]Par extention [d-y] signifie l'ensemble des lettres minuscule de d à y
-\item [*][.] signifie le . dans les expressions regulières soit tout les charactères
+\item [*]Par extension [d-y] signifie l'ensemble des lettres minuscules de d à y
+\item [*][.] signifie le . dans les expressions régulières soit tous les caractères
 \end{itemize}
 
-Ensuite, dans la partie à droite de l'état initiale dans le graph, soit les différents mots clefs et les identifiers, pour plus de lisibilité nous n'avons pas inclu les transitions d'un état faisant parti d'un mot clef vers un identifier, normalement chaque état d'un mot clef devrait contenir une transition depuis lui même vers l'état identifier, la transition comprenent \{[a-z] , [A-Z], [0-9], \_\} en excluant les autres transitions sortantes de cet état.
+Ensuite, dans la partie à droite de l'état initiale dans le graphe, soit les différents mots-clés et les identifiers, pour plus de lisibilité nous n'avons pas inclus les transitions d'un état faisant partie d'un mot-clé vers un identifier, normalement chaque état d'un mot-clé devrait contenir une transition depuis lui même vers l'état identifier, la transition comprend \{[a-z] , [A-Z], [0-9], \_\} en excluant les autres transitions sortantes de cet état.
 \end{document}
