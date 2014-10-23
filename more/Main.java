@@ -7,37 +7,26 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 public class Main {
-    public static void main (String[] args){
-    LexicalAnalyzer scanner = null;
-        try {
-            scanner = new LexicalAnalyzer(new java.io.FileReader(args[0]));
-        }
-        catch (FileNotFoundException e) {
-            System.out.println(e);
-        }
-        try {
-        Symbol symbol = null;
-            do {
-                symbol = scanner.nextToken();
-                if (symbol.getType() != LexicalUnit.END_OF_STREAM) {
-                    System.out.println(symbol);
-                }
-            } while(symbol.getType() != LexicalUnit.END_OF_STREAM);
+    
+    public static void main (String[] args) throws FileNotFoundException, IOException, SyntaxErrorException {
+        LexicalAnalyzer scanner = null;
             
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
-	catch (SyntaxErrorException e) {
-		System.out.println(e);
-	}
+        scanner = new LexicalAnalyzer(new java.io.FileReader(args[0])); 
+            
+        Symbol symbol = null;
+        do {
+            symbol = scanner.nextToken();
+            if (symbol.getType() != LexicalUnit.END_OF_STREAM) {
+                System.out.println(symbol);
+            }
+        } while(symbol.getType() != LexicalUnit.END_OF_STREAM);
         System.out.println("Identifiers");
 
         HashMap<Object, Integer> identifiersMap = scanner.getIdentifiersMap();
         TreeSet<Object> keys = new TreeSet<Object>(identifiersMap.keySet());
         Iterator it = keys.iterator();
         while (it.hasNext()) {
-        	Object identifier = it.next();
+            Object identifier = it.next();
             System.out.println(identifier + "  " + identifiersMap.get(identifier));
         }
     }
