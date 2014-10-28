@@ -96,7 +96,7 @@ Real & REAL & \begin{minipage}{2in} \begin{verbatim} (([1-9][0-9]*) | 0)\.[0-9]+
 
 \subsection{Gestion des nombres et opérations}
 
-Afin de gérer les expressions arithmétiques contenant des nombres et les opérateur plus et moins, nous avons du supprimer les opérateurs plus et moins dans l'expression régulière des nombres entiers et réels.\\
+Afin de gérer les expressions arithmétiques contenant des nombres et les opérateurs plus et moins, nous avons du supprimer les opérateurs plus et moins dans l'expression régulière des nombres entiers et réels.\\
 Par exemple, si on a 4+5 on détectera "4", "+" et "5" avec notre implémentation tandis que si on avait laissé le plus dans l'expression régulière des entiers nous aurions obtenu "4" et "+5".\\
 Par contre un entier +2 sera détecté comme "+" et "2" mais ce sera plus simple à interpréter lors de la construction de l'arbre syntaxique.
 
