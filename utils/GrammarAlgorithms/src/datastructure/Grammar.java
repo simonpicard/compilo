@@ -16,7 +16,7 @@ import java.util.Set;
 public class Grammar {
 
     public Grammar(Set<Variable> variables, Set<Terminal> terminals,
-            HashMap< Variable, List<List<Token>>> relations, Variable start) {
+            HashMap< Variable, Set<List<Token>>> relations, Variable start) {
         this.variables = variables;
         this.terminals = terminals;
         this.relations = relations;
@@ -39,11 +39,11 @@ public class Grammar {
         this.terminals = terminals;
     }
 
-    public HashMap<Variable, List<List<Token>>> getRelations() {
+    public HashMap<Variable, Set<List<Token>>> getRelations() {
         return relations;
     }
 
-    public void setRelations(HashMap<Variable, List<List<Token>>> relations) {
+    public void setRelations(HashMap<Variable, Set<List<Token>>> relations) {
         this.relations = relations;
     }
 
@@ -55,11 +55,11 @@ public class Grammar {
         this.start = start;
     }
 
-    public static String relationsToString(HashMap<Variable, List<List<Token>>> relations) {
+    public static String relationsToString(HashMap<Variable, Set<List<Token>>> relations) {
         String result = "";
         for(Variable variable : relations.keySet()) {
             result += variable + "->";
-            List<List<Token>> rightPartsForTheSameVariable = relations.get(variable);
+            Set<List<Token>> rightPartsForTheSameVariable = relations.get(variable);
             for(List<Token> rightPart : rightPartsForTheSameVariable) {
                 for(Token token : rightPart) {
                     result += token + " ";
@@ -88,6 +88,6 @@ public class Grammar {
 
     private Set<Variable> variables;
     private Set<Terminal> terminals;
-    private HashMap<Variable, List<List<Token>>> relations;
+    private HashMap<Variable, Set<List<Token>>> relations;
     private Variable start;
 }

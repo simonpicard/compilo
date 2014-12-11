@@ -31,7 +31,7 @@ public class GrammarParser {
     public Grammar generateGrammar() {
         Set<Variable> variables = new HashSet<>();
         Set<Terminal> terminals = new HashSet<>();
-        HashMap<Variable, List<List<Token>>> relations = new HashMap<>();
+        HashMap<Variable, Set<List<Token>>> relations = new HashMap<>();
         Variable start = null;
 
         FileInputStream fis = null;
@@ -65,7 +65,7 @@ public class GrammarParser {
                     Variable leftPart = new Variable(splittedLine[0]);
 
                     // Parse the several right parts for a same variable
-                    List<List<Token>> rightPartsForTheSameVariable = new ArrayList<>();
+                    Set<List<Token>> rightPartsForTheSameVariable = new HashSet<>();
                     splittedLine = splittedLine[1].split("\\|");
                     for (int i = 0; i < splittedLine.length; ++i) {
                         // Parse one right part
