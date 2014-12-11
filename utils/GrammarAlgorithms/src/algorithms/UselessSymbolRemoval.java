@@ -25,7 +25,13 @@ public class UselessSymbolRemoval {
     }
 
     public void process() {
-        this.removeUnproductiveSymbols();
+        Boolean isGrammarChanged;
+        do {
+            isGrammarChanged = false;
+            Boolean b1 = this.removeUnproductiveSymbols();
+            Boolean b2 = this.removeUnreachableSymbols();
+            isGrammarChanged = b1 || b2;
+        } while (isGrammarChanged);
     }
 
     // Implements the aglgorithm of unproductive symbol removal.
@@ -77,17 +83,36 @@ public class UselessSymbolRemoval {
         // Suppress unproductive variables
         if (!productiveVariables.equals(this.grammar.getVariables())) {
             isGrammarChanged = true;
+            assignNewVariableSetToGrammar(productiveVariables);
+        }
+
+        return isGrammarChanged;
+    }
+
+    private HashSet<Variable> keepVariables(HashSet<Token> set) {
+        HashSet<Variable> variables = new HashSet<>();
+        for (Token token : set) {
+            if (!token.isTerminal()) {
+                variables.add((Variable) token);
+            }
+        }
+        return variables;
+    }
+
+    private void assignNewVariableSetToGrammar(Set<Variable> newVariableSet) {
+        if (!newVariableSet.equals(this.grammar.getVariables())) {
+            HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
             HashMap<Variable, Set<List<Token>>> newRelations = new HashMap<>();
-            if (!productiveVariables.contains(this.grammar.getStart())) {
+            if (!newVariableSet.contains(this.grammar.getStart())) {
                 System.out.println("The start symbol is unproductive");
             } else {
                 for (Variable leftPart : relations.keySet()) {
-                    if (productiveVariables.contains(leftPart)) {
+                    if (newVariableSet.contains(leftPart)) {
                         Set<List<Token>> newRightParts = new HashSet<>();
                         for (List<Token> rightPart : relations.get(leftPart)) {
                             Boolean isWholeRightPartInProductiveVariables = true;
                             for (Token token : rightPart) {
-                                if (!token.isTerminal() && !currentProductiveSymbols.contains(token)) {
+                                if (!token.isTerminal() && !newVariableSet.contains((Variable) token)) {
                                     isWholeRightPartInProductiveVariables = false;
                                     break;
                                 }
@@ -100,20 +125,60 @@ public class UselessSymbolRemoval {
                     }
                 }
             }
-            this.grammar.setVariables(productiveVariables);
+            this.grammar.setVariables(newVariableSet);
             this.grammar.setRelations(newRelations);
+
+            // Check terminal reachability
+            relations = this.grammar.getRelations();
+            Set<Terminal> newTerminals = new HashSet<>();
+            
+            for (Variable leftPart : relations.keySet()) {
+                for (List<Token> rightPart : relations.get(leftPart)) {
+                    for (Token token : rightPart) {
+                        if(token.isTerminal() && !newTerminals.contains((Terminal) token)) {
+                            newTerminals.add((Terminal) token);
+                        }
+                    }
+                }
+            }
+            
+            this.grammar.setTerminals(newTerminals);
         }
-        return isGrammarChanged;
     }
 
-    private HashSet<Variable> keepVariables(HashSet<Token> set) {
-        HashSet<Variable> variables = new HashSet<>();
-        for (Token token : set) {
-            if (!token.isTerminal()) {
-                variables.add((Variable) token);
+    private Boolean removeUnreachableSymbols() {
+        Boolean isGrammarChanged = false;
+
+        HashSet<Variable> currentReachableVariables = new HashSet<>();
+        // r(G) <- S
+        currentReachableVariables.add(this.grammar.getStart());
+
+        // P
+        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+
+        Boolean isNewReachableVariableFound;
+        do {
+            isNewReachableVariableFound = false;
+            for (Variable leftPart : currentReachableVariables) {
+
+                for (List<Token> rightPart : relations.get(leftPart)) {
+                    for (Token token : rightPart) {
+                        if (!token.isTerminal() && !currentReachableVariables.contains((Variable) token)) {
+                            isNewReachableVariableFound = true;
+                            currentReachableVariables.add((Variable) token);
+                        }
+                    }
+                }
             }
+        } while (isNewReachableVariableFound);
+
+        // Suppress unreachable variables
+        if (!currentReachableVariables.equals(this.grammar.getVariables())) {
+            isGrammarChanged = true;
+            assignNewVariableSetToGrammar(currentReachableVariables);
         }
-        return variables;
+
+        return isGrammarChanged;
     }
 
     private Grammar grammar;
