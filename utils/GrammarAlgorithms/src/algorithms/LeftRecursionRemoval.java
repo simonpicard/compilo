@@ -19,20 +19,52 @@ import java.util.Set;
  *
  * @author arnaud
  */
-public class LeftRecursionRemoval {
+public class LeftRecursionRemoval implements GrammarAlgorithm {
 
     public LeftRecursionRemoval(Grammar grammar) {
         this.grammar = grammar;
     }
 
+    @Override
     public void process() {
+        leftRecursionRemoval();
+    }
 
+    private void leftRecursionRemoval() {
+        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        List<Variable> orderedVariables = new ArrayList<>(this.grammar.getVariables());
+        
+
+        for (int i = 0; i < orderedVariables.size(); ++i) {
+            Set<List<Token>> newRightAiParts = new HashSet<>(relations.get(orderedVariables.get(i)));
+            for (int j = 0; j < i; ++j) {
+                
+                for(List<Token> rightPartAi : relations.get(orderedVariables.get(i))) {
+                    // Ai -> Aja
+                    if(rightPartAi.get(0).equals(orderedVariables.get(j))) {
+                        // Remove Ai -> Aja
+                        newRightAiParts.remove(rightPartAi);
+                        for(List<Token> rightPartAj : relations.get(orderedVariables.get(j))) {
+                            List<Token> newRightPartAi = new ArrayList<>(rightPartAi);
+                            // Replace Aj by the value of the relation
+                            newRightPartAi.remove(0);
+                            newRightPartAi.addAll(0, rightPartAj);
+                            
+                            newRightAiParts.add(newRightPartAi);
+                        }
+                    }
+                }
+                
+            }
+            relations.remove(orderedVariables.get(i));
+            relations.put(orderedVariables.get(i), newRightAiParts);
+            directLeftRecursionRemoval(orderedVariables.get(i));
+        }
     }
 
     private void directLeftRecursionRemoval(Variable leftPart) {
         HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
-        
-        
+
         // A -> Aa1 | ... | Aar
         Set<List<Token>> leftRecursiveSet = new HashSet<>();
         // A -> b1 | ... | bs
@@ -45,7 +77,7 @@ public class LeftRecursionRemoval {
             }
         }
 
-            // If there exists a left recursion for this variable, 
+        // If there exists a left recursion for this variable, 
         // remove all the rules for this variable and replace them 
         // by new rules without left recursion.
         if (!leftRecursiveSet.isEmpty()) {

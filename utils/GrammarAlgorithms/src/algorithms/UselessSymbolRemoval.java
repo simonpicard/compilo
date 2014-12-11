@@ -18,12 +18,13 @@ import java.util.Set;
  *
  * @author arnaud
  */
-public class UselessSymbolRemoval {
+public class UselessSymbolRemoval implements GrammarAlgorithm {
 
     public UselessSymbolRemoval(Grammar grammar) {
         this.grammar = grammar;
     }
 
+    @Override
     public void process() {
         Boolean isGrammarChanged;
         do {
