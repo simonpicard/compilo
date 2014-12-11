@@ -5,6 +5,7 @@
  */
 package datastructure;
 
+import java.util.HashSet;
 import java.util.Objects;
 
 /**
@@ -18,6 +19,16 @@ public abstract class Token {
     }
 
     public abstract Boolean isTerminal();
+    
+    public static HashSet<Variable> keepVariables(HashSet<Token> set) {
+        HashSet<Variable> variables = new HashSet<>();
+        for (Token token : set) {
+            if (!token.isTerminal()) {
+                variables.add((Variable) token);
+            }
+        }
+        return variables;
+    }
 
     @Override
     public String toString() {
