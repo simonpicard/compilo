@@ -52,7 +52,12 @@ public class GrammarParser {
             line = br.readLine();
             splittedLine = line.split("\\s+");
             for (int i = 0; i < splittedLine.length; ++i) {
-                terminals.add(new Terminal(splittedLine[i]));
+                // Epsilon
+                if (splittedLine[i].equals("EPSILON_VALUE")) {
+                    terminals.add(Epsilon.getInstance());
+                } else {
+                    terminals.add(new Terminal(splittedLine[i]));
+                }
             }
 
             // Third line : start
@@ -72,18 +77,23 @@ public class GrammarParser {
                         String[] splittedSplittedLine = splittedLine[i].split("\\s+");
                         List<Token> rightPart = new ArrayList<>();
                         for (int j = 0; j < splittedSplittedLine.length; ++j) {
-                            Variable variable = new Variable(splittedSplittedLine[j]);
-                            Terminal terminal = new Terminal(splittedSplittedLine[j]);
-                            // Check whether the token belongs to the variables or the terminals
-                            if (variables.contains(variable)) {
-                                rightPart.add(variable);
-                            } else if (terminals.contains(terminal)) {
-                                rightPart.add(terminal);
+                            // Epsilon
+                            if (splittedSplittedLine[j].equals("EPSILON_VALUE")) {
+                                rightPart.add(Epsilon.getInstance());
                             } else {
-                                throw new Exception("Right part does not belong to the variables nor the terminals");
+                                Variable variable = new Variable(splittedSplittedLine[j]);
+                                Terminal terminal = new Terminal(splittedSplittedLine[j]);
+                                // Check whether the token belongs to the variables or the terminals
+                                if (variables.contains(variable)) {
+                                    rightPart.add(variable);
+                                } else if (terminals.contains(terminal)) {
+                                    rightPart.add(terminal);
+                                } else {
+                                    throw new Exception("Right part does not belong to the variables nor the terminals");
+                                }
                             }
                         }
-                        
+
                         rightPartsForTheSameVariable.add(rightPart);
                     }
                     relations.put(leftPart, rightPartsForTheSameVariable);

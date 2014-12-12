@@ -102,6 +102,7 @@ public class LeftRecursionRemoval implements GrammarAlgorithm {
             // Add epsilon
             List<Token> epsilonList = new ArrayList<>();
             epsilonList.add(Epsilon.getInstance());
+            this.grammar.addEpsilonToTerminalSet();
             leftRecursiveSet.add(epsilonList);
             relations.put(newVariable, leftRecursiveSet);
 

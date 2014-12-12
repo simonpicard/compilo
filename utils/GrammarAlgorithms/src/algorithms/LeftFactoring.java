@@ -76,6 +76,7 @@ public class LeftFactoring implements GrammarAlgorithm {
                     
                     if (sublist.isEmpty()) {
                         sublist.add(Epsilon.getInstance());
+                        this.grammar.addEpsilonToTerminalSet();
                     }
                     relations.get(newVariable).add(sublist);
 
@@ -84,7 +85,7 @@ public class LeftFactoring implements GrammarAlgorithm {
                         sublist = orderedRightParts.get(index).subList(sizeOfSubstring, orderedRightParts.get(index).size());
                         if (sublist.isEmpty()) {
                             sublist.add(Epsilon.getInstance());
-
+                            this.grammar.addEpsilonToTerminalSet();;
                         }
                         relations.get(newVariable).add(sublist);
                     }

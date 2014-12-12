@@ -28,6 +28,12 @@ public class Grammar {
         this.variables.add(variable);
     }
     
+    public void addEpsilonToTerminalSet() {
+        if (!this.terminals.contains(Epsilon.getInstance())) {
+            this.terminals.add(Epsilon.getInstance());
+        }
+    }
+    
     public void assignNewVariableSet(Set<Variable> newVariableSet) {
         if (!newVariableSet.equals(this.getVariables())) {
             HashMap<Variable, Set<List<Token>>> relations = this.getRelations();

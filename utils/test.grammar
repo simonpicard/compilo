@@ -1,4 +1,9 @@
-<stmt> <expr> <stmt-list>
-if then end-if else
-<stmt>
-<stmt>->if <expr> then <stmt-list> end-if|if <expr> then <stmt-list> else <stmt-list> end-if
+S' E E' T T' F
+$ + * ( ) id EPSILON_VALUE
+S'
+S'->E $
+E->T E'
+E'->+ T E'|EPSILON_VALUE
+T->F T'
+T'->* F T'|EPSILON_VALUE
+F->( E )|id
