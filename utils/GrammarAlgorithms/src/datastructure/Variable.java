@@ -20,4 +20,17 @@ public class Variable extends Token {
         return false;
     }
     
+    public static Variable getNewVariable() {
+        ++newVariableCounter;
+        return new Variable("NEW_VAR'{" + newVariableCounter + "}");
+    }
+    
+    public static Variable getNewVariable(Variable variable) {
+        ++newVariableCounter;
+        return new Variable(variable.getValue() + "'{" + newVariableCounter + "}");
+    }
+    
+    private static int newVariableCounter = 0;
+    
+    
 }

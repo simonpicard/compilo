@@ -1,6 +1,4 @@
-A B C
-a b c d e f g
-A
-A->A b|a|C f
-B->A c|d
-C->B g|A e|C c
+<stmt> <expr> <stmt-list>
+if then end-if else
+<stmt>
+<stmt>->if <expr> then <stmt-list> end-if|if <expr> then <stmt-list> else <stmt-list> end-if

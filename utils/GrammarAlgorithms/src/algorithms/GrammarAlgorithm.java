@@ -11,6 +11,6 @@ package algorithms;
  */
 public interface GrammarAlgorithm {
     
-    public abstract void process();
+    public abstract void process() throws Exception;
     
 }

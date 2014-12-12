@@ -84,7 +84,7 @@ public class LeftRecursionRemoval implements GrammarAlgorithm {
             relations.remove(leftPart);
             Variable oldVariable = leftPart;
 
-            Variable newVariable = new Variable(oldVariable.getValue() + "'");
+            Variable newVariable = Variable.getNewVariable(oldVariable);
             this.grammar.addVariableToVariableSet(newVariable);
 
             // A -> b1A' | ... | bsA'
