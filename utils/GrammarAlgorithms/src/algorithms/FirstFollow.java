@@ -45,6 +45,17 @@ public class FirstFollow implements GrammarAlgorithm {
         return k1Sum;
     }
 
+    private Boolean containsEmptyFirstSet(List<Token> tokenList) {
+        Boolean result = false;
+        for (Token token : tokenList) {
+            if (this.allFirstK1.get(token).isEmpty()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
     private void generateFirstSet() {
         // For all a that belongs to T : First(a) = {a}
         for (Terminal terminal : this.grammar.getTerminals()) {
@@ -63,11 +74,13 @@ public class FirstFollow implements GrammarAlgorithm {
             isChangeDetected = false;
             for (Variable leftPart : relations.keySet()) {
                 for (List<Token> rightPart : relations.get(leftPart)) {
-                    Set<Terminal> k1Sum = firstSet(rightPart);
-                    for (Terminal terminal : k1Sum) {
-                        if (!this.allFirstK1.get(leftPart).contains(terminal)) {
-                            this.allFirstK1.get(leftPart).add(terminal);
-                            isChangeDetected = true;
+                    if (!containsEmptyFirstSet(rightPart)) {
+                        Set<Terminal> k1Sum = firstSet(rightPart);
+                        for (Terminal terminal : k1Sum) {
+                            if (!this.allFirstK1.get(leftPart).contains(terminal)) {
+                                this.allFirstK1.get(leftPart).add(terminal);
+                                isChangeDetected = true;
+                            }
                         }
                     }
                 }

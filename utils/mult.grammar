@@ -1,6 +1,9 @@
-E T F
-* id ( )
-E
-E->T * E|T
-T->F * T|F
-F->id|( E )
+S'@E@E'@T@T'@F
+$@EPSILON_VALUE@+@*@(@)@id
+S'
+S'->E@$
+E->T@E'
+E'->+@T@E'|EPSILON_VALUE
+T->F@T'
+T'->*@F@T'|EPSILON_VALUE
+F->(@E@)|id
