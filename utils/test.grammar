@@ -1,9 +1,16 @@
-S' E E' T T' F
-$ + * ( ) id EPSILON_VALUE
-S'
-S'->E $
-E->T E'
-E'->+ T E'|EPSILON_VALUE
-T->F T'
-T'->* F T'|EPSILON_VALUE
-F->( E )|id
+<system goal>@<program>@<statement list>@<statement tail>@<statement>@<id list>@<id tail>@<expr list>@<expr tail>@<expression>@<primary tail>@<primary>@<add op>
+begin@end@EPSILON_VALUE@ID@:=@read@(@)@;@write@,@INTLIT@+@-@$
+<system goal>
+<program>->begin@<statement list>@end
+<statement list>-><statement>@<statement tail>
+<statement tail>-><statement>@<statement tail>|EPSILON_VALUE
+<statement>->ID@:=@<expression>@;|read@(@<id list>@)@;|write@(@<expr list>@)@;
+<id list>->ID@<id tail>
+<id tail>->,@ID@<id tail>|EPSILON_VALUE
+<expr list>-><expression>@<expr tail>
+<expr tail>->,@<expression>@<expr tail>|EPSILON_VALUE
+<expression>-><primary>@<primary tail>
+<primary tail>-><add op>@<primary>@<primary tail>|EPSILON_VALUE
+<primary>->(@<expression>@)|ID|INTLIT
+<add op>->+|-
+<system goal>-><program>@$

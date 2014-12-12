@@ -1,6 +1,6 @@
 package core;
 
-import algorithms.FirstFellow;
+import algorithms.FirstFollow;
 import algorithms.LeftRecursionRemoval;
 import algorithms.UselessSymbolRemoval;
 import algorithms.LeftFactoring;
@@ -19,8 +19,9 @@ public class Main {
         GrammarParser grammarParser = new GrammarParser("/home/arnaud/Documents/ulb/ma1-2014-2015/compiler/projet/compilo/utils/test.grammar");
         Grammar grammar = grammarParser.generateGrammar();
         System.out.println(grammar);
-        GrammarAlgorithm algorithm = new FirstFellow(grammar);
+        GrammarAlgorithm algorithm = new FirstFollow(grammar);
         algorithm.process();
-        System.out.println(((FirstFellow)algorithm).getFirstK1());
+        System.out.println(((FirstFollow)algorithm).getFirstK1());
+        System.out.println(((FirstFollow)algorithm).getFollowK1());
     }
 }
