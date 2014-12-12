@@ -34,7 +34,7 @@ public class FirstFollow implements GrammarAlgorithm {
         this.generateFollowSet();
     }
 
-    private Set<Terminal> firstSet(List<Token> tokenList) {
+    public Set<Terminal> firstSet(List<Token> tokenList) {
         Set<Terminal> k1Sum = new HashSet<>();
         if (!tokenList.isEmpty()) {
             k1Sum.addAll(this.allFirstK1.get(tokenList.get(0)));

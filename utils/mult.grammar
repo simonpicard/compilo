@@ -1,9 +1,8 @@
-S'@E@E'@T@T'@F
-$@EPSILON_VALUE@+@*@(@)@id
-S'
-S'->E@$
-E->T@E'
-E'->+@T@E'|EPSILON_VALUE
-T->F@T'
-T'->*@F@T'|EPSILON_VALUE
-F->(@E@)|id
+S@expr@expr-tail@var@var-tail
+$@-@(@)@EPSILON_VALUE@ID
+S
+S->expr@$
+expr->-@expr|(@expr@)|var@expr-tail
+expr-tail->-@expr|EPSILON_VALUE
+var->ID@var-tail
+var-tail->(@expr@)|EPSILON_VALUE

@@ -48,6 +48,19 @@ public class ProductionRule {
     public List<Token> getRightPart() {
         return this.rightPart;
     }
+
+    @Override
+    public String toString() {
+        String result = "";
+        result += "(" + this.id + ")" + this.leftPart.toString() + "->";
+        for (Token token : this.rightPart) {
+            result += token.toString() + " ";
+        }
+        result = result.substring(0, result.length()-1);
+        return result;
+    }
+    
+    
     
     private static int counter = 0;
     private int id;
