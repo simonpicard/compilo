@@ -28,6 +28,6 @@ public class Main {
         actionTable.writTable("./out.tex");
         //FirstFollow algo = new FirstFollow(grammar);
         //algo.process();
-        //System.out.println(actionTable);
+        System.out.println(actionTable.);
     }
 }

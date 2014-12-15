@@ -127,7 +127,7 @@ public class ActionTable {
         for (int i = 0; i < orderedTerminals.size()-1; i++) {
             file.write(" \\rotatebox{-90}{"+orderedTerminals.get(i).toString().replace("_", "\\_") + "}&");
         }
-        file.write(" \\rotatebox{-90}{"+orderedTerminals.get(orderedTerminals.size() - 1).toString() + "}\\\\\n\\hline\n");
+        file.write(" \\rotatebox{-90}{"+orderedTerminals.get(orderedTerminals.size() - 1).toString().replace("_", "\\_") + "}\\\\\n\\hline\n");
 
         for (int i = 0; i < orderedVariables.size(); i++) {
             file.write(orderedVariables.get(i) + "&");
