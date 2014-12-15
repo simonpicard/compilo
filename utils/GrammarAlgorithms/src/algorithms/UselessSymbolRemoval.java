@@ -107,17 +107,19 @@ public class UselessSymbolRemoval implements GrammarAlgorithm {
         Boolean isNewReachableVariableFound;
         do {
             isNewReachableVariableFound = false;
+            HashSet<Variable> newCurrentReachableVariables = new HashSet<>(currentReachableVariables);
             for (Variable leftPart : currentReachableVariables) {
 
                 for (List<Token> rightPart : relations.get(leftPart)) {
                     for (Token token : rightPart) {
                         if (!token.isTerminal() && !currentReachableVariables.contains((Variable) token)) {
                             isNewReachableVariableFound = true;
-                            currentReachableVariables.add((Variable) token);
+                            newCurrentReachableVariables.add((Variable) token);
                         }
                     }
                 }
             }
+            currentReachableVariables = new HashSet<>(newCurrentReachableVariables);
         } while (isNewReachableVariableFound);
 
         // Suppress unreachable variables

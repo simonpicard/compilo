@@ -43,8 +43,8 @@ public class ActionTable {
             Set<Terminal> firstAlpha = firstFollow.firstSet(productionRule.getRightPart());
             for (Terminal terminal : firstAlpha) {
                 // Two production rules for the same M[A,a], the grammar is not LL(1)
-                if (this.table.get(productionRule.getLeftPart()).get(terminal) != null) {
-                    throw new Exception("Two production rules for the same M[A,a], the grammar is not LL(1)");
+                if (this.table.get(productionRule.getLeftPart()).get(terminal) != null && !this.table.get(productionRule.getLeftPart()).get(terminal).equals(productionRule)) {
+                    throw new Exception("Two production rules for the same M[A,a], the grammar is not LL(1) : A=" + productionRule.getLeftPart() + ", a=" + terminal + ", oldProductionRule=" + this.table.get(productionRule.getLeftPart()).get(terminal) + ", newProductionRule=" + productionRule);
                 }
                 this.table.get(productionRule.getLeftPart()).put(terminal, productionRule);
             }
@@ -53,8 +53,8 @@ public class ActionTable {
             if (firstAlpha.contains(Epsilon.getInstance())) {
                 for (Terminal terminal : firstFollow.getFollowK1().get(productionRule.getLeftPart())) {
                     // Two production rules for the same M[A,a], the grammar is not LL(1)
-                    if (this.table.get(productionRule.getLeftPart()).get(terminal) != null) {
-                        throw new Exception("Two production rules for the same M[A,a], the grammar is not LL(1)");
+                    if (this.table.get(productionRule.getLeftPart()).get(terminal) != null && !this.table.get(productionRule.getLeftPart()).get(terminal).equals(productionRule)) {
+                        throw new Exception("Two production rules for the same M[A,a], the grammar is not LL(1) : A=" + productionRule.getLeftPart() + ", a=" + terminal + ", oldProductionRule=" + this.table.get(productionRule.getLeftPart()).get(terminal) + ", newProductionRule=" + productionRule);
                     }
                     this.table.get(productionRule.getLeftPart()).put(terminal, productionRule);
                 }

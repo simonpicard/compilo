@@ -1,0 +1,74 @@
+<Program>-><Instruction> <InstructionEnd> <InstructionList> <Program>
+         -><Empty> <Program>
+<Empty>-><InstructionEnd> <EmptyTail>
+<EmptyTail>-><InstructionEnd> <EmptyTail>
+           ->EPSILON_VALUE
+<Definition>->IDENTIFIER TYPE_DEFINITION <Expression>
+            ->CONST <Assignation>
+<Block>->LET <Assignation> <Empty> <InstructionList> END
+<InstructionList>-><Instruction> <Empty> <InstructionList>
+                 -><Empty> <InstructionList>
+                 ->EPSILON_VALUE
+<Instruction>-><Assignation>
+             -><Loop>
+             -><Definition>
+             -><Block>
+<InstructionEnd>->END_OF_INSTRUCTION
+<Type>->BOOLEAN_TYPE
+      ->REAL_TYPE
+      ->INTEGER_TYPE
+<Loop>-><If>
+      ->WHILE <Expression> <Empty> <InstructionList> END
+      ->WHILE <Expression> <Empty> <Instruction> END
+      ->FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <Empty> <InstructionList> END
+      ->FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <Empty> <Instruction> END
+      ->FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> TERNARY_ELSE <Expression> <Empty> <InstructionList> END
+      ->FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> TERNARY_ELSE <Expression> <Empty> <Instruction> END
+<Assignation>->IDENTIFIER ASSIGNATION <Expression>
+             ->IDENTIFIER COMMA <Assignation> COMMA <Expression>
+<Expression>-><AtomicExpression>
+            -><UnaryExpression>
+            -><BinaryExpression>
+            -><Expression> TERNARY_IF <Expression> TERNARY_ELSE <Expression>
+<AtomicExpression>->IDENTIFIER
+                  ->INTEGER
+                  ->REAL
+                  ->BOOLEAN
+<UnaryExpression>-><AtomicExpression>
+                 ->LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
+                 -><UnaryOperator> <UnaryExpression>
+<BinaryExpression>-><AtomicExpression>
+                  ->LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
+                  -><Expression> <BinaryOperator> <BinaryExpression>
+<UnaryOperator>->BITWISE_NOT
+               ->MINUS
+               ->PLUS
+               ->NEGATION
+<BinaryOperator>->POWER
+                ->LESS_OR_EQUALS_THAN
+                ->GREATER_OR_EQUALS_THAN
+                ->ARITHMETIC_SHIFT_RIGHT
+                ->ARITHMETIC_SHIFT_LEFT
+                ->EQUALITY
+                ->INEQUALITY
+                ->LAZY_AND
+                ->LAZY_OR
+                ->REMAINDER
+                ->BITWISE_AND
+                ->BITWISE_OR
+                ->BITWISE_XOR
+                ->INVERSE_DIVIDE
+                ->MINUS
+                ->PLUS
+                ->TIMES
+                ->DIVIDE
+                ->LESS_THAN
+                ->GREATER_THAN         
+<If>->IF <Expression> <Empty> <InstructionList> <IfEnd>
+    ->IF <Expression> <Empty> <Instruction> <IfEnd>
+<IfEnd>->ELSE_IF <Expression> <Empty> <InstructionList> <IfEnd>
+       ->ELSE_IF <Expression> <Empty> <Instruction> <IfEnd>
+       ->ELSE <InstructionList> END
+       ->ELSE <Instruction> END
+       ->END
+#Separer operateurs binaires et unaires

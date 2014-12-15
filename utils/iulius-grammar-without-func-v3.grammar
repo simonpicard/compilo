@@ -1,0 +1,29 @@
+<Program> <Empty> <EmptyTail> <Definition> <Block> <InstructionList> <Instruction> <InstructionEnd> <Type> <Loop> <Assignation> <Expression> <AtomicExpression> <UnaryExpression> <UnaryBitwiseNotExpression> <UnaryMinusPlusExpression> <UnaryAtomicExpression> <BinaryExpression> <BinaryLazyOrExpression> <BinaryLazyAndExpression> <BinaryNumericExpression> <BinaryTermExpression> <BinaryShiftedExpression> <BinaryFactorExpression> <If> <IfEnd>
+EPSILON_VALUE IDENTIFIER TYPE_DEFINITION CONST END ASSIGNATION MAP_TO END_OF_INSTRUCTION BOOLEAN_TYPE REAL_TYPE INTEGER_TYPE WHILE FOR TERNARY_ELSE COMMA TERNARY_IF INTEGER REAL BOOLEAN NEGATION BITWISE_NOT MINUS PLUS LEFT_PARENTHESIS RIGHT_PARENTHESIS LAZY_OR LAZY_AND GREATER_THAN LESS_THAN GREATER_OR_EQUALS_THAN LESS_OR_EQUALS_THAN EQUALITY INEQUALITY BITWISE_OR BITWISE_XOR ARITHMETIC_SHIFT_LEFT ARITHMETIC_SHIFT_RIGHT TIMES DIVIDE REMAINDER BITWISE_AND INVERSE_DIVIDE POWER IF ELSE_IF ELSE LET
+<Program>
+<Program>-><Instruction> <InstructionEnd> <InstructionList> <Program>|<Empty> <Program>
+<Empty>-><InstructionEnd> <EmptyTail>
+<EmptyTail>-><InstructionEnd> <EmptyTail>|EPSILON_VALUE
+<Definition>->IDENTIFIER TYPE_DEFINITION <Expression>|CONST <Assignation>
+<Block>->LET <Assignation> <Empty> <InstructionList> END
+<InstructionList>-><Instruction> <Empty> <InstructionList>|<Empty> <InstructionList>|EPSILON_VALUE
+<Instruction>-><Assignation>|<Loop>|<Definition>|<Block>
+<InstructionEnd>->END_OF_INSTRUCTION
+<Type>->BOOLEAN_TYPE|REAL_TYPE|INTEGER_TYPE
+<Loop>-><If>|WHILE <Expression> <Empty> <InstructionList> END|WHILE <Expression> <Empty> <Instruction> END|FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <Empty> <InstructionList> END|FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <Empty> <Instruction> END|FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> TERNARY_ELSE <Expression> <Empty> <InstructionList> END|FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> TERNARY_ELSE <Expression> <Empty> <Instruction> END
+<Assignation>->IDENTIFIER ASSIGNATION <Expression>|IDENTIFIER COMMA <Assignation> COMMA <Expression>
+<Expression>-><Expression> TERNARY_IF <Expression> TERNARY_ELSE <Expression>|<BinaryExpression>
+<AtomicExpression>->IDENTIFIER|INTEGER|REAL|BOOLEAN
+<UnaryExpression>->NEGATION <UnaryExpression>|<UnaryBitwiseNotExpression>
+<UnaryBitwiseNotExpression>->BITWISE_NOT <UnaryBitwiseNotExpression>|<UnaryMinusPlusExpression>
+<UnaryMinusPlusExpression>->MINUS <UnaryMinusPlusExpression>|PLUS <UnaryMinusPlusExpression>|<UnaryAtomicExpression>
+<UnaryAtomicExpression>-><AtomicExpression>|LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
+<BinaryExpression>-><BinaryExpression> LAZY_OR <BinaryLazyOrExpression>|<BinaryLazyOrExpression>
+<BinaryLazyOrExpression>-><BinaryLazyOrExpression> LAZY_AND <BinaryLazyAndExpression>|<BinaryLazyAndExpression>
+<BinaryLazyAndExpression>-><BinaryLazyAndExpression> GREATER_THAN <BinaryNumericExpression>|<BinaryLazyAndExpression> LESS_THAN <BinaryNumericExpression>|<BinaryLazyAndExpression> GREATER_OR_EQUALS_THAN <BinaryNumericExpression>|<BinaryLazyAndExpression> LESS_OR_EQUALS_THAN <BinaryNumericExpression>|<BinaryLazyAndExpression> EQUALITY <BinaryNumericExpression>|<BinaryLazyAndExpression> INEQUALITY <BinaryNumericExpression>|<BinaryNumericExpression>
+<BinaryNumericExpression>-><BinaryNumericExpression> PLUS <BinaryTermExpression>|<BinaryNumericExpression> MINUS <BinaryTermExpression>|<BinaryNumericExpression> BITWISE_OR <BinaryTermExpression>|<BinaryNumericExpression> BITWISE_XOR <BinaryTermExpression>|<BinaryTermExpression>
+<BinaryTermExpression>-><BinaryTermExpression> ARITHMETIC_SHIFT_LEFT <BinaryShiftedExpression>|<BinaryTermExpression> ARITHMETIC_SHIFT_RIGHT <BinaryShiftedExpression>|<BinaryShiftedExpression>
+<BinaryShiftedExpression>-><BinaryShiftedExpression> TIMES <BinaryFactorExpression>|<BinaryShiftedExpression> DIVIDE <BinaryFactorExpression>|<BinaryShiftedExpression> REMAINDER <BinaryFactorExpression>|<BinaryShiftedExpression> BITWISE_AND <BinaryFactorExpression>|<BinaryShiftedExpression> INVERSE_DIVIDE <BinaryFactorExpression>|<BinaryFactorExpression>
+<BinaryFactorExpression>-><BinaryFactorExpression> POWER <UnaryExpression>|<UnaryExpression>     
+<If>->IF <Expression> <Empty> <InstructionList> <IfEnd>|IF <Expression> <Empty> <Instruction> <IfEnd>
+<IfEnd>->ELSE_IF <Expression> <Empty> <InstructionList> <IfEnd>|ELSE_IF <Expression> <Empty> <Instruction> <IfEnd>|ELSE <InstructionList> END|ELSE <Instruction> END|END

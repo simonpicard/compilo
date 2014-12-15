@@ -43,14 +43,14 @@ public class GrammarParser {
 
             // First line : variables
             line = br.readLine();
-            String[] splittedLine = line.split("@");
+            String[] splittedLine = line.split("\\s+");
             for (int i = 0; i < splittedLine.length; ++i) {
                 variables.add(new Variable(splittedLine[i]));
             }
 
             // Second line : terminals
             line = br.readLine();
-            splittedLine = line.split("@");
+            splittedLine = line.split("\\s+");
             for (int i = 0; i < splittedLine.length; ++i) {
                 // Epsilon
                 if (splittedLine[i].equals("EPSILON_VALUE")) {
@@ -74,7 +74,7 @@ public class GrammarParser {
                     splittedLine = splittedLine[1].split("\\|");
                     for (int i = 0; i < splittedLine.length; ++i) {
                         // Parse one right part
-                        String[] splittedSplittedLine = splittedLine[i].split("@");
+                        String[] splittedSplittedLine = splittedLine[i].split("\\s+");
                         List<Token> rightPart = new ArrayList<>();
                         for (int j = 0; j < splittedSplittedLine.length; ++j) {
                             // Epsilon
