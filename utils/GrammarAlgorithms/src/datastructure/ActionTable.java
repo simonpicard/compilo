@@ -8,6 +8,9 @@ package datastructure;
 import java.util.HashMap;
 import java.util.List;
 import algorithms.FirstFollow;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -97,6 +100,55 @@ public class ActionTable {
             result += "\n";
         }
         return result;
+    }
+
+    public void writTable(String path) throws IOException {
+        BufferedWriter file = new BufferedWriter(new FileWriter(path));
+        
+        file.write("\\documentclass[a2paper,landscape]{article}\n" +
+"\\usepackage[utf8]{inputenc}\n" +
+"\\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n" +
+"\\usepackage[english]{babel}\n" +
+"\\usepackage{graphicx}\n" +
+"\\usepackage{float}" +
+"\n" +
+"\n" +
+"\\begin{document}");
+
+        List<Variable> orderedVariables = new ArrayList<>(this.grammar.getVariables());
+        List<Terminal> orderedTerminals = new ArrayList<>(this.grammar.getTerminals());
+
+        file.write("\\begin{tabular}{|");
+        for (Terminal terminal : orderedTerminals) {
+            file.write("c|");
+        }
+        file.write("c|}\n\\hline\n&");
+
+        for (int i = 0; i < orderedTerminals.size()-1; i++) {
+            file.write(" \\rotatebox{-90}{"+orderedTerminals.get(i).toString().replace("_", "\\_") + "}&");
+        }
+        file.write(" \\rotatebox{-90}{"+orderedTerminals.get(orderedTerminals.size() - 1).toString() + "}\\\\\n\\hline\n");
+
+        for (int i = 0; i < orderedVariables.size(); i++) {
+            file.write(orderedVariables.get(i) + "&");
+            for (int j = 0; j < orderedTerminals.size() - 1; j++) {
+                ProductionRule productionRule = this.table.get(orderedVariables.get(i)).get(orderedTerminals.get(j));
+                if (productionRule == null) {
+                    file.write("&");
+                } else {
+                    file.write(productionRule.getId() + "&");
+                }
+            }
+            ProductionRule productionRule = this.table.get(orderedVariables.get(i)).get(orderedTerminals.get(orderedTerminals.size() - 1));
+            if (productionRule == null) {
+                file.write("\\\\\n\\hline\n");
+            } else {
+                file.write(productionRule.getId() + "\\\\\n\\hline\n");
+            }
+        }
+
+        file.write("\\end{tabular}\\end{document} ");
+        file.close();
     }
 
     private Grammar grammar;

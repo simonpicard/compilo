@@ -20,11 +20,13 @@ import java.util.HashSet;
 public class Main {
 
     public static void main(String args[]) throws Exception {
-        GrammarParser grammarParser = new GrammarParser("/home/arnaud/Documents/ulb/ma1-2014-2015/compiler/projet/iulius-grammar-without-func-v8.grammar");
+        //GrammarParser grammarParser = new GrammarParser("/home/arnaud/Documents/ulb/ma1-2014-2015/compiler/projet/iulius-grammar-without-func-v8.grammar");
+        GrammarParser grammarParser = new GrammarParser("C:\\Users\\Simon\\Desktop\\git\\compilo\\utils\\iulius-grammar-without-func-v8.grammar");
         Grammar grammar = grammarParser.generateGrammar();
         ActionTable actionTable = new ActionTable(grammar);
-        FirstFollow algo = new FirstFollow(grammar);
-        algo.process();
-        System.out.println(actionTable);
+        actionTable.writTable("./out.tex");
+        //FirstFollow algo = new FirstFollow(grammar);
+        //algo.process();
+        //System.out.println(actionTable);
     }
 }
