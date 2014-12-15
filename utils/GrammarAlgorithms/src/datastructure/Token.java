@@ -5,7 +5,9 @@
  */
 package datastructure;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -20,8 +22,8 @@ public abstract class Token {
 
     public abstract Boolean isTerminal();
     
-    public static HashSet<Variable> keepVariables(HashSet<Token> set) {
-        HashSet<Variable> variables = new HashSet<>();
+    public static List<Variable> keepVariables(List<Token> set) {
+        List<Variable> variables = new ArrayList<>();
         for (Token token : set) {
             if (!token.isTerminal()) {
                 variables.add((Variable) token);

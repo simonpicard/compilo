@@ -26,9 +26,9 @@ public class ProductionRule {
     public static List<ProductionRule> generateProductionRulesFromGrammar(Grammar grammar) {
         List<ProductionRule> result = new ArrayList<>();
         
-        HashMap<Variable, Set<List<Token>>> relations = grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = grammar.getRelations();
         
-        for (Variable leftPart : relations.keySet()) {
+        for (Variable leftPart : grammar.getVariables()) {
             for (List<Token> rightPart : relations.get(leftPart)) {
                 result.add(new ProductionRule(leftPart, rightPart));
             }

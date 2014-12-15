@@ -5,6 +5,7 @@
  */
 package datastructure;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,8 @@ import java.util.Set;
  */
 public class Grammar {
 
-    public Grammar(Set<Variable> variables, Set<Terminal> terminals,
-            HashMap< Variable, Set<List<Token>>> relations, Variable start) {
+    public Grammar(List<Variable> variables, List<Terminal> terminals,
+            HashMap< Variable, List<List<Token>>> relations, Variable start) {
         this.variables = variables;
         this.terminals = terminals;
         this.relations = relations;
@@ -34,16 +35,16 @@ public class Grammar {
         }
     }
     
-    public void assignNewVariableSet(Set<Variable> newVariableSet) {
+    public void assignNewVariableSet(List<Variable> newVariableSet) {
         if (!newVariableSet.equals(this.getVariables())) {
-            HashMap<Variable, Set<List<Token>>> relations = this.getRelations();
-            HashMap<Variable, Set<List<Token>>> newRelations = new HashMap<>();
+            HashMap<Variable, List<List<Token>>> relations = this.getRelations();
+            HashMap<Variable, List<List<Token>>> newRelations = new HashMap<>();
             if (!newVariableSet.contains(this.getStart())) {
                 System.out.println("The start symbol is unproductive");
             } else {
                 for (Variable leftPart : relations.keySet()) {
                     if (newVariableSet.contains(leftPart)) {
-                        Set<List<Token>> newRightParts = new HashSet<>();
+                        List<List<Token>> newRightParts = new ArrayList<>();
                         for (List<Token> rightPart : relations.get(leftPart)) {
                             Boolean isWholeRightPartInProductiveVariables = true;
                             for (Token token : rightPart) {
@@ -65,7 +66,7 @@ public class Grammar {
 
             // Check terminal reachability
             relations = this.getRelations();
-            Set<Terminal> newTerminals = new HashSet<>();
+            List<Terminal> newTerminals = new ArrayList<>();
             
             for (Variable leftPart : relations.keySet()) {
                 for (List<Token> rightPart : relations.get(leftPart)) {
@@ -81,15 +82,15 @@ public class Grammar {
         }
     }
 
-    public Set<Variable> getVariables() {
+    public List<Variable> getVariables() {
         return variables;
     }
 
-    public Set<Terminal> getTerminals() {
+    public List<Terminal> getTerminals() {
         return terminals;
     }
 
-    public HashMap<Variable, Set<List<Token>>> getRelations() {
+    public HashMap<Variable, List<List<Token>>> getRelations() {
         return relations;
     }
 
@@ -98,11 +99,12 @@ public class Grammar {
     }
 
 
-    private static String relationsToString(HashMap<Variable, Set<List<Token>>> relations) {
+    private String relationsToString() {
+        HashMap<Variable, List<List<Token>>> relations = this.getRelations();
         String result = "";
-        for(Variable variable : relations.keySet()) {
+        for(Variable variable : this.variables) {
             result += variable + "->";
-            Set<List<Token>> rightPartsForTheSameVariable = relations.get(variable);
+            List<List<Token>> rightPartsForTheSameVariable = relations.get(variable);
             for(List<Token> rightPart : rightPartsForTheSameVariable) {
                 for(Token token : rightPart) {
                     result += token + " ";
@@ -124,13 +126,13 @@ public class Grammar {
                 + "Terminal: " + this.terminals + "\n"
                 + "Start: " + this.start + "\n"
                 + "Relations:\n"
-                + relationsToString(this.relations);
+                + relationsToString();
     }
     
     
 
-    private Set<Variable> variables;
-    private Set<Terminal> terminals;
-    private HashMap<Variable, Set<List<Token>>> relations;
+    private List<Variable> variables;
+    private List<Terminal> terminals;
+    private HashMap<Variable, List<List<Token>>> relations;
     private Variable start;
 }

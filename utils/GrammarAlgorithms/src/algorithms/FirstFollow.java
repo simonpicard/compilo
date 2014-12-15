@@ -69,7 +69,7 @@ public class FirstFollow implements GrammarAlgorithm {
         }
 
         Boolean isChangeDetected = false;
-        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = this.grammar.getRelations();
         do {
             isChangeDetected = false;
             for (Variable leftPart : relations.keySet()) {
@@ -96,7 +96,7 @@ public class FirstFollow implements GrammarAlgorithm {
         }
 
         Boolean isChangeDetected = false;
-        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = this.grammar.getRelations();
         do {
             isChangeDetected = false;
             for (Variable leftPart : relations.keySet()) {

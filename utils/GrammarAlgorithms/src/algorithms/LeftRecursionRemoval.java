@@ -31,12 +31,12 @@ public class LeftRecursionRemoval implements GrammarAlgorithm {
     }
 
     private void leftRecursionRemoval() {
-        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = this.grammar.getRelations();
         List<Variable> orderedVariables = new ArrayList<>(this.grammar.getVariables());
         
 
         for (int i = 0; i < orderedVariables.size(); ++i) {
-            Set<List<Token>> newRightAiParts = new HashSet<>(relations.get(orderedVariables.get(i)));
+            List<List<Token>> newRightAiParts = new ArrayList<>(relations.get(orderedVariables.get(i)));
             for (int j = 0; j < i; ++j) {
                 
                 for(List<Token> rightPartAi : relations.get(orderedVariables.get(i))) {
@@ -63,12 +63,12 @@ public class LeftRecursionRemoval implements GrammarAlgorithm {
     }
 
     private void directLeftRecursionRemoval(Variable leftPart) {
-        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = this.grammar.getRelations();
 
         // A -> Aa1 | ... | Aar
-        Set<List<Token>> leftRecursiveSet = new HashSet<>();
+        List<List<Token>> leftRecursiveSet = new ArrayList<>();
         // A -> b1 | ... | bs
-        Set<List<Token>> notLeftRecursiveSet = new HashSet<>();
+        List<List<Token>> notLeftRecursiveSet = new ArrayList<>();
         for (List<Token> rightPart : relations.get(leftPart)) {
             if (rightPart.get(0).equals(leftPart)) {
                 leftRecursiveSet.add(rightPart);

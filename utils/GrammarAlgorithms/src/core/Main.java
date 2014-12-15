@@ -23,6 +23,7 @@ public class Main {
         //GrammarParser grammarParser = new GrammarParser("/home/arnaud/Documents/ulb/ma1-2014-2015/compiler/projet/iulius-grammar-without-func-v8.grammar");
         GrammarParser grammarParser = new GrammarParser("C:\\Users\\Simon\\Desktop\\git\\compilo\\utils\\iulius-grammar-without-func-v8.grammar");
         Grammar grammar = grammarParser.generateGrammar();
+        System.out.println(grammar);
         ActionTable actionTable = new ActionTable(grammar);
         actionTable.writTable("./out.tex");
         //FirstFollow algo = new FirstFollow(grammar);

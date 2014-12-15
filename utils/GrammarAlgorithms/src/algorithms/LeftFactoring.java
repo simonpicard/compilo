@@ -31,7 +31,7 @@ public class LeftFactoring implements GrammarAlgorithm {
     }
 
     private void leftFactoring() throws Exception {
-        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = this.grammar.getRelations();
         List<Variable> orderedLeftParts = new ArrayList<>(relations.keySet());
 
         int leftPartIndex = 0;
@@ -68,7 +68,7 @@ public class LeftFactoring implements GrammarAlgorithm {
                     // Create new variable
                     Variable newVariable = Variable.getNewVariable();
                     this.grammar.addVariableToVariableSet(newVariable);
-                    relations.put(newVariable, new HashSet<List<Token>>());
+                    relations.put(newVariable, new ArrayList<List<Token>>());
 
                     // A' -> b1 | ... | bn
                     relations.get(leftPart).remove(orderedRightParts.get(i));
