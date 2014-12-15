@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 /**
  *
@@ -40,8 +41,8 @@ public class UselessSymbolRemoval implements GrammarAlgorithm {
     private Boolean removeUnproductiveSymbols() {
         Boolean isGrammarChanged = false;
 
-        HashSet<Token> currentProductiveSymbols;
-        currentProductiveSymbols = new HashSet<>();
+        List<Token> currentProductiveSymbols;
+        currentProductiveSymbols = new ArrayList<>();
 
         // g(G) <- T
         for (Terminal terminal : this.grammar.getTerminals()) {
@@ -49,7 +50,7 @@ public class UselessSymbolRemoval implements GrammarAlgorithm {
         }
 
         // P
-        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = this.grammar.getRelations();
 
         // Repeat while it finds new productive symbols
         Boolean isNewProductiveSymbolAdded;
@@ -80,7 +81,7 @@ public class UselessSymbolRemoval implements GrammarAlgorithm {
             }
         } while (isNewProductiveSymbolAdded);
 
-        HashSet<Variable> productiveVariables = Token.keepVariables(currentProductiveSymbols);
+        List<Variable> productiveVariables = Token.keepVariables(currentProductiveSymbols);
         // Suppress unproductive variables
         if (!productiveVariables.equals(this.grammar.getVariables())) {
             isGrammarChanged = true;
@@ -97,17 +98,17 @@ public class UselessSymbolRemoval implements GrammarAlgorithm {
     private Boolean removeUnreachableSymbols() {
         Boolean isGrammarChanged = false;
 
-        HashSet<Variable> currentReachableVariables = new HashSet<>();
+        List<Variable> currentReachableVariables = new ArrayList<>();
         // r(G) <- S
         currentReachableVariables.add(this.grammar.getStart());
 
         // P
-        HashMap<Variable, Set<List<Token>>> relations = this.grammar.getRelations();
+        HashMap<Variable, List<List<Token>>> relations = this.grammar.getRelations();
 
         Boolean isNewReachableVariableFound;
         do {
             isNewReachableVariableFound = false;
-            HashSet<Variable> newCurrentReachableVariables = new HashSet<>(currentReachableVariables);
+            List<Variable> newCurrentReachableVariables = new ArrayList<>(currentReachableVariables);
             for (Variable leftPart : currentReachableVariables) {
 
                 for (List<Token> rightPart : relations.get(leftPart)) {
@@ -119,7 +120,7 @@ public class UselessSymbolRemoval implements GrammarAlgorithm {
                     }
                 }
             }
-            currentReachableVariables = new HashSet<>(newCurrentReachableVariables);
+            currentReachableVariables = new ArrayList<>(newCurrentReachableVariables);
         } while (isNewReachableVariableFound);
 
         // Suppress unreachable variables
