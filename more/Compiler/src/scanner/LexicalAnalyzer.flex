@@ -1,3 +1,4 @@
+package scanner;
 import java.util.regex.PatternSyntaxException;
 import java.util.HashMap;
 
