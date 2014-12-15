@@ -11,7 +11,7 @@ import java.util.HashMap;
  * on 15/12/14 18:56 from the specification file
  * <tt>LexicalAnalyzer.flex</tt>
  */
-class LexicalAnalyzer {
+public class LexicalAnalyzer {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -382,7 +382,7 @@ class LexicalAnalyzer {
    *
    * @param   in  the java.io.Inputstream to read input from.
    */
-  LexicalAnalyzer(java.io.InputStream in) {
+  public LexicalAnalyzer(java.io.InputStream in) {
     this(new java.io.InputStreamReader(in));
   }
 
