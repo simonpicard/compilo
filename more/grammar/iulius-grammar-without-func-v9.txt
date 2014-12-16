@@ -79,3 +79,4 @@
 #Remplacement de <Empty> par END_OF_INSTRUCTION
 #Remplacement de <Assignation> par IDENTIFIER <AssignationTail>
 #Suppression de <Definition>
+#Version fonctionnelle sans les fonctions
