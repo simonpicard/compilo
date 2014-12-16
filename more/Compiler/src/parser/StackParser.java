@@ -46,6 +46,7 @@ public class StackParser {
             topOfStack = stack.isEmpty() ? Epsilon.getInstance() : stack.get(stack.size() - 1);
             System.out.println("Top of stack : " + topOfStack);
             System.out.println("Input terminal : " + inputTerminal);
+            System.out.println("Stack : " + stack);
             if (inputTerminal.equals(Epsilon.getInstance()) && stack.isEmpty()) {
                 System.out.println("Accept " + res);
                 go = false;
