@@ -52,7 +52,7 @@ public class StackParser {
                 go = false;
             } else if (!topOfStack.isTerminal() && table.get((Variable) topOfStack).get(inputTerminal) != null) {
                 //produce
-                System.out.println("Produce " + table.get((Variable) topOfStack).get(inputTerminal).getId());
+                System.out.println("Produce " + table.get((Variable) topOfStack).get(inputTerminal));
                 productionRule = table.get((Variable) topOfStack).get(inputTerminal);
                 stack.remove(stack.size() - 1);
                 for (int i = productionRule.getRightPart().size() - 1; i >= 0; i--) {

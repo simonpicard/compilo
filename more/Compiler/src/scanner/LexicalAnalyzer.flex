@@ -99,7 +99,7 @@ RealOctal = {Octal}\.[0-9]+
 
 %%//Identification of tokens
 
-{Comment} {}
+{Comment} {return new Symbol(LexicalUnit.END_OF_INSTRUCTION, yyline, yycolumn, yytext());}//Return END_OF_INSTRUCTION because a comment contains a \n
 {Circumflex} {return new Symbol(LexicalUnit.POWER, yyline, yycolumn, yytext());}
 {Percentage} {return new Symbol(LexicalUnit.REMAINDER, yyline, yycolumn, yytext());}
 {Tilde} {return new Symbol(LexicalUnit.BITWISE_NOT, yyline, yycolumn, yytext());}
