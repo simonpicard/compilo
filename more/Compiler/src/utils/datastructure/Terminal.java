@@ -5,6 +5,9 @@
  */
 package utils.datastructure;
 
+import scanner.LexicalUnit;
+import scanner.Symbol;
+
 /**
  *
  * @author arnaud
@@ -12,6 +15,10 @@ package utils.datastructure;
 public class Terminal extends Token {
     public Terminal(String value) {
         super(value);
+    }
+    
+    public static Terminal castToTerminal(Symbol symbol) {
+        return LexicalUnit.END_OF_STREAM.equals(symbol.getType()) ? Epsilon.getInstance() : new Terminal(symbol.getType().name());
     }
 
     @Override

@@ -1,25 +1,25 @@
-<Program>-><Instruction>
-<Empty>->END_OF_INSTRUCTION
-<Definition>-><Type> TYPE_DEFINITION IDENTIFIER <Expression>
-            ->CONST <Type> TYPE_DEFINITION IDENTIFIER <Expression>
+<Program>-><InstructionList>
+<InstructionList>-><IdentifierInstruction> END_OF_INSTRUCTION <InstructionList>
+                 -><ConstDefinition> END_OF_INSTRUCTION <InstructionList>
+                 -><Block> END_OF_INSTRUCTION <InstructionList>
+                 -><Loop> END_OF_INSTRUCTION <InstructionList>
+                 ->END_OF_INSTRUCTION <InstructionList>
+                 ->EPSILON_VALUE
+<IdentifierInstruction>->IDENTIFIER <IdentifierInstructionTail>
+<IdentifierInstructionTail>-><AssignationTail>
+                           ->TYPE_DEFINITION <Type>
+<AssignationTail>->ASSIGNATION <Expression>
+                 ->COMMA IDENTIFIER <AssignationTail> COMMA <Expression>
+<ConstDefinition>->CONST IDENTIFIER <AssignationTail>
+<Block>->LET IDENTIFIER <AssignationTail> END_OF_INSTRUCTION <InstructionList> END
+<Loop>-><If>
+      ->WHILE <Expression> END_OF_INSTRUCTION <InstructionList> END
+      ->FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <ForTail>
+<ForTail>->END_OF_INSTRUCTION <InstructionList> END
+         ->TERNARY_ELSE <Expression> END_OF_INSTRUCTION <InstructionList> END
 <Type>->BOOLEAN_TYPE
       ->REAL_TYPE
       ->INTEGER_TYPE
-<Block>->LET <Assignation> <Empty> <Instruction> END
-<Instruction>-><Assignation> <Empty> <Instruction>
-             -><Loop> <Empty> <Instruction>
-             -><Definition> <Empty> <Instruction>
-             -><Block> <Empty> <Instruction>
-             -><Empty> <Instruction>
-             ->EPSILON_VALUE
-<Loop>-><If>
-      ->WHILE <Expression> <Empty> <Instruction> END
-      ->FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <ForTail>
-<ForTail>-><Empty> <Instruction> END
-         ->TERNARY_ELSE <Expression> <Empty> <Instruction> END
-<Assignation>->IDENTIFIER <AssignationTail>
-<AssignationTail>->ASSIGNATION <Expression>
-                 ->COMMA <Assignation> COMMA <Expression>
 <Expression>-><BinaryExpression> <TernaryIfExpression>
 <TernaryIfExpression>->TERNARY_IF <Expression> <TernaryElseExpression>
              ->EPSILON_VALUE
@@ -71,8 +71,11 @@
 <BinaryFactorExpression>-><UnaryExpression> <BinaryFactorExpression'>
 <BinaryFactorExpression'>->POWER <UnaryExpression> <BinaryFactorExpression'>
                          ->EPSILON_VALUE
-<If>->IF <Expression> <Empty> <Instruction> <IfEnd>
-<IfEnd>->ELSE_IF <Expression> <Empty> <Instruction> <IfEnd>
-       ->ELSE <Instruction> END
+<If>->IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
+<IfEnd>->ELSE_IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
+       ->ELSE <InstructionList> END
        ->END
-#Version fonctionnelle. Suppression de <InstructionList>. Modification de la forme des definition (a::Integer devient Integer::a)
+#Renommage : Instruction -> InstructionList
+#Remplacement de <Empty> par END_OF_INSTRUCTION
+#Remplacement de <Assignation> par IDENTIFIER <AssignationTail>
+#Suppression de <Definition>

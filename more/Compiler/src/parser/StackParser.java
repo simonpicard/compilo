@@ -35,35 +35,36 @@ public class StackParser {
     private void parse(String path, ActionTable actionTable) throws FileNotFoundException, IOException, PatternSyntaxException, SyntaxErrorException {
         LexicalAnalyzer la = new LexicalAnalyzer(new FileInputStream(path));
         List<Token> stack = new ArrayList<Token>();
-        Symbol symbol = la.nextToken();
+        Terminal inputTerminal = Terminal.castToTerminal(la.nextToken());
         HashMap<Variable, HashMap<Terminal, ProductionRule>> table = actionTable.getTable();
         stack.add(new Variable("<Program>"));
-        Token token;
+        Token topOfStack;
         ProductionRule productionRule;
         Boolean go = true;
         String res = "";
         while (go) {
-            token = stack.get(stack.size() - 1);
-            if (!token.isTerminal() && table.get((Variable) token).get(new Terminal(symbol.getType().name())) != null) {
+            topOfStack = stack.isEmpty() ? Epsilon.getInstance() : stack.get(stack.size() - 1);
+            System.out.println("Top of stack : " + topOfStack);
+            System.out.println("Input terminal : " + inputTerminal);
+            if (inputTerminal.equals(Epsilon.getInstance()) && stack.isEmpty()) {
+                System.out.println("Accept " + res);
+                go = false;
+            } else if (!topOfStack.isTerminal() && table.get((Variable) topOfStack).get(inputTerminal) != null) {
                 //produce
-                System.out.println("Produce " + table.get((Variable) token).get(new Terminal(symbol.getType().name())).getId());
-                productionRule = table.get((Variable) token).get(new Terminal(symbol.getType().name()));
+                System.out.println("Produce " + table.get((Variable) topOfStack).get(inputTerminal).getId());
+                productionRule = table.get((Variable) topOfStack).get(inputTerminal);
                 stack.remove(stack.size() - 1);
                 for (int i = productionRule.getRightPart().size() - 1; i >= 0; i--) {
                     if (!productionRule.getRightPart().get(i).equals(Epsilon.getInstance())) {
                         stack.add(productionRule.getRightPart().get(i));
                     }
                 }
-                System.out.println(stack);
-            } else if (token.isTerminal() && (new Terminal(symbol.getType().name())).equals((Terminal) token)) {
+            } else if (topOfStack.isTerminal() && (inputTerminal).equals((Terminal) topOfStack)) {
                 //match
-                System.out.println("Match "+symbol.getType().name());
+                System.out.println("Match " + inputTerminal);
                 res += stack.get(stack.size() - 1).toString() + " ";
                 stack.remove(stack.size() - 1);
-                symbol = la.nextToken();
-            } else if (symbol.getType().name().equals("END_OF_STREAM") && stack.isEmpty()) {
-                System.out.println("Accept " + res);
-                go = false;
+                inputTerminal = Terminal.castToTerminal(la.nextToken());
             } else {
                 System.out.println("Error " + res);
                 go = false;
