@@ -5,6 +5,7 @@ import java.util.HashMap;
 %%// Options of the scanner
 
 %class LexicalAnalyzer	//Name
+%public  //Public class
 %unicode						//Use unicode
 %line							//Use line counter (yyline variable)
 %column						//Use character counter by line (yycolumn variable)
@@ -163,7 +164,7 @@ RealOctal = {Octal}\.[0-9]+
 {Real} {return new Symbol(LexicalUnit.REAL, yyline, yycolumn, yytext());}
 
 {Space} {}
-{EndOfLine} {}
+{EndOfLine} {return new Symbol(LexicalUnit.END_OF_INSTRUCTION, yyline, yycolumn, yytext());}
 {Tab} {}
 {Octal} {throw new SyntaxErrorException(yytext());}
 {RealOctal} {throw new SyntaxErrorException(yytext());}
