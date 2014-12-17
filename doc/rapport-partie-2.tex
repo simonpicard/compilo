@@ -2,9 +2,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
-\usepackage[a4paper]{geometry}
+\usepackage[a4paper,top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
 \usepackage{longtable}
-\geometry{hscale=0.75,vscale=0.60,centering}
+\usepackage[final]{pdfpages} 
+
 
 %opening
 \title{INFO-F-403 : Language theory and compiling \\ Rapport projet partie 2 - Grammaire}
@@ -120,5 +121,108 @@ $[100]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
 $[101]$&<ArgumentTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}COMMA IDENTIFIER TYPE\_DEFINITION <Type> \\<ArgumentTail> \end{tabular}\\
 $[102]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
 \end{longtable}
+
+\section{First et Follow set}
+
+
+\begin{longtable}{|c|c|c|}
+\hline
+Variable&First&Follow\\
+\hline
+<Program>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST, PRINTLN, FOR\\EPSILON\_VALUE\\INTEGER\_CAST, FUNCTION\\END\_OF\_INSTRUCTION\\CONST, READ\_INTEGER, LET\\WHILE, IDENTIFIER\\READ\_REAL, REAL\_CAST, IF\end{tabular}&\begin{tabular}[c]{@{}c@{}}\end{tabular}\\
+\hline
+<InstructionList>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST, PRINTLN, FOR\\EPSILON\_VALUE\\INTEGER\_CAST, FUNCTION\\END\_OF\_INSTRUCTION\\CONST, READ\_INTEGER, LET\\WHILE, IDENTIFIER\\READ\_REAL, REAL\_CAST, IF\end{tabular}&\begin{tabular}[c]{@{}c@{}}RETURN, ELSE\_IF, ELSE, END\end{tabular}\\
+\hline
+<IdentifierInstruction>&\begin{tabular}[c]{@{}c@{}}IDENTIFIER\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<IdentifierInstructionTail>&\begin{tabular}[c]{@{}c@{}}ASSIGNATION, COMMA\\LEFT\_PARENTHESIS\\TYPE\_DEFINITION\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<AssignationTail>&\begin{tabular}[c]{@{}c@{}}ASSIGNATION, COMMA\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<ConstDefinition>&\begin{tabular}[c]{@{}c@{}}CONST\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<Block>&\begin{tabular}[c]{@{}c@{}}LET\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<Loop>&\begin{tabular}[c]{@{}c@{}}FOR, WHILE, IF\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<ForTail>&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\\TERNARY\_ELSE\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<Type>&\begin{tabular}[c]{@{}c@{}}INTEGER\_TYPE\\BOOLEAN\_TYPE, REAL\_TYPE\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA, RIGHT\_PARENTHESIS\\END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<Expression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\TERNARY\_ELSE, END\end{tabular}\\
+\hline
+<TernaryIfExpression>&\begin{tabular}[c]{@{}c@{}}TERNARY\_IF\\EPSILON\_VALUE\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\TERNARY\_ELSE, END\end{tabular}\\
+\hline
+<TernaryElseExpression>&\begin{tabular}[c]{@{}c@{}}TERNARY\_ELSE\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\TERNARY\_ELSE, END\end{tabular}\\
+\hline
+<AtomicExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST, PRINTLN\\REAL, READ\_INTEGER\\INTEGER\_CAST, IDENTIFIER\\READ\_REAL, REAL\_CAST\\BOOLEAN, INTEGER\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<AtomicIdentifierExpression>&\begin{tabular}[c]{@{}c@{}}IDENTIFIER\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<AtomicIdentifierExpressionTail>&\begin{tabular}[c]{@{}c@{}}LEFT\_PARENTHESIS\\EPSILON\_VALUE\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<UnaryExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<UnaryBitwiseNotExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\INTEGER\_CAST, BOOLEAN\\MINUS, LEFT\_PARENTHESIS\\REAL, READ\_INTEGER\\IDENTIFIER, READ\_REAL\\REAL\_CAST, INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<UnaryMinusPlusExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST, PRINTLN\\INTEGER\_CAST, BOOLEAN\\MINUS, LEFT\_PARENTHESIS\\REAL, READ\_INTEGER\\IDENTIFIER, READ\_REAL\\REAL\_CAST, INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<UnaryAtomicExpression>&\begin{tabular}[c]{@{}c@{}}LEFT\_PARENTHESIS\\BOOLEAN\_CAST, PRINTLN\\REAL, READ\_INTEGER\\INTEGER\_CAST, IDENTIFIER\\READ\_REAL, REAL\_CAST\\BOOLEAN, INTEGER\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<BinaryExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\TERNARY\_IF, TERNARY\_ELSE\\END\end{tabular}\\
+\hline
+<BinaryExpression'>&\begin{tabular}[c]{@{}c@{}}EPSILON\_VALUE, LAZY\_OR\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\TERNARY\_IF, TERNARY\_ELSE\\END\end{tabular}\\
+\hline
+<BinaryLazyOrExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\TERNARY\_IF, TERNARY\_ELSE\\END, LAZY\_OR\end{tabular}\\
+\hline
+<BinaryLazyOrExpression'>&\begin{tabular}[c]{@{}c@{}}LAZY\_AND, EPSILON\_VALUE\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\TERNARY\_IF, TERNARY\_ELSE\\END, LAZY\_OR\end{tabular}\\
+\hline
+<BinaryLazyAndExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\LAZY\_AND, TERNARY\_IF\\TERNARY\_ELSE, END, LAZY\_OR\end{tabular}\\
+\hline
+<BinaryLazyAndExpression'>&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\GREATER\_THAN\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, INEQUALITY\\EPSILON\_VALUE, LESS\_THAN\end{tabular}&\begin{tabular}[c]{@{}c@{}}COMMA\\END\_OF\_INSTRUCTION\\RIGHT\_PARENTHESIS\\LAZY\_AND, TERNARY\_IF\\TERNARY\_ELSE, END, LAZY\_OR\end{tabular}\\
+\hline
+<BinaryNumericExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\COMMA, RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, LESS\_THAN\\LAZY\_OR\\END\_OF\_INSTRUCTION\\GREATER\_THAN\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, LAZY\_AND, END\end{tabular}\\
+\hline
+<BinaryNumericExpression'>&\begin{tabular}[c]{@{}c@{}}BITWISE\_OR\\EPSILON\_VALUE\\BITWISE\_XOR, PLUS, MINUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\COMMA, RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, LESS\_THAN\\LAZY\_OR\\END\_OF\_INSTRUCTION\\GREATER\_THAN\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, LAZY\_AND, END\end{tabular}\\
+\hline
+<BinaryTermExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\COMMA, BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, LESS\_THAN\\LAZY\_OR, BITWISE\_XOR\\MINUS\\END\_OF\_INSTRUCTION\\GREATER\_THAN\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, LAZY\_AND, END\\PLUS\end{tabular}\\
+\hline
+<BinaryTermExpression'>&\begin{tabular}[c]{@{}c@{}}ARITHMETIC\_SHIFT\_LEFT\\EPSILON\_VALUE\\ARITHMETIC\_SHIFT\_RIGHT\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\COMMA, BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, LESS\_THAN\\LAZY\_OR, BITWISE\_XOR\\MINUS\\END\_OF\_INSTRUCTION\\GREATER\_THAN\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, LAZY\_AND, END\\PLUS\end{tabular}\\
+\hline
+<BinaryShiftedExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, LESS\_THAN\\LAZY\_OR, BITWISE\_XOR\\MINUS\\END\_OF\_INSTRUCTION\\GREATER\_THAN\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, LAZY\_AND, END\\ARITHMETIC\_SHIFT\_RIGHT\\PLUS\end{tabular}\\
+\hline
+<BinaryShiftedExpression'>&\begin{tabular}[c]{@{}c@{}}INVERSE\_DIVIDE, TIMES\\REMAINDER, EPSILON\_VALUE\\BITWISE\_AND, DIVIDE\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, LESS\_THAN\\LAZY\_OR, BITWISE\_XOR\\MINUS\\END\_OF\_INSTRUCTION\\GREATER\_THAN\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, LAZY\_AND, END\\ARITHMETIC\_SHIFT\_RIGHT\\PLUS\end{tabular}\\
+\hline
+<BinaryFactorExpression>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, INTEGER\_CAST\\BOOLEAN, MINUS\\LEFT\_PARENTHESIS, REAL\\READ\_INTEGER, IDENTIFIER\\READ\_REAL, REAL\_CAST\\INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<BinaryFactorExpression'>&\begin{tabular}[c]{@{}c@{}}POWER, EPSILON\_VALUE\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<If>&\begin{tabular}[c]{@{}c@{}}IF\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<IfEnd>&\begin{tabular}[c]{@{}c@{}}ELSE\_IF, ELSE, END\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<BuiltInFunctionCall>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST, PRINTLN\\READ\_INTEGER\\INTEGER\_CAST, READ\_REAL\\REAL\_CAST\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<FunctionCallTail>&\begin{tabular}[c]{@{}c@{}}LEFT\_PARENTHESIS\end{tabular}&\begin{tabular}[c]{@{}c@{}}LESS\_OR\_EQUALS\_THAN\\INVERSE\_DIVIDE\\BITWISE\_OR\\RIGHT\_PARENTHESIS\\INEQUALITY, TERNARY\_IF\\TERNARY\_ELSE, DIVIDE\\MINUS, GREATER\_THAN\\LAZY\_AND\\ARITHMETIC\_SHIFT\_RIGHT\\COMMA\\ARITHMETIC\_SHIFT\_LEFT\\TIMES, POWER, BITWISE\_AND\\LESS\_THAN, LAZY\_OR\\BITWISE\_XOR, REMAINDER\\END\_OF\_INSTRUCTION\\GREATER\_OR\_EQUALS\_THAN\\EQUALITY, END, PLUS\end{tabular}\\
+\hline
+<Parameter>&\begin{tabular}[c]{@{}c@{}}BOOLEAN\_CAST\\BITWISE\_NOT, PRINTLN\\NEGATION, EPSILON\_VALUE\\INTEGER\_CAST, BOOLEAN\\MINUS, LEFT\_PARENTHESIS\\REAL, READ\_INTEGER\\IDENTIFIER, READ\_REAL\\REAL\_CAST, INTEGER, PLUS\end{tabular}&\begin{tabular}[c]{@{}c@{}}RIGHT\_PARENTHESIS\end{tabular}\\
+\hline
+<ParameterTail>&\begin{tabular}[c]{@{}c@{}}COMMA, EPSILON\_VALUE\end{tabular}&\begin{tabular}[c]{@{}c@{}}RIGHT\_PARENTHESIS\end{tabular}\\
+\hline
+<FunctionDefinition>&\begin{tabular}[c]{@{}c@{}}FUNCTION\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<FunctionDefinitionEnd>&\begin{tabular}[c]{@{}c@{}}RETURN, END\end{tabular}&\begin{tabular}[c]{@{}c@{}}END\_OF\_INSTRUCTION\end{tabular}\\
+\hline
+<Argument>&\begin{tabular}[c]{@{}c@{}}EPSILON\_VALUE\\IDENTIFIER\end{tabular}&\begin{tabular}[c]{@{}c@{}}RIGHT\_PARENTHESIS\end{tabular}\\
+\hline
+<ArgumentTail>&\begin{tabular}[c]{@{}c@{}}COMMA, EPSILON\_VALUE\end{tabular}&\begin{tabular}[c]{@{}c@{}}RIGHT\_PARENTHESIS\end{tabular}\\
+\hline
+\end{longtable}
+
+\section{Action Table}
+\clearpage
+\begin{figure}[!h]
+\includepdf[pages=1, angle=90]{AT.pdf}
+\end{figure}
 
 \end{document}

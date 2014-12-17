@@ -188,35 +188,44 @@ public class FirstFollow implements GrammarAlgorithm {
                 + "\\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n"
                 + "\\usepackage[english]{babel}\n"
                 + "\\usepackage{graphicx}\n"
-                + "\\usepackage{float}\n"
-                + "\\usepackage{longtable}"
-                + "\\usepackage[T1]{fontenc}\n"
+                + "\\usepackage{float}"
                 + "\n"
+                + "\\usepackage{longtable}\n"
                 + "\\begin{document}");
 
         file.write("\\begin{longtable}{|c|c|c|}\n\\hline\n");
         file.write("Variable&First&Follow\\\\\n\\hline\n");
-        int i = 0, j = 0, k = 0;
+        int i = 0;
         for (Variable variable : variables) {
-            file.write(variable.toString().replace("_", "\\_").replace("]", "").replace("[", "") + "&\\begin{tabular}[x]{@{}c@{}}");
-            j = 0;
+            i = 0;
+            file.write(variable.toString().replace("_", "\\_").replace("]", "").replace("[", "") + "&\\begin{tabular}[c]{@{}c@{}}");
             for (Terminal terminal : allFirstK1.get(variable)) {
+                if (i + terminal.toString().length() > 22) {
+                    file.write("\\\\");
+                    i = terminal.toString().length();
+                } else {
+                    if (i != 0) {
+                        file.write(", ");
+                    }
+                    i += terminal.toString().length();
+                }
                 file.write(terminal.toString().replace("_", "\\_").replace("]", "").replace("[", ""));
-                file.write("\\\\");
-                j++;
             }
-            file.write("\\end{tabular}&\\begin{tabular}[x]{@{}c@{}}");
+            file.write("\\end{tabular}&\\begin{tabular}[c]{@{}c@{}}");
             i = 0;
             for (Terminal terminal : allFollowK1.get(variable)) {
+                if (i + terminal.toString().length() > 22) {
+                    file.write("\\\\");
+                    i = terminal.toString().length();
+                } else {
+                    if (i != 0) {
+                        file.write(", ");
+                    }
+                    i += terminal.toString().length();
+                }
                 file.write(terminal.toString().replace("_", "\\_").replace("]", "").replace("[", ""));
-                file.write("\\\\");
-                i++;
             }
             file.write("\\end{tabular}\\\\\n\\hline\n");
-        }
-        k += i > j ? i : j;
-        if (k > 0){
-            ;
         }
         file.write("\\end{longtable}\\end{document} ");
         file.close();

@@ -62,7 +62,7 @@ public class ProductionRule {
     
     
     
-    private static int counter = 0;
+    private static int counter = 1;
     private int id;
     private Variable leftPart;
     private List<Token> rightPart;
