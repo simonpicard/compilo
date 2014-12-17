@@ -5,6 +5,9 @@
  */
 package utils.algorithms;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import utils.datastructure.Grammar;
 import utils.datastructure.Terminal;
 import utils.datastructure.Token;
@@ -173,6 +176,50 @@ public class FirstFollow implements GrammarAlgorithm {
 
     public HashMap<Token, Set<Terminal>> getFollowK1() {
         return allFollowK1;
+    }
+
+    public void printFF(String path) throws IOException {
+        List<Variable> variables = grammar.getVariables();
+
+        BufferedWriter file = new BufferedWriter(new FileWriter(path));
+
+        file.write("\\documentclass[a4paper]{article}\n"
+                + "\\usepackage[utf8]{inputenc}\n"
+                + "\\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n"
+                + "\\usepackage[english]{babel}\n"
+                + "\\usepackage{graphicx}\n"
+                + "\\usepackage{float}\n"
+                + "\\usepackage{longtable}"
+                + "\\usepackage[T1]{fontenc}\n"
+                + "\n"
+                + "\\begin{document}");
+
+        file.write("\\begin{longtable}{|c|c|c|}\n\\hline\n");
+        file.write("Variable&First&Follow\\\\\n\\hline\n");
+        int i = 0, j = 0, k = 0;
+        for (Variable variable : variables) {
+            file.write(variable.toString().replace("_", "\\_").replace("]", "").replace("[", "") + "&\\begin{tabular}[x]{@{}c@{}}");
+            j = 0;
+            for (Terminal terminal : allFirstK1.get(variable)) {
+                file.write(terminal.toString().replace("_", "\\_").replace("]", "").replace("[", ""));
+                file.write("\\\\");
+                j++;
+            }
+            file.write("\\end{tabular}&\\begin{tabular}[x]{@{}c@{}}");
+            i = 0;
+            for (Terminal terminal : allFollowK1.get(variable)) {
+                file.write(terminal.toString().replace("_", "\\_").replace("]", "").replace("[", ""));
+                file.write("\\\\");
+                i++;
+            }
+            file.write("\\end{tabular}\\\\\n\\hline\n");
+        }
+        k += i > j ? i : j;
+        if (k > 0){
+            ;
+        }
+        file.write("\\end{longtable}\\end{document} ");
+        file.close();
     }
 
     private Grammar grammar;
