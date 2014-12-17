@@ -1,13 +1,20 @@
-a = a?b?d:e:c
+a::Integer
+b::Integer
+c::Integer
 
-const a = 5
+# Euclidean algorithm
 
-if a?2:3 #com
-    a=5
-elseif a
-    b=5
-elseif a
-    b=5
-else
-    b=5
+function main()
+    a = readint()
+    b = readint()
+    while(b)
+        c=b;
+        while(a >= b) # a mod b
+            a=a-b
+        end
+        b=a;a=c
+    end
+    println(a)
 end
+
+main();
