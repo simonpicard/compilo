@@ -5,6 +5,9 @@
  */
 package utils.datastructure;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,17 +27,17 @@ public class Grammar {
         this.relations = relations;
         this.start = start;
     }
-    
+
     public void addVariableToVariableSet(Variable variable) {
         this.variables.add(variable);
     }
-    
+
     public void addEpsilonToTerminalSet() {
         if (!this.terminals.contains(Epsilon.getInstance())) {
             this.terminals.add(Epsilon.getInstance());
         }
     }
-    
+
     public void assignNewVariableSet(List<Variable> newVariableSet) {
         if (!newVariableSet.equals(this.getVariables())) {
             HashMap<Variable, List<List<Token>>> relations = this.getRelations();
@@ -67,17 +70,17 @@ public class Grammar {
             // Check terminal reachability
             relations = this.getRelations();
             List<Terminal> newTerminals = new ArrayList<>();
-            
+
             for (Variable leftPart : relations.keySet()) {
                 for (List<Token> rightPart : relations.get(leftPart)) {
                     for (Token token : rightPart) {
-                        if(token.isTerminal() && !newTerminals.contains((Terminal) token)) {
+                        if (token.isTerminal() && !newTerminals.contains((Terminal) token)) {
                             newTerminals.add((Terminal) token);
                         }
                     }
                 }
             }
-            
+
             this.terminals = newTerminals;
         }
     }
@@ -98,28 +101,27 @@ public class Grammar {
         return start;
     }
 
-
     private String relationsToString() {
         HashMap<Variable, List<List<Token>>> relations = this.getRelations();
         String result = "";
-        for(Variable variable : this.variables) {
+        for (Variable variable : this.variables) {
             result += variable + "->";
             List<List<Token>> rightPartsForTheSameVariable = relations.get(variable);
-            for(List<Token> rightPart : rightPartsForTheSameVariable) {
-                for(Token token : rightPart) {
+            for (List<Token> rightPart : rightPartsForTheSameVariable) {
+                for (Token token : rightPart) {
                     result += token + " ";
                 }
                 // Pop the last character
-                result = result.substring(0, result.length()-1);
+                result = result.substring(0, result.length() - 1);
                 result += "|";
             }
             // Pop the last character
-            result = result.substring(0, result.length()-1);
+            result = result.substring(0, result.length() - 1);
             result += "\n";
         }
         return result;
     }
-    
+
     @Override
     public String toString() {
         return "Variables: " + this.variables + "\n"
@@ -128,8 +130,50 @@ public class Grammar {
                 + "Relations:\n"
                 + relationsToString();
     }
-    
-    
+
+    public void writeLatexTable(String filename) throws IOException {
+        BufferedWriter file = new BufferedWriter(new FileWriter(filename));
+
+        file.write("\\begin{longtable}{llll}\n");
+
+        final int maxInCell = 40;
+        int productionCount = 1;
+        for (Variable leftPart : this.getVariables()) {
+            file.write("$[" + productionCount + "]$&" + leftPart.toLatex() + "&$\\rightarrow$&\\begin{tabular}[t]{@{}l@{}}");
+            ++productionCount;
+            int currentInCell = maxInCell;
+            for (Token token : this.relations.get(leftPart).get(0)) {
+                currentInCell -= token.toString().length();
+                if (currentInCell < 0) {
+                    file.write("\\\\" + token.toLatex() + " ");
+                    currentInCell = maxInCell - token.toString().length();
+                } else {
+                    file.write(token.toLatex() + " ");
+                }
+            }
+            file.write("\\end{tabular}\\\\\n");
+            for (int i = 1; i < this.relations.get(leftPart).size(); ++i) {
+                file.write("$[" + productionCount + "]$&" + "&$\\rightarrow$&\\begin{tabular}[t]{@{}l@{}}");
+                ++productionCount;
+                currentInCell = maxInCell;
+                for (Token token : this.relations.get(leftPart).get(i)) {
+                    currentInCell -= token.toString().length();
+                    if (currentInCell < 0) {
+                        file.write("\\\\" + token.toLatex() + " ");
+                        currentInCell = maxInCell - token.toString().length();
+                    } else {
+                        file.write(token.toLatex() + " ");
+                    }
+                }
+                file.write("\\end{tabular}\\\\\n");
+            }
+        }
+
+        file.write("\\end{longtable}");
+
+        file.flush();
+        file.close();
+    }
 
     private List<Variable> variables;
     private List<Terminal> terminals;

@@ -31,6 +31,21 @@ public abstract class Token {
         }
         return variables;
     }
+    
+    public String toLatex() {
+        String res = "";
+        for(int i=0; i<this.getValue().length(); ++i) {
+            char aChar = this.getValue().charAt(i);
+            switch(aChar) {
+                case '_':
+                    res += "\\_";
+                    break;
+                default:
+                    res += aChar;
+            }
+        }
+        return res;
+    }
 
     @Override
     public String toString() {

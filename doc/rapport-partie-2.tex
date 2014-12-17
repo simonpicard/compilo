@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
 \usepackage[a4paper]{geometry}
+\usepackage{longtable}
 \geometry{hscale=0.75,vscale=0.60,centering}
 
 %opening
@@ -12,5 +13,112 @@
 \begin{document}
 
 \maketitle
+
+\section{Grammaire}
+
+\begin{longtable}{llll}
+$[1]$&<Program>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<InstructionList> \end{tabular}\\
+$[2]$&<InstructionList>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<IdentifierInstruction> \\END\_OF\_INSTRUCTION <InstructionList> \end{tabular}\\
+$[3]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<ConstDefinition> END\_OF\_INSTRUCTION \\<InstructionList> \end{tabular}\\
+$[4]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<Block> END\_OF\_INSTRUCTION \\<InstructionList> \end{tabular}\\
+$[5]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<Loop> END\_OF\_INSTRUCTION \\<InstructionList> \end{tabular}\\
+$[6]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BuiltInFunctionCall> END\_OF\_INSTRUCTION \\<InstructionList> \end{tabular}\\
+$[7]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<FunctionDefinition> END\_OF\_INSTRUCTION \\<InstructionList> \end{tabular}\\
+$[8]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}END\_OF\_INSTRUCTION <InstructionList> \end{tabular}\\
+$[9]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[10]$&<IdentifierInstruction>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IDENTIFIER <IdentifierInstructionTail> \end{tabular}\\
+$[11]$&<IdentifierInstructionTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<AssignationTail> \end{tabular}\\
+$[12]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TYPE\_DEFINITION <Type> \end{tabular}\\
+$[13]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<FunctionCallTail> \end{tabular}\\
+$[14]$&<AssignationTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ASSIGNATION <Expression> \end{tabular}\\
+$[15]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}COMMA IDENTIFIER <AssignationTail> COMMA \\<Expression> \end{tabular}\\
+$[16]$&<ConstDefinition>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}CONST IDENTIFIER <AssignationTail> \end{tabular}\\
+$[17]$&<Block>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LET IDENTIFIER <AssignationTail> \\END\_OF\_INSTRUCTION <InstructionList> END \end{tabular}\\
+$[18]$&<Loop>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<If> \end{tabular}\\
+$[19]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}WHILE <Expression> END\_OF\_INSTRUCTION \\<InstructionList> END \end{tabular}\\
+$[20]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}FOR IDENTIFIER ASSIGNATION <Expression> \\TERNARY\_ELSE <Expression> <ForTail> \end{tabular}\\
+$[21]$&<ForTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}END\_OF\_INSTRUCTION <InstructionList> END \end{tabular}\\
+$[22]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TERNARY\_ELSE <Expression> \\END\_OF\_INSTRUCTION <InstructionList> END \end{tabular}\\
+$[23]$&<Type>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BOOLEAN\_TYPE \end{tabular}\\
+$[24]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}REAL\_TYPE \end{tabular}\\
+$[25]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INTEGER\_TYPE \end{tabular}\\
+$[26]$&<Expression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryExpression> <TernaryIfExpression> \end{tabular}\\
+$[27]$&<TernaryIfExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TERNARY\_IF <Expression> \\<TernaryElseExpression> \end{tabular}\\
+$[28]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[29]$&<TernaryElseExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TERNARY\_ELSE <Expression> \end{tabular}\\
+$[30]$&<AtomicExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<AtomicIdentifierExpression> \end{tabular}\\
+$[31]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INTEGER \end{tabular}\\
+$[32]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}REAL \end{tabular}\\
+$[33]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BOOLEAN \end{tabular}\\
+$[34]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BuiltInFunctionCall> \end{tabular}\\
+$[35]$&<AtomicIdentifierExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IDENTIFIER \\<AtomicIdentifierExpressionTail> \end{tabular}\\
+$[36]$&<AtomicIdentifierExpressionTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<FunctionCallTail> \end{tabular}\\
+$[37]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[38]$&<UnaryExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}NEGATION <UnaryExpression> \end{tabular}\\
+$[39]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<UnaryBitwiseNotExpression> \end{tabular}\\
+$[40]$&<UnaryBitwiseNotExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_NOT <UnaryBitwiseNotExpression> \end{tabular}\\
+$[41]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<UnaryMinusPlusExpression> \end{tabular}\\
+$[42]$&<UnaryMinusPlusExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}MINUS <UnaryMinusPlusExpression> \end{tabular}\\
+$[43]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}PLUS <UnaryMinusPlusExpression> \end{tabular}\\
+$[44]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<UnaryAtomicExpression> \end{tabular}\\
+$[45]$&<UnaryAtomicExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<AtomicExpression> \end{tabular}\\
+$[46]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LEFT\_PARENTHESIS <Expression> \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[47]$&<BinaryExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryLazyOrExpression> \\<BinaryExpression'> \end{tabular}\\
+$[48]$&<BinaryExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LAZY\_OR <BinaryLazyOrExpression> \\<BinaryExpression'> \end{tabular}\\
+$[49]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[50]$&<BinaryLazyOrExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryLazyAndExpression> \\<BinaryLazyOrExpression'> \end{tabular}\\
+$[51]$&<BinaryLazyOrExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LAZY\_AND <BinaryLazyAndExpression> \\<BinaryLazyOrExpression'> \end{tabular}\\
+$[52]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[53]$&<BinaryLazyAndExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
+$[54]$&<BinaryLazyAndExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}GREATER\_THAN <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
+$[55]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LESS\_THAN <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
+$[56]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}GREATER\_OR\_EQUALS\_THAN \\<BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
+$[57]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LESS\_OR\_EQUALS\_THAN \\<BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
+$[58]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EQUALITY <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
+$[59]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INEQUALITY <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
+$[60]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[61]$&<BinaryNumericExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
+$[62]$&<BinaryNumericExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}PLUS <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
+$[63]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}MINUS <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
+$[64]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_OR <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
+$[65]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_XOR <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
+$[66]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[67]$&<BinaryTermExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryShiftedExpression> \\<BinaryTermExpression'> \end{tabular}\\
+$[68]$&<BinaryTermExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ARITHMETIC\_SHIFT\_LEFT \\<BinaryShiftedExpression> \\<BinaryTermExpression'> \end{tabular}\\
+$[69]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ARITHMETIC\_SHIFT\_RIGHT \\<BinaryShiftedExpression> \\<BinaryTermExpression'> \end{tabular}\\
+$[70]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[71]$&<BinaryShiftedExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
+$[72]$&<BinaryShiftedExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TIMES <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
+$[73]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}DIVIDE <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
+$[74]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}REMAINDER <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
+$[75]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_AND <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
+$[76]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INVERSE\_DIVIDE <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
+$[77]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[78]$&<BinaryFactorExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<UnaryExpression> \\<BinaryFactorExpression'> \end{tabular}\\
+$[79]$&<BinaryFactorExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}POWER <UnaryExpression> \\<BinaryFactorExpression'> \end{tabular}\\
+$[80]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[81]$&<If>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IF <Expression> END\_OF\_INSTRUCTION \\<InstructionList> <IfEnd> \end{tabular}\\
+$[82]$&<IfEnd>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ELSE\_IF <Expression> END\_OF\_INSTRUCTION \\<InstructionList> <IfEnd> \end{tabular}\\
+$[83]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ELSE <InstructionList> END \end{tabular}\\
+$[84]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}END \end{tabular}\\
+$[85]$&<BuiltInFunctionCall>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}READ\_REAL LEFT\_PARENTHESIS \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[86]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}READ\_INTEGER LEFT\_PARENTHESIS \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[87]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INTEGER\_CAST LEFT\_PARENTHESIS <Expression> \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[88]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}REAL\_CAST LEFT\_PARENTHESIS <Expression> \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[89]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BOOLEAN\_CAST LEFT\_PARENTHESIS <Expression> \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[90]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}PRINTLN LEFT\_PARENTHESIS <Expression> \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[91]$&<FunctionCallTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LEFT\_PARENTHESIS <Parameter> \\RIGHT\_PARENTHESIS \end{tabular}\\
+$[92]$&<Parameter>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<Expression> <ParameterTail> \end{tabular}\\
+$[93]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[94]$&<ParameterTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}COMMA <Expression> <ParameterTail> \end{tabular}\\
+$[95]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[96]$&<FunctionDefinition>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}FUNCTION IDENTIFIER LEFT\_PARENTHESIS \\<Argument> RIGHT\_PARENTHESIS \\<InstructionList> <FunctionDefinitionEnd> \end{tabular}\\
+$[97]$&<FunctionDefinitionEnd>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}RETURN <Expression> END \end{tabular}\\
+$[98]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}END \end{tabular}\\
+$[99]$&<Argument>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IDENTIFIER TYPE\_DEFINITION <Type> \\<ArgumentTail> \end{tabular}\\
+$[100]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[101]$&<ArgumentTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}COMMA IDENTIFIER TYPE\_DEFINITION <Type> \\<ArgumentTail> \end{tabular}\\
+$[102]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+\end{longtable}
 
 \end{document}
