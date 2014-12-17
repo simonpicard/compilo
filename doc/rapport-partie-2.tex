@@ -16,8 +16,16 @@
 \maketitle
 
 \section{Transformation de la grammaire donnée}
-\subsection{Elimination des ambiguités}
-La première étape pour rendre la grammaire LL(1) fut l'élimination des ambiguités de la grammaire donnée. Pour cela, nous avons commencé par fixer la iorité et l'associativité des opérateurs. 
+\subsection{Opérateurs binaires et unaires}
+La première étape pour rendre la grammaire LL(1) fut la distinction des deux types d'opérateurs : les opérateurs binaires qui agissent sur deux expressions l'une située à gauche et l'autre à droite de ces opérateurs et les opérateurs unaires qui agissent sur une seule expression située à droite de ces opérateurs. Il faut différencier les deux types d'opérateurs afin de ne pas avoir des expressions du style : >>4, *2, 6|,... .Les opérateurs unaires sont au nombre de quatre : ! (negation), $\sim$ (not bit à bit), + et -. Les opérateurs + et - sont également des opérateurs binaires. 
+\subsection{Priorité et associativité des opérateurs}
+Lors de cette étape, nous avons modifié la grammaire afin de fixer la priorité et l'associativité des différents opérateurs, ceci afin de rendre la grammaire moins ambigue. Nous avons remarqué que les opérateurs unaires étaient plus prioritaires que les opérateurs binaires et que les opérateurs unaires étaient tous associatifs à droite, tandis que les opérateurs binaires l'étaient tous à gauche. Pour fixer la priorité, nous avons mis les opérateurs les moins prioritaires le plus ``haut'' possible dans la grammaire et les plus prioritaires le plus ``bas'' possible. 
+\subsection{Suppression des récursion à gauche}
+L'étape suivante fut l'étape de suppression des récursions à gauche qui sont incompatibles avec les ``top-down parser'' car cela fait entrer ce genre de parser dans une boucle ou récursion infinie.
+\subsection{Left factoring}
+Cette étape rassemble les règles de production d'une variable qui ont un préfixe commun en une seule règle de production qui contient ce préfixe commun et une nouvelle variable. Cette nouvelle variable possède des règles de production vers les différents suffixes qui étaient présents à l'origine dans les différentes règles de production qui ont été mises en commun. Ceci est nécessaire car le parser qu'on va créer est LL(1), il faut donc qu'il puisse choisir la bonne règle de production en regardant seulement le prochain token qui est en entrée.
+\subsection{Suppression de la variable <Instruction>}
+Nous avons décidé de supprimer la variable <Instruction> et de ne laisser que <InstructionList>. <InstructionList> pouvant être une liste d'instruction, une instruction vide ou rien (epsilon), ceci afin de rendre la grammaire moins ambigue, plus allégée et sans grande perte de fonctionnalité du langage.
 
 
 \section{Grammaire}
@@ -127,7 +135,7 @@ $[101]$&<ArgumentTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}COMMA IDENTIFIER
 $[102]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 \end{longtable}
 
-\section{First et Follow set}
+\section{Ensembles First et Follow}
 
 
 \begin{longtable}{|c|c|c|}
