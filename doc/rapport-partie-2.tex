@@ -15,6 +15,11 @@
 
 \maketitle
 
+\section{Transformation de la grammaire donnée}
+\subsection{Elimination des ambiguités}
+La première étape pour rendre la grammaire LL(1) fut l'élimination des ambiguités de la grammaire donnée. Pour cela, nous avons commencé par fixer la iorité et l'associativité des opérateurs. 
+
+
 \section{Grammaire}
 
 \begin{longtable}{llll}
@@ -26,7 +31,7 @@ $[5]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<Loop> END\_OF\_INSTRUCTION \\<I
 $[6]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BuiltInFunctionCall> END\_OF\_INSTRUCTION \\<InstructionList> \end{tabular}\\
 $[7]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<FunctionDefinition> END\_OF\_INSTRUCTION \\<InstructionList> \end{tabular}\\
 $[8]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}END\_OF\_INSTRUCTION <InstructionList> \end{tabular}\\
-$[9]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[9]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[10]$&<IdentifierInstruction>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IDENTIFIER <IdentifierInstructionTail> \end{tabular}\\
 $[11]$&<IdentifierInstructionTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<AssignationTail> \end{tabular}\\
 $[12]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TYPE\_DEFINITION <Type> \end{tabular}\\
@@ -45,7 +50,7 @@ $[24]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}REAL\_TYPE \end{tabular}\\
 $[25]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INTEGER\_TYPE \end{tabular}\\
 $[26]$&<Expression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryExpression> <TernaryIfExpression> \end{tabular}\\
 $[27]$&<TernaryIfExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TERNARY\_IF <Expression> \\<TernaryElseExpression> \end{tabular}\\
-$[28]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[28]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[29]$&<TernaryElseExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TERNARY\_ELSE <Expression> \end{tabular}\\
 $[30]$&<AtomicExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<AtomicIdentifierExpression> \end{tabular}\\
 $[31]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INTEGER \end{tabular}\\
@@ -54,7 +59,7 @@ $[33]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BOOLEAN \end{tabular}\\
 $[34]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BuiltInFunctionCall> \end{tabular}\\
 $[35]$&<AtomicIdentifierExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IDENTIFIER \\<AtomicIdentifierExpressionTail> \end{tabular}\\
 $[36]$&<AtomicIdentifierExpressionTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<FunctionCallTail> \end{tabular}\\
-$[37]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[37]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[38]$&<UnaryExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}NEGATION <UnaryExpression> \end{tabular}\\
 $[39]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<UnaryBitwiseNotExpression> \end{tabular}\\
 $[40]$&<UnaryBitwiseNotExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_NOT <UnaryBitwiseNotExpression> \end{tabular}\\
@@ -66,10 +71,10 @@ $[45]$&<UnaryAtomicExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<AtomicE
 $[46]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LEFT\_PARENTHESIS <Expression> \\RIGHT\_PARENTHESIS \end{tabular}\\
 $[47]$&<BinaryExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryLazyOrExpression> \\<BinaryExpression'> \end{tabular}\\
 $[48]$&<BinaryExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LAZY\_OR <BinaryLazyOrExpression> \\<BinaryExpression'> \end{tabular}\\
-$[49]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[49]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[50]$&<BinaryLazyOrExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryLazyAndExpression> \\<BinaryLazyOrExpression'> \end{tabular}\\
 $[51]$&<BinaryLazyOrExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LAZY\_AND <BinaryLazyAndExpression> \\<BinaryLazyOrExpression'> \end{tabular}\\
-$[52]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[52]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[53]$&<BinaryLazyAndExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
 $[54]$&<BinaryLazyAndExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}GREATER\_THAN <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
 $[55]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LESS\_THAN <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
@@ -77,27 +82,27 @@ $[56]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}GREATER\_OR\_EQUALS\_THAN \\<Bi
 $[57]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LESS\_OR\_EQUALS\_THAN \\<BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
 $[58]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EQUALITY <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
 $[59]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INEQUALITY <BinaryNumericExpression> \\<BinaryLazyAndExpression'> \end{tabular}\\
-$[60]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[60]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[61]$&<BinaryNumericExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
 $[62]$&<BinaryNumericExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}PLUS <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
 $[63]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}MINUS <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
 $[64]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_OR <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
 $[65]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_XOR <BinaryTermExpression> \\<BinaryNumericExpression'> \end{tabular}\\
-$[66]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[66]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[67]$&<BinaryTermExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryShiftedExpression> \\<BinaryTermExpression'> \end{tabular}\\
 $[68]$&<BinaryTermExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ARITHMETIC\_SHIFT\_LEFT \\<BinaryShiftedExpression> \\<BinaryTermExpression'> \end{tabular}\\
 $[69]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ARITHMETIC\_SHIFT\_RIGHT \\<BinaryShiftedExpression> \\<BinaryTermExpression'> \end{tabular}\\
-$[70]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[70]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[71]$&<BinaryShiftedExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
 $[72]$&<BinaryShiftedExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}TIMES <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
 $[73]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}DIVIDE <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
 $[74]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}REMAINDER <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
 $[75]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BITWISE\_AND <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
 $[76]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}INVERSE\_DIVIDE <BinaryFactorExpression> \\<BinaryShiftedExpression'> \end{tabular}\\
-$[77]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[77]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[78]$&<BinaryFactorExpression>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<UnaryExpression> \\<BinaryFactorExpression'> \end{tabular}\\
 $[79]$&<BinaryFactorExpression'>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}POWER <UnaryExpression> \\<BinaryFactorExpression'> \end{tabular}\\
-$[80]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[80]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[81]$&<If>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IF <Expression> END\_OF\_INSTRUCTION \\<InstructionList> <IfEnd> \end{tabular}\\
 $[82]$&<IfEnd>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ELSE\_IF <Expression> END\_OF\_INSTRUCTION \\<InstructionList> <IfEnd> \end{tabular}\\
 $[83]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}ELSE <InstructionList> END \end{tabular}\\
@@ -110,16 +115,16 @@ $[89]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}BOOLEAN\_CAST LEFT\_PARENTHESIS
 $[90]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}PRINTLN LEFT\_PARENTHESIS <Expression> \\RIGHT\_PARENTHESIS \end{tabular}\\
 $[91]$&<FunctionCallTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}LEFT\_PARENTHESIS <Parameter> \\RIGHT\_PARENTHESIS \end{tabular}\\
 $[92]$&<Parameter>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<Expression> <ParameterTail> \end{tabular}\\
-$[93]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[93]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[94]$&<ParameterTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}COMMA <Expression> <ParameterTail> \end{tabular}\\
-$[95]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[95]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[96]$&<FunctionDefinition>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}FUNCTION IDENTIFIER LEFT\_PARENTHESIS \\<Argument> RIGHT\_PARENTHESIS \\<InstructionList> <FunctionDefinitionEnd> \end{tabular}\\
 $[97]$&<FunctionDefinitionEnd>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}RETURN <Expression> END \end{tabular}\\
 $[98]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}END \end{tabular}\\
 $[99]$&<Argument>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}IDENTIFIER TYPE\_DEFINITION <Type> \\<ArgumentTail> \end{tabular}\\
-$[100]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[100]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 $[101]$&<ArgumentTail>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}COMMA IDENTIFIER TYPE\_DEFINITION <Type> \\<ArgumentTail> \end{tabular}\\
-$[102]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}EPSILON\_VALUE \end{tabular}\\
+$[102]$&&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}$\epsilon$ \end{tabular}\\
 \end{longtable}
 
 \section{First et Follow set}

@@ -15,6 +15,11 @@ public class Epsilon extends Terminal {
         super(value);
     }
     
+    @Override
+    public String toLatex() {
+        return "$\\epsilon$";
+    }
+    
     public static Epsilon getInstance() {
         if (epsilon == null) {
             epsilon = new Epsilon("EPSILON_VALUE");
