@@ -1,8 +1,0 @@
-S@expr@expr-tail@var@var-tail
-$@-@(@)@EPSILON_VALUE@ID
-S
-S->expr@$
-expr->-@expr|(@expr@)|var@expr-tail
-expr-tail->-@expr|EPSILON_VALUE
-var->ID@var-tail
-var-tail->(@expr@)|EPSILON_VALUE
