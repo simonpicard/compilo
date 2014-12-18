@@ -1,0 +1,105 @@
+<Program>-><InstructionList>
+<Instruction>-><IdentifierInstruction>
+             -><ConstDefinition>
+             -><Block>
+             -><Loop>
+             -><BuiltInFunctionCall>
+             -><FunctionDefinition>
+<InstructionList>-><Instruction> <InstructionListTail>
+                 -><InstructionListTail>
+<InstructionListTail>->END_OF_INSTRUCTION <InstructionList>
+                     ->EPSILON_VALUE
+<IdentifierInstruction>->IDENTIFIER <IdentifierInstructionTail>
+<IdentifierInstructionTail>-><AssignationTail>
+                           ->TYPE_DEFINITION <Type>
+                           -><FunctionCallTail>
+<AssignationTail>->ASSIGNATION <Expression>
+                 ->COMMA IDENTIFIER <AssignationTail> COMMA <Expression>
+<ConstDefinition>->CONST IDENTIFIER <AssignationTail>
+<Block>->LET IDENTIFIER <AssignationTail> END_OF_INSTRUCTION <InstructionList> END
+<Loop>-><If>
+      ->WHILE <Expression> END_OF_INSTRUCTION <InstructionList> END
+      ->FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <ForTail>
+<ForTail>->END_OF_INSTRUCTION <InstructionList> END
+         ->TERNARY_ELSE <Expression> END_OF_INSTRUCTION <InstructionList> END
+<Type>->BOOLEAN_TYPE
+      ->REAL_TYPE
+      ->INTEGER_TYPE
+<Expression>-><BinaryExpression> <TernaryIfExpression>
+<TernaryIfExpression>->TERNARY_IF <Expression> <TernaryElseExpression>
+                     ->EPSILON_VALUE
+<TernaryElseExpression>->TERNARY_ELSE <Expression>
+<AtomicExpression>-><AtomicIdentifierExpression>
+                  ->INTEGER
+                  ->REAL
+                  ->BOOLEAN
+                  -><BuiltInFunctionCall>
+<AtomicIdentifierExpression>->IDENTIFIER <AtomicIdentifierExpressionTail>
+<AtomicIdentifierExpressionTail>-><FunctionCallTail>
+                                ->EPSILON_VALUE
+<UnaryExpression>->NEGATION <UnaryExpression>
+                 -><UnaryBitwiseNotExpression>
+<UnaryBitwiseNotExpression>->BITWISE_NOT <UnaryBitwiseNotExpression>
+                           -><UnaryMinusPlusExpression>
+<UnaryMinusPlusExpression>->MINUS <UnaryMinusPlusExpression>
+                          ->PLUS <UnaryMinusPlusExpression>
+                          -><UnaryAtomicExpression>
+<UnaryAtomicExpression>-><AtomicExpression>
+                       ->LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS                       
+<BinaryExpression>-><BinaryLazyOrExpression> <BinaryExpression'>
+<BinaryExpression'>->LAZY_OR <BinaryLazyOrExpression> <BinaryExpression'>
+                   ->EPSILON_VALUE
+<BinaryLazyOrExpression>-><BinaryLazyAndExpression> <BinaryLazyOrExpression'>
+<BinaryLazyOrExpression'>->LAZY_AND <BinaryLazyAndExpression> <BinaryLazyOrExpression'>
+                         ->EPSILON_VALUE
+<BinaryLazyAndExpression>-><BinaryNumericExpression> <BinaryLazyAndExpression'>
+<BinaryLazyAndExpression'>->GREATER_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
+                          ->LESS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
+                          ->GREATER_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
+                          ->LESS_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
+                          ->EQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
+                          ->INEQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
+                          ->EPSILON_VALUE
+<BinaryNumericExpression>-><BinaryTermExpression> <BinaryNumericExpression'>
+<BinaryNumericExpression'>->PLUS <BinaryTermExpression> <BinaryNumericExpression'>
+                          ->MINUS <BinaryTermExpression> <BinaryNumericExpression'>
+                          ->BITWISE_OR <BinaryTermExpression> <BinaryNumericExpression'>
+                          ->BITWISE_XOR <BinaryTermExpression> <BinaryNumericExpression'>
+                          ->EPSILON_VALUE
+<BinaryTermExpression>-><BinaryShiftedExpression> <BinaryTermExpression'>
+<BinaryTermExpression'>->ARITHMETIC_SHIFT_LEFT <BinaryShiftedExpression> <BinaryTermExpression'>
+                       ->ARITHMETIC_SHIFT_RIGHT <BinaryShiftedExpression> <BinaryTermExpression'>
+                       ->EPSILON_VALUE
+<BinaryShiftedExpression>-><BinaryFactorExpression> <BinaryShiftedExpression'>
+<BinaryShiftedExpression'>->TIMES <BinaryFactorExpression> <BinaryShiftedExpression'>
+                          ->DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>
+                          ->REMAINDER <BinaryFactorExpression> <BinaryShiftedExpression'>
+                          ->BITWISE_AND <BinaryFactorExpression> <BinaryShiftedExpression'>
+                          ->INVERSE_DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>
+                          ->EPSILON_VALUE
+<BinaryFactorExpression>-><UnaryExpression> <BinaryFactorExpression'>
+<BinaryFactorExpression'>->POWER <UnaryExpression> <BinaryFactorExpression'>
+                         ->EPSILON_VALUE
+<If>->IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
+<IfEnd>->ELSE_IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
+       ->ELSE <InstructionList> END
+       ->END
+<BuiltInFunctionCall>->READ_REAL LEFT_PARENTHESIS RIGHT_PARENTHESIS
+                     ->READ_INTEGER LEFT_PARENTHESIS RIGHT_PARENTHESIS
+                     ->INTEGER_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
+                     ->REAL_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
+                     ->BOOLEAN_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
+                     ->PRINTLN LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
+<FunctionCallTail>->LEFT_PARENTHESIS <Parameter> RIGHT_PARENTHESIS
+<Parameter>-><Expression> <ParameterTail>
+           ->EPSILON_VALUE
+<ParameterTail>->COMMA <Expression> <ParameterTail>
+               ->EPSILON_VALUE
+<FunctionDefinition>->FUNCTION IDENTIFIER LEFT_PARENTHESIS <Argument> RIGHT_PARENTHESIS <InstructionList> <FunctionDefinitionEnd>
+<FunctionDefinitionEnd>->RETURN <Expression> END
+                       ->END
+<Argument>->IDENTIFIER TYPE_DEFINITION <Type> <ArgumentTail>
+          ->EPSILON_VALUE
+<ArgumentTail>->COMMA IDENTIFIER TYPE_DEFINITION <Type> <ArgumentTail>
+              ->EPSILON_VALUE
+#Ajout de la possibilité de terminer une liste d'instructions par une instruction sans END_OF_INSTRUCTION
