@@ -16,29 +16,34 @@
 \maketitle
 
 \section{Introduction}
-Dans cette partie du projet, il nous est demandé de modifier la grammaire donnée dans l'énoncé afin de rendre celle-ci LL(1). Nous avons décidé d'inclure les fonctions dans la grammaire.
+Dans cette partie du projet, il nous est demandé de modifier la grammaire donnée dans l'énoncé afin de rendre celle-ci LL(1). Il faut donc appliquer toute une série de règles et d'algorithmes pour rendre cette grammaire moins ambigüe et LL(1), dans le but de construire ``l'action table'' à partir des ensembles first et follow. L'inclusion des fonctions dans la grammaire fait partie d'un bonus que nous avons décidé de réaliser.
 
 \section{Transformation de la grammaire donnée}
 \subsection{Opérateurs binaires et unaires}
 La première étape pour rendre la grammaire LL(1) fut la distinction des deux types d'opérateurs : les opérateurs binaires qui agissent sur deux expressions l'une située à gauche et l'autre à droite de ces opérateurs et les opérateurs unaires qui agissent sur une seule expression située à droite de ces opérateurs. Il faut différencier les deux types d'opérateurs afin de ne pas avoir des expressions du style : >>4, *2, 6|,... .Les opérateurs unaires sont au nombre de quatre : ! (negation), $\sim$ (not bit à bit), + et -. Les opérateurs + et - sont également des opérateurs binaires. 
 \subsection{Priorité et associativité des opérateurs}
-Lors de cette étape, nous avons modifié la grammaire afin de fixer la priorité et l'associativité des différents opérateurs, ceci afin de rendre la grammaire moins ambigue. Nous avons remarqué que les opérateurs unaires étaient plus prioritaires que les opérateurs binaires et que les opérateurs unaires étaient tous associatifs à droite, tandis que les opérateurs binaires l'étaient tous à gauche. Pour fixer la priorité, nous avons mis les opérateurs les moins prioritaires le plus ``haut'' possible dans la grammaire et les plus prioritaires le plus ``bas'' possible. 
-\subsection{Suppression des récursion à gauche}
-L'étape suivante fut l'étape de suppression des récursions à gauche qui sont incompatibles avec les ``top-down parser'' car cela fait entrer ce genre de parser dans une boucle ou récursion infinie.
+Lors de cette étape, nous avons modifié la grammaire afin de fixer la priorité et l'associativité des différents opérateurs, ceci afin de rendre la grammaire moins ambigüe. Nous avons remarqué que les opérateurs unaires étaient plus prioritaires que les opérateurs binaires et que les opérateurs unaires étaient tous associatifs à droite, tandis que les opérateurs binaires l'étaient tous à gauche. Pour fixer la priorité, nous avons mis les opérateurs les moins prioritaires le plus ``haut'' possible dans la grammaire et les plus prioritaires le plus ``bas'' possible. 
+\subsection{Suppression des récursions à gauche}
+L'étape suivante fut l'étape de suppression des récursions à gauche qui sont incompatibles avec les ``top-down parser'' car cela fait entrer ce genre de parser dans une boucle ou récursion infinie. Cette étape rend tout opérateur associatif à droite si l'on ne fait rien pour résoudre ce problème lors de l'analyse sémantique.
 \subsection{Left factoring}
 Cette étape rassemble les règles de production d'une variable qui ont un préfixe commun en une seule règle de production qui contient ce préfixe commun et une nouvelle variable. Cette nouvelle variable possède des règles de production vers les différents suffixes qui étaient présents à l'origine dans les différentes règles de production qui ont été mises en commun. Ceci est nécessaire car le parser qu'on va créer est LL(1), il faut donc qu'il puisse choisir la bonne règle de production en regardant seulement le prochain token qui est en entrée.
 \subsection{Les variables <Instruction> et <InstructionList>}
-Dans la grammaire donnée, à chaque fois que la variable <Instruction> se trouvait dans la partie droite d'une règle de production excepté lorque la partie gauche de la règle était <InstructionList>, il y avait une autre règle de production pour cette même partie gauche où <Instruction> était remplacé par <InstructionList>. Par exemple, <If>$\rightarrow$<Expression> <Empty> <InstructionList> <IfEnd> et <If>$\rightarrow$<Expression> <Empty> <Instruction> <IfEnd>. Ceci permettant de ne pas mettre de END\_OF\_INSTRUCTION à la fin d'une <Instruction> lorsque le corps d'un block (ici, le corps du ``if'') ne contenait qu'une seule <Instruction>. 
+Dans la grammaire donnée, à chaque fois que la variable <Instruction> se trouvait dans la partie droite d'une règle de production excepté lorsque la partie gauche de la règle était <InstructionList>, il y avait une autre règle de production pour cette même partie gauche où <Instruction> était remplacé par <InstructionList>. Par exemple, <If>$\rightarrow$<Expression> <Empty> <InstructionList> <IfEnd> et <If>$\rightarrow$<Expression> <Empty> <Instruction> <IfEnd>. Ceci permettant de ne pas mettre de END\_OF\_INSTRUCTION à la fin d'une <Instruction> lorsque le corps d'un block (ici, le corps du ``if'') ne contenait qu'une seule <Instruction>. 
 Le problème posé par le doublement systématique des règles de production contenant des instructions (une règle pour <Instruction> et une autre pour <InstructionList>) est que ce n'est pas factorisé à gauche et que le first de <InstructionList> peut être <Instruction>. 
 Afin de résoudre ce problème, nous avons décidé de ne plus utilisé que la variable <InstructionList> dans les autres règles de production. Ainsi, on évite le doublement des règles de production.
 Une <InstructionList> est une liste d'<Instruction> séparées par des END\_OF\_INSTRUCTION, avec la dernière <Instruction> qui n'est pas nécessairement suivie d'un END\_OF\_INSTRUCTION. Ceci permet d'avoir un programme du style : if(a>b);a=10 end;
 Donc seule une <InstructionList> permet de produire des <Instruction>.
+De plus, vu qu'une <InstructionList> peut contenir des instructions vide (une instruction contenant seulement END\_OF\_INSTRUCTION) la variable <Empty> n'est plus nécessaire car celle-ci servait uniquement à indiquer qu'il fallait au moins un terminal END\_OF\_INSTRUCTION.
 \subsection{Fonctions}
-Les fonctions aménent deux types d'instructions en plus : les définitions de fonction et les appels de fonction. Les appels sont considérés comme des expressions atomiques afin de pourvoir mettre des appels de fonction au sein d'une expression. Par exemple, a=foo()+5;
+Les fonctions amènent deux types d'instructions en plus : les définitions de fonction et les appels de fonction. Les appels sont considérés comme des expressions atomiques afin de pourvoir mettre des appels de fonction au sein d'une expression. Par exemple, a=foo()+5;
 De plus, il faut qu'une fonction puisse être appelée sans avoir besoin de faire une assignation ou un autre type d'instruction car une fonction peut ne rien retourner et simplement avoir un effet de bord. Par exemple, la fonction println est une fonction qui ne retourne rien mais produit un effet de bord qui est l'affichage dans le terminal. Il faut donc pouvoir faire, par exemple, println(a). C'est pour cela qu'il faut qu'un appel de fonction soit une instruction à part entière.
+\subsection{Instructions commencant par un identifier}
+Plusieurs instructions commencent par un identifier. Il s'agit des assignations, des déclarations de variables et des appels de fonctions. Afin que la grammaire soit LL(1) il faut factoriser ces instructions. C'est pour cela que la variable <IdentifierInstruction> a été créée. Celle-ci représente une instruction qui commence par un identifier. La variable <IdentifierInstructionTail> a été également créée afin de distinguer les différents types d'instructions qui commencent par un identifier. La distinction est après aisément faite car lorsque le symbole suivant l'identifier est ``='', on sait que c'est une assignation, lorsque ce symbole est ``::'', on sait que c'est une déclaration de variable et lorsque que ce symbole est ``('', on sait que c'est un appel de fonction.
 
 
 \section{Grammaire}
+
+Voici la grammaire donnée dans l'énoncé et transformée en grammaire LL(1). A chaque règle de production correspond un numéro qui identifie cette règle.
 
 \begin{longtable}{llll}
 $[1]$&<Program>&$\rightarrow$&\begin{tabular}[t]{@{}l@{}}<InstructionList> \end{tabular}\\
@@ -249,7 +254,7 @@ Variable&First&Follow\\
 \end{longtable}
 
 \section{Action Table}
-Les lignes de l'``action table'' représente les variables et les colonnes, les terminaux. Une cellule de cette table contient le numéro d'une règle de production correspondant au numéro repris dans la section grammaire.
+Les lignes de ``l'action table'' représentent les variables et les colonnes représentent les terminaux. Une cellule de cette table contient le numéro d'une règle de production correspondant au numéro repris dans la section grammaire.
 \clearpage
 \begin{figure}[!h]
 \includepdf[pages=1, angle=90]{action-table.pdf}
