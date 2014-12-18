@@ -24,8 +24,12 @@ Lors de cette étape, nous avons modifié la grammaire afin de fixer la priorit�
 L'étape suivante fut l'étape de suppression des récursions à gauche qui sont incompatibles avec les ``top-down parser'' car cela fait entrer ce genre de parser dans une boucle ou récursion infinie.
 \subsection{Left factoring}
 Cette étape rassemble les règles de production d'une variable qui ont un préfixe commun en une seule règle de production qui contient ce préfixe commun et une nouvelle variable. Cette nouvelle variable possède des règles de production vers les différents suffixes qui étaient présents à l'origine dans les différentes règles de production qui ont été mises en commun. Ceci est nécessaire car le parser qu'on va créer est LL(1), il faut donc qu'il puisse choisir la bonne règle de production en regardant seulement le prochain token qui est en entrée.
-\subsection{Suppression de la variable <Instruction>}
-Nous avons décidé de supprimer la variable <Instruction> et de ne laisser que <InstructionList>. <InstructionList> pouvant être une liste d'instruction, une instruction vide ou rien (epsilon), ceci afin de rendre la grammaire moins ambigue, plus allégée et sans grande perte de fonctionnalité du langage.
+\subsection{Les variables <Instruction> et <InstructionList>}
+Dans la grammaire donnée, à chaque fois que la variable <Instruction> se trouvait dans la partie droite d'une règle de production excepté lorque la partie gauche de la règle était <InstructionList>, il y avait une autre règle de production pour cette même partie gauche où <Instruction> était remplacé par <InstructionList>. Par exemple, <If>$\rightarrow$<Expression> <Empty> <InstructionList> <IfEnd> et <If>$\rightarrow$<Expression> <Empty> <Instruction> <IfEnd>. Ceci permettant de ne pas mettre de END\_OF\_INSTRUCTION à la fin d'une <Instruction> lorsque le corps d'un block (ici, le corps du ``if'') ne contenait qu'une seule <Instruction>. 
+Le problème posé par le doublement systématique des règles de production contenant des instructions (une règle pour <Instruction> et une autre pour <InstructionList>) est que ce n'est pas factorisé à gauche et que le first de <InstructionList> peut être <Instruction>. 
+Afin de résoudre ce problème, nous avons décidé de ne plus utilisé que la variable <InstructionList> dans les autres règles de production. Ainsi, on évite le doublement des règles de production.
+Une <InstructionList> est une liste d'<Instruction> séparées par des END\_OF\_INSTRUCTION, avec la dernière <Instruction> qui n'est pas nécessairement suivie d'un END\_OF\_INSTRUCTION. Ceci permet d'avoir un programme du style : if(a>b);a=10 end;
+Donc seule une <InstructionList> permet de produire des <Instruction>.
 
 
 \section{Grammaire}
@@ -239,6 +243,7 @@ Variable&First&Follow\\
 \end{longtable}
 
 \section{Action Table}
+Les lignes de l'``action table'' représente les variables et les colonnes, les terminaux. Une cellule de cette table contient le numéro d'une règle de production correspondant au numéro repris dans la section grammaire.
 \clearpage
 \begin{figure}[!h]
 \includepdf[pages=1, angle=90]{AT.pdf}
