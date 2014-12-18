@@ -23,7 +23,12 @@ public class Main {
     public static void main(String[] args) throws Exception {
         GrammarParser gp = new GrammarParser("../grammar/iulius-grammar-with-func-v2.grammar");
         Grammar grammar = gp.generateGrammar();
+        grammar.writeLatexTable("../../doc/grammar.tex");
+        FirstFollow firstFollow = new FirstFollow(grammar);
+        firstFollow.process();
+        firstFollow.printFF("../../doc/ff.tex");
         ActionTable at = new ActionTable(grammar);
+        at.writTable("../../doc/AT.tex");
         StackParser sp = new StackParser("../../test/testType.il", at);
     }
 }

@@ -105,15 +105,20 @@ public class ActionTable {
     public void writTable(String path) throws IOException {
         BufferedWriter file = new BufferedWriter(new FileWriter(path));
         
-        file.write("\\documentclass[a2paper,landscape]{article}\n" +
+        file.write("\\documentclass[8pt]{article}\n" +
 "\\usepackage[utf8]{inputenc}\n" +
-"\\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n" +
+"\\usepackage[T1]{fontenc}\n" +
+"\\usepackage[paperheight=27cm,paperwidth=31cm,top=0.5cm, bottom=0.5cm, left=.5cm, right=0.5cm]{geometry}\n" +
 "\\usepackage[english]{babel}\n" +
 "\\usepackage{graphicx}\n" +
 "\\usepackage{float}" +
 "\n" +
 "\n" +
-"\\begin{document}");
+"\\begin{document}" + 
+"\\begin{figure}\n" +
+"\\begin{center}\n" +
+"\\bgroup\n" +
+"\\setlength{\\tabcolsep}{1pt}");
 
         List<Variable> orderedVariables = new ArrayList<>(this.grammar.getVariables());
         List<Terminal> orderedTerminals = new ArrayList<>(this.grammar.getTerminals());
@@ -147,7 +152,11 @@ public class ActionTable {
             }
         }
 
-        file.write("\\end{tabular}\\end{document} ");
+        file.write("\\end{tabular}\n" +
+"\\egroup\n" +
+"\\end{center}\n" +
+"\\end{figure}\n" +
+"\\end{document} ");
         file.close();
     }
 
