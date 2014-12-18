@@ -23,6 +23,16 @@ Dans cette partie du projet, il nous est demandé de modifier la grammaire donn�
 La première étape pour rendre la grammaire LL(1) fut la distinction des deux types d'opérateurs : les opérateurs binaires qui agissent sur deux expressions l'une située à gauche et l'autre à droite de ces opérateurs et les opérateurs unaires qui agissent sur une seule expression située à droite de ces opérateurs. Il faut différencier les deux types d'opérateurs afin de ne pas avoir des expressions du style : >>4, *2, 6|,... .Les opérateurs unaires sont au nombre de quatre : ! (negation), $\sim$ (not bit à bit), + et -. Les opérateurs + et - sont également des opérateurs binaires. 
 \subsection{Priorité et associativité des opérateurs}
 Lors de cette étape, nous avons modifié la grammaire afin de fixer la priorité et l'associativité des différents opérateurs, ceci afin de rendre la grammaire moins ambigüe. Nous avons remarqué que les opérateurs unaires étaient plus prioritaires que les opérateurs binaires et que les opérateurs unaires étaient tous associatifs à droite, tandis que les opérateurs binaires l'étaient tous à gauche. Pour fixer la priorité, nous avons mis les opérateurs les moins prioritaires le plus ``haut'' possible dans la grammaire et les plus prioritaires le plus ``bas'' possible. 
+Dans la grammaire ci-dessous où le ``start symbol'' est E, l'opérateur ``+'' est considéré comme plus ``haut'' que l'opérateur ``*'' dans la grammaire car il est possible d'obtenir l'opérateur ``+'' en utilisant moins de règles de production à partir du ``start symbol'' que pour obtenir l'opérateur ``*''.
+\begin{verbatim}
+E->E + T
+ ->T
+T->T * F
+ ->F
+F->ID
+ ->( E )
+\end{verbatim}
+
 \subsection{Suppression des récursions à gauche}
 L'étape suivante fut l'étape de suppression des récursions à gauche qui sont incompatibles avec les ``top-down parser'' car cela fait entrer ce genre de parser dans une boucle ou récursion infinie. Cette étape rend tout opérateur associatif à droite si l'on ne fait rien pour résoudre ce problème lors de l'analyse sémantique.
 \subsection{Left factoring}
