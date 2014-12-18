@@ -45,7 +45,7 @@
                           ->PLUS <UnaryMinusPlusExpression>
                           -><UnaryAtomicExpression>
 <UnaryAtomicExpression>-><AtomicExpression>
-                       ->LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS                       
+                       ->LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
 <BinaryExpression>-><BinaryLazyOrExpression> <BinaryExpression'>
 <BinaryExpression'>->LAZY_OR <BinaryLazyOrExpression> <BinaryExpression'>
                    ->EPSILON_VALUE

@@ -22,7 +22,7 @@ EPSILON_VALUE IDENTIFIER TYPE_DEFINITION CONST END ASSIGNATION END_OF_INSTRUCTIO
 <UnaryExpression>->NEGATION <UnaryExpression>|<UnaryBitwiseNotExpression>
 <UnaryBitwiseNotExpression>->BITWISE_NOT <UnaryBitwiseNotExpression>|<UnaryMinusPlusExpression>
 <UnaryMinusPlusExpression>->MINUS <UnaryMinusPlusExpression>|PLUS <UnaryMinusPlusExpression>|<UnaryAtomicExpression>
-<UnaryAtomicExpression>-><AtomicExpression>|LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS                       
+<UnaryAtomicExpression>-><AtomicExpression>|LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
 <BinaryExpression>-><BinaryLazyOrExpression> <BinaryExpression'>
 <BinaryExpression'>->LAZY_OR <BinaryLazyOrExpression> <BinaryExpression'>|EPSILON_VALUE
 <BinaryLazyOrExpression>-><BinaryLazyAndExpression> <BinaryLazyOrExpression'>
