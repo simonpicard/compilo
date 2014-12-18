@@ -28,7 +28,7 @@ public class Main {
         //firstFollow.process();
         //firstFollow.printFF("../../doc/ff.tex");
         ActionTable at = new ActionTable(grammar);
-        //at.writTable("../../doc/AT.tex");
+        //at.writTable("../../doc/action-table.tex");
         StackParser sp = new StackParser("../../test/testType.il", at);
     }
 }

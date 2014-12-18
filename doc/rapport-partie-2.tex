@@ -15,6 +15,9 @@
 
 \maketitle
 
+\section{Introduction}
+Dans cette partie du projet, il nous est demandé de modifier la grammaire donnée dans l'énoncé afin de rendre celle-ci LL(1). Nous avons décidé d'inclure les fonctions dans la grammaire.
+
 \section{Transformation de la grammaire donnée}
 \subsection{Opérateurs binaires et unaires}
 La première étape pour rendre la grammaire LL(1) fut la distinction des deux types d'opérateurs : les opérateurs binaires qui agissent sur deux expressions l'une située à gauche et l'autre à droite de ces opérateurs et les opérateurs unaires qui agissent sur une seule expression située à droite de ces opérateurs. Il faut différencier les deux types d'opérateurs afin de ne pas avoir des expressions du style : >>4, *2, 6|,... .Les opérateurs unaires sont au nombre de quatre : ! (negation), $\sim$ (not bit à bit), + et -. Les opérateurs + et - sont également des opérateurs binaires. 
@@ -30,6 +33,9 @@ Le problème posé par le doublement systématique des règles de production con
 Afin de résoudre ce problème, nous avons décidé de ne plus utilisé que la variable <InstructionList> dans les autres règles de production. Ainsi, on évite le doublement des règles de production.
 Une <InstructionList> est une liste d'<Instruction> séparées par des END\_OF\_INSTRUCTION, avec la dernière <Instruction> qui n'est pas nécessairement suivie d'un END\_OF\_INSTRUCTION. Ceci permet d'avoir un programme du style : if(a>b);a=10 end;
 Donc seule une <InstructionList> permet de produire des <Instruction>.
+\subsection{Fonctions}
+Les fonctions aménent deux types d'instructions en plus : les définitions de fonction et les appels de fonction. Les appels sont considérés comme des expressions atomiques afin de pourvoir mettre des appels de fonction au sein d'une expression. Par exemple, a=foo()+5;
+De plus, il faut qu'une fonction puisse être appelée sans avoir besoin de faire une assignation ou un autre type d'instruction car une fonction peut ne rien retourner et simplement avoir un effet de bord. Par exemple, la fonction println est une fonction qui ne retourne rien mais produit un effet de bord qui est l'affichage dans le terminal. Il faut donc pouvoir faire, par exemple, println(a). C'est pour cela qu'il faut qu'un appel de fonction soit une instruction à part entière.
 
 
 \section{Grammaire}
@@ -246,7 +252,7 @@ Variable&First&Follow\\
 Les lignes de l'``action table'' représente les variables et les colonnes, les terminaux. Une cellule de cette table contient le numéro d'une règle de production correspondant au numéro repris dans la section grammaire.
 \clearpage
 \begin{figure}[!h]
-\includepdf[pages=1, angle=90]{AT.pdf}
+\includepdf[pages=1, angle=90]{action-table.pdf}
 \end{figure}
 
 \end{document}
