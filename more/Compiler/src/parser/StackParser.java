@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
+import parser.TypeEnum;
 import utils.datastructure.ActionTable;
 import utils.datastructure.Token;
 import scanner.LexicalAnalyzer;
@@ -27,9 +28,12 @@ import utils.datastructure.Variable;
  * @author Simon
  */
 public class StackParser {
+    
+    private Environment env;
 
     public StackParser(String path, ActionTable actionTable) throws IOException, FileNotFoundException, PatternSyntaxException, SyntaxErrorException {
         parse(path, actionTable);
+        env = new Environment();
     }
 
     private void parse(String path, ActionTable actionTable) throws FileNotFoundException, IOException, PatternSyntaxException, SyntaxErrorException {
@@ -71,6 +75,19 @@ public class StackParser {
                 go = false;
             }
         }
+    }
+    
+    private void baseEnvironnement(){
+        Frame f = new Frame();
+        f.add("Integer", new FrameType("i32", TypeEnum.integer));
+        f.add("FloatingPoint", new FrameType("float", TypeEnum.real));
+        f.add("Bool", new FrameType("i1", TypeEnum.bool));
+        
+        f.add("true", new FrameConst(TypeEnum.bool, "true"));
+        f.add("false", new FrameConst(TypeEnum.bool, "false"));
+        f.add("null", new FrameConst(TypeEnum.pointer, "null"));
+        
+        env.add(f);
     }
 
 }
