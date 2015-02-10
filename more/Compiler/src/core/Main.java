@@ -5,6 +5,7 @@
  */
 package core;
 
+import parser.RecursiveParser;
 import parser.StackParser;
 import utils.algorithms.FirstFollow;
 import utils.datastructure.ActionTable;
@@ -29,6 +30,7 @@ public class Main {
         //firstFollow.printFF("../../doc/ff.tex");
         ActionTable at = new ActionTable(grammar);
         //at.writTable("../../doc/action-table.tex");
-        StackParser sp = new StackParser("../../test/testType.il", at);
+        RecursiveParser rp = new RecursiveParser("../../test/testType.il", at);
+        rp.parseProgram();
     }
 }

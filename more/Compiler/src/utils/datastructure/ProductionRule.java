@@ -21,6 +21,7 @@ public class ProductionRule {
         ++counter;
         this.leftPart = leftPart;
         this.rightPart = rightPart;
+        productionRules.put(id, this);
     }
     
     public static List<ProductionRule> generateProductionRulesFromGrammar(Grammar grammar) {
@@ -63,6 +64,7 @@ public class ProductionRule {
     
     
     private static int counter = 1;
+    public static HashMap<Integer, ProductionRule> productionRules = new HashMap<>();
     private int id;
     private Variable leftPart;
     private List<Token> rightPart;
