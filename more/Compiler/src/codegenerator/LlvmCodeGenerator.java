@@ -16,6 +16,7 @@ import java.io.IOException;
  */
 public class LlvmCodeGenerator {
     private FileOutputStream outputFile;
+    public static String endOfline = System.getProperty("line.separator");
     
     public LlvmCodeGenerator(String outputPath) throws FileNotFoundException {
         outputFile = new FileOutputStream(new File(outputPath));
