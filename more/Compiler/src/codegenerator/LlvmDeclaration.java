@@ -22,14 +22,14 @@ public class LlvmDeclaration implements LlvmItem {
     @Override
     public byte[] toByte() {
         String res;
-        res = "%"+Integer.toString(fv.getAddress())+" = allocate ";
+        res = "%v"+Integer.toString(fv.getAddress())+" = allocate ";
         switch(fv.getType()){
-            case(Type.integer):
+            case integer:
                 res = res + "i32";
-            case(Type.real):
+            case real:
                 res = res + "float";
-            case(Type.bool):
-                res = res + "bool";
+            case bool:
+                res = res + "i1";
         }
         res = res + "\n";
         return res.getBytes(Charset.forName("UTF-8"));
