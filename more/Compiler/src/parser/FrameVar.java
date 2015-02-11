@@ -9,36 +9,34 @@ package parser;
  *
  * @author Simon
  */
-public class FrameVar implements FrameItem{
-    private TypeEnum t;
-    private static int address = 0;
-    private Object val;
-    
-    public FrameVar(TypeEnum t, Object v){
+public class FrameVar implements FrameItem {
+
+    private Type t;
+    private int address;
+    private static int addressCounter = 0;
+
+    public FrameVar(Type t) {
         this.t = t;
-        val = v;
-        address++;
+        this.address = addressCounter;
+        ++addressCounter;
     }
 
-    public TypeEnum getType() {
+    public Type getType() {
         return t;
     }
 
-    public void setType(TypeEnum t) {
+    public void setType(Type t) {
         this.t = t;
     }
 
     public int getAddress() {
         return address;
     }
-
-    public Object getVal() {
-        return val;
+    
+    @Override
+    public String toString() {
+        String res = "type(variable), address(" + address + "), variableType(" + t + ")";
+        return res;
     }
 
-    public void setVal(Object val) {
-        this.val = val;
-    }
-    
-    
 }

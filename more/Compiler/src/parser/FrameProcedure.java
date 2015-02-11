@@ -12,29 +12,29 @@ import java.util.ArrayList;
  * @author Simon
  */
 public class FrameProcedure implements FrameItem {
-    private TypeEnum resultType;
-    private ArrayList<TypeEnum> argsType;
+    private Type resultType;
+    private ArrayList<Type> argsType;
     private Object procedure;
     
-    public FrameProcedure(TypeEnum t, ArrayList<TypeEnum> aT, Object p){
+    public FrameProcedure(Type t, ArrayList<Type> aT, Object p){
         resultType = t;
         argsType = aT;
         procedure = p;
     }
 
-    public TypeEnum getResultType() {
+    public Type getResultType() {
         return resultType;
     }
 
-    public void setResultType(TypeEnum resultType) {
+    public void setResultType(Type resultType) {
         this.resultType = resultType;
     }
 
-    public ArrayList<TypeEnum> getArgsType() {
+    public ArrayList<Type> getArgsType() {
         return argsType;
     }
 
-    public void setArgsType(ArrayList<TypeEnum> argsType) {
+    public void setArgsType(ArrayList<Type> argsType) {
         this.argsType = argsType;
     }
 

@@ -11,21 +11,21 @@ package parser;
  */
 public class FrameConst implements FrameItem{
     
-    private TypeEnum t;
+    private Type t;
     private Object val;
     private static int address = 0;
     
-    public FrameConst(TypeEnum t, Object v){
+    public FrameConst(Type t, Object v){
         this.t = t;
         val = v;
         address++;
     }
 
-    public TypeEnum getT() {
+    public Type getT() {
         return t;
     }
 
-    public void setT(TypeEnum t) {
+    public void setT(Type t) {
         this.t = t;
     }
 

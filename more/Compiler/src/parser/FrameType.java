@@ -11,9 +11,9 @@ package parser;
  */
 public class FrameType implements FrameItem{
     private String typeLLVM;
-    private TypeEnum id;
+    private Type id;
     
-    public FrameType(String t, TypeEnum i){
+    public FrameType(String t, Type i){
         typeLLVM = t;
         id = i;
     }
@@ -26,11 +26,11 @@ public class FrameType implements FrameItem{
         this.typeLLVM = typeLLVM;
     }
 
-    public TypeEnum getId() {
+    public Type getId() {
         return id;
     }
 
-    public void setId(TypeEnum id) {
+    public void setId(Type id) {
         this.id = id;
     }
     

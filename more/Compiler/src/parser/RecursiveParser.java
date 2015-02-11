@@ -30,6 +30,7 @@ public class RecursiveParser {
     private Terminal currentTerminal;
     private Variable currentVariable;
     private ProductionRule currentProductionRule;
+    private TableOfSymbols tableOfSymbols;
 
     private void produce(ProductionRule productionRule) {
         System.out.println("Produce " + productionRule);
@@ -64,10 +65,13 @@ public class RecursiveParser {
         this.lexicalAnalyzer = new LexicalAnalyzer(new FileInputStream(sourcePath));
         currentSymbol = lexicalAnalyzer.nextToken();
         this.actionTable = actionTable;
+        this.tableOfSymbols = new TableOfSymbols();
     }
 
     public void parseProgram() throws Exception {
         initStep("<Program>");
+        
+        tableOfSymbols.addFrame(new Frame());
         // [1] <Program> -> <InstructionList>
         if (ProductionRule.productionRules.get(1).equals(currentProductionRule)) {
             parseInstructionList();
@@ -75,6 +79,7 @@ public class RecursiveParser {
         else {
             error(currentVariable, currentTerminal);
         }
+        tableOfSymbols.removeFrame();
         if (currentTerminal.equals(Epsilon.getInstance())) {
             System.out.println("Accept");
         }
@@ -143,15 +148,16 @@ public class RecursiveParser {
         initStep("<IdentifierInstruction>");
         // [12] <IdentifierInstruction> -> IDENTIFIER <IdentifierInstructionTail>
         if (ProductionRule.productionRules.get(12).equals(currentProductionRule)) {
+            String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
-            parseIdentifierInstructionTail();
+            parseIdentifierInstructionTail(identifier);
         } // Error
         else {
             error(currentVariable, currentTerminal);
         }
     }
 
-    private void parseIdentifierInstructionTail() throws Exception {
+    private void parseIdentifierInstructionTail(String identifier) throws Exception {
         initStep("<IdentifierInstructionTail>");
         // [13] <IdentifierInstructionTail> -> <AssignationTail>
         if (ProductionRule.productionRules.get(13).equals(currentProductionRule)) {
@@ -159,7 +165,7 @@ public class RecursiveParser {
         } // [14] <IdentifierInstructionTail> -> TYPE_DEFINITION <Type>
         else if (ProductionRule.productionRules.get(14).equals(currentProductionRule)) {
             match(currentTerminal);
-            parseType();
+            parseType(identifier);
         } // [15] <IdentifierInstructionTail> -> <FunctionCallTail>
         else if (ProductionRule.productionRules.get(15).equals(currentProductionRule)) {
             parseFunctionCallTail();
@@ -201,8 +207,10 @@ public class RecursiveParser {
         }
     }
     
+    // Faut peut etre modifier la grammaire pour avoir : let a::Integer = 1 et pas let a = 1
     private void parseBlock() throws Exception {
         initStep("<Block>");
+        tableOfSymbols.addFrame(new Frame());
         // [19] <Block> -> LET IDENTIFIER <AssignationTail> END_OF_INSTRUCTION <InstructionList> END
         if (ProductionRule.productionRules.get(19).equals(currentProductionRule)) {
             match(currentTerminal);
@@ -229,8 +237,10 @@ public class RecursiveParser {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
+            tableOfSymbols.removeFrame();
         }
         // [22] <Loop> -> FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <ForTail>
         else if (ProductionRule.productionRules.get(22).equals(currentProductionRule)) {
@@ -253,16 +263,20 @@ public class RecursiveParser {
         // [23] <ForTail> -> END_OF_INSTRUCTION <InstructionList> END
         if (ProductionRule.productionRules.get(23).equals(currentProductionRule)) {
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
+            tableOfSymbols.removeFrame();
         }
         // [24] <ForTail> -> TERNARY_ELSE <Expresssion> END_OF_INSTRUCTION <InstructionList> END
         else if (ProductionRule.productionRules.get(24).equals(currentProductionRule)) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
+            tableOfSymbols.removeFrame();
         }
         // Error
         else {
@@ -270,18 +284,21 @@ public class RecursiveParser {
         }
     }
     
-    private void parseType() throws Exception {
+    private void parseType(String identifier) throws Exception {
         initStep("<Type>");
         // [25] <Type> -> BOOLEAN_TYPE
         if (ProductionRule.productionRules.get(25).equals(currentProductionRule)) {
+            tableOfSymbols.addNewEntry(identifier, new FrameVar(Type.bool));
             match(currentTerminal);
         }
         // [26] <Type> -> REAL_TYPE
         else if (ProductionRule.productionRules.get(26).equals(currentProductionRule)) {
+            tableOfSymbols.addNewEntry(identifier, new FrameVar(Type.real));
             match(currentTerminal);
         }
         // [27] <Type> -> INTEGER_TYPE
         else if (ProductionRule.productionRules.get(27).equals(currentProductionRule)) {
+            tableOfSymbols.addNewEntry(identifier, new FrameVar(Type.integer));
             match(currentTerminal);
         }
         // Error
@@ -767,6 +784,7 @@ public class RecursiveParser {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             parseIfEnd();
         }
@@ -778,19 +796,23 @@ public class RecursiveParser {
     
     private void parseIfEnd() throws Exception {
         initStep("<IfEnd>");
+        tableOfSymbols.removeFrame();
         // [84] <IfEnd> -> ELSE_IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
         if (ProductionRule.productionRules.get(84).equals(currentProductionRule)) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             parseIfEnd();
         }
         // [85] <IfEnd> -> ELSE <InstructionList> END
         else if (ProductionRule.productionRules.get(85).equals(currentProductionRule)) {
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
+            tableOfSymbols.removeFrame();
         }
         // [86] <IfEnd> -> END
         else if (ProductionRule.productionRules.get(86).equals(currentProductionRule)) {
@@ -906,10 +928,12 @@ public class RecursiveParser {
             match(currentTerminal);
             match(currentTerminal);
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             parseArgument();
             match(currentTerminal);
             parseInstructionList();
             parseFunctionDefinitionEnd();
+            tableOfSymbols.removeFrame();
         }
         // Error
         else {
@@ -937,11 +961,13 @@ public class RecursiveParser {
     
     private void parseArgument() throws Exception {
         initStep("<Argument>");
+        
         // [101] <Argument> -> IDENTIFIER TYPE_DEFINITION <Type> <ArgumentTail>
         if (ProductionRule.productionRules.get(101).equals(currentProductionRule)) {
+            String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
             match(currentTerminal);
-            parseType();
+            parseType(identifier);
             parseArgumentTail();
         }
         // [102] <Argument> -> EPSILON_VALUE
@@ -959,9 +985,10 @@ public class RecursiveParser {
         // [103] <ArgumentTail> -> COMMA IDENTIFIER TYPE_DEFINITION <Type> <ArgumentTail>
         if (ProductionRule.productionRules.get(103).equals(currentProductionRule)) {
             match(currentTerminal);
+            String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
             match(currentTerminal);
-            parseType();
+            parseType(identifier);
             parseArgumentTail();
         }
         // [104] <ArgumentTail> -> EPSILON_VALUE

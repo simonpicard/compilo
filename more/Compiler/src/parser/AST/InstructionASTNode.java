@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parser;
+package parser.AST;
 
 /**
  *
- * @author Simon
+ * @author arnaud
  */
-public enum TypeEnum{integer, real, bool, pointer};
+public abstract class InstructionASTNode implements ASTNode {
+    
+}

@@ -30,7 +30,7 @@ public class Main {
         //firstFollow.printFF("../../doc/ff.tex");
         ActionTable at = new ActionTable(grammar);
         //at.writTable("../../doc/action-table.tex");
-        RecursiveParser rp = new RecursiveParser("../../test/testType.il", at);
+        RecursiveParser rp = new RecursiveParser("../../test/test.il", at);
         rp.parseProgram();
     }
 }

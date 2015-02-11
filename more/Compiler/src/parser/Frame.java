@@ -6,6 +6,7 @@
 package parser;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  *
@@ -19,11 +20,15 @@ public class Frame {
         entries = new HashMap<>();
     }
     
-    public void add(String k, FrameItem item){
-        entries.put(k, item);
+    public Set<String> identifiers() {
+        return entries.keySet();
     }
     
-    public FrameItem get(String k){
-        return entries.get(k);
+    public void add(String identifier, FrameItem item){
+        entries.put(identifier, item);
+    }
+    
+    public FrameItem get(String identifier){
+        return entries.get(identifier);
     }
 }
