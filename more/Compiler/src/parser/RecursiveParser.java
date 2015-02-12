@@ -194,11 +194,13 @@ public class RecursiveParser {
         // [17] <AssignationTail> -> COMMA IDENTIFIER <AssignationTail> COMMA <Expression>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 17) {
             match(currentTerminal);
+            FrameVar var = (FrameVar) tableOfSymbols.lookup(identifier);
             identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
             parseAssignationTail(identifier);
             match(currentTerminal);
             parseExpression();
+            generator.assignation(var.getAddress(), var.getType());
         }
         
         // Error

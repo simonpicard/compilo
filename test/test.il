@@ -17,3 +17,7 @@ println(a)
 b::Bool
 
 b=true||false&&true
+
+c::Integer
+d::Integer
+c,d=3,18
