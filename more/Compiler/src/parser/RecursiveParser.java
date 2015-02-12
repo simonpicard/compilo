@@ -590,36 +590,42 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 56) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.greaterThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [57] <BinaryLazyAndExpression'> -> LESS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 57) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.lessThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [58] <BinaryLazyAndExpression'> -> GREATER_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 58) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.greaterOrEqualsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [59] <BinaryLazyAndExpression'> -> LESS_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 59) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.lessOrEqualsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [60] <BinaryLazyAndExpression'> -> EQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 60) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.equalsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [61] <BinaryLazyAndExpression'> -> INEQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 61) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.notEqualsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [62] <BinaryLazyAndExpression'> -> EPSILON_VALUE
