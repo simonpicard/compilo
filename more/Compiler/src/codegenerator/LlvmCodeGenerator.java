@@ -228,7 +228,7 @@ public class LlvmCodeGenerator {
         outputFile.write(res.getBytes(charset));
     }
     
-    private void binaryOperation(String op) throws IOException, CodeGeneratorException {
+    private void binaryOperationInt(String op) throws IOException, CodeGeneratorException {
         String res = op +" ";
         Expression top = topExpression();
         switch (top.type) {
@@ -250,18 +250,44 @@ public class LlvmCodeGenerator {
     }
     
     public void plus() throws IOException, CodeGeneratorException {
-        binaryOperation("add");
+        binaryOperationInt("add");
     }
     
     public void minus() throws IOException, CodeGeneratorException {
-        binaryOperation("sub");
+        binaryOperationInt("sub");
     }
     
     public void bitwiseOr() throws IOException, CodeGeneratorException {
-        binaryOperation("or");
+        binaryOperationInt("or");
     }
     
     public void bitwiseXor() throws IOException, CodeGeneratorException {
-        binaryOperation("xor");
+        binaryOperationInt("xor");
     }
+    
+    public void leftShift() throws IOException, CodeGeneratorException {
+        binaryOperationInt("shl");
+    }
+    
+    public void rightShift() throws IOException, CodeGeneratorException {
+        binaryOperationInt("lshr");
+    }
+    
+    public void bitwiseAnd() throws IOException, CodeGeneratorException {
+        binaryOperationInt("and");
+    }
+    
+    public void times() throws IOException, CodeGeneratorException {
+        binaryOperationInt("mul");
+    }
+    
+    public void divide() throws IOException, CodeGeneratorException {
+        binaryOperationInt("udiv");
+    }
+    
+    public void remainder() throws IOException, CodeGeneratorException {
+        binaryOperationInt("urem");
+    }
+    
+    //inverse divide ??
 }

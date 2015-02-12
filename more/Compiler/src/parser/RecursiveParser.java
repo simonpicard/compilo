@@ -704,12 +704,14 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 70) {
             match(currentTerminal);
             parseBinaryShiftedExpression();
+            generator.leftShift();
             parseBinaryTermExpressionPrim();
         }
         // [71] <BinaryTermExpression'> -> ARITHMETIC_SHIFT_RIGHT <BinaryShiftedExpression> <BinaryTermExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 71) {
             match(currentTerminal);
             parseBinaryShiftedExpression();
+            generator.rightShift();
             parseBinaryTermExpressionPrim();
         }
         // [72] <BinaryTermExpression'> -> EPSILON_VALUE
@@ -741,24 +743,28 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 74) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.times();
             parseBinaryShiftedExpressionPrim();
         }
         // [75] <BinaryShiftedExpression'> -> DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 75) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.divide();
             parseBinaryShiftedExpressionPrim();
         }
         // [76] <BinaryShiftedExpression'> -> REMAINDER <BinaryFactorExpression> <BinaryShiftedExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 76) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.remainder();
             parseBinaryShiftedExpressionPrim();
         }
         // [77] <BinaryShiftedExpression'> -> BITWISE_AND <BinaryFactorExpression> <BinaryShiftedExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 77) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.bitwiseAnd();
             parseBinaryShiftedExpressionPrim();
         }
         // [78] <BinaryShiftedExpression'> -> INVERSE_DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>
