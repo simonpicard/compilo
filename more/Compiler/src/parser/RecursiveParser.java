@@ -657,18 +657,21 @@ public class RecursiveParser {
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 65) {
             match(currentTerminal);
             parseBinaryTermExpression();
+            generator.minus();
             parseBinaryNumericExpressionPrim();
         }
         // [66] <BinaryNumericExpression'> -> BITWISE_OR <BinaryTermExpression> <BinaryNumericExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 66) {
             match(currentTerminal);
             parseBinaryTermExpression();
+            generator.bitwiseOr();
             parseBinaryNumericExpressionPrim();
         }
         // [67] <BinaryNumericExpression'> -> BITWISE_XOR <BinaryTermExpression> <BinaryNumericExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 67) {
             match(currentTerminal);
             parseBinaryTermExpression();
+            generator.bitwiseXor();
             parseBinaryNumericExpressionPrim();
         }
         // [68] <BinaryNumericExpression'> -> EPSILON_VALUE
