@@ -156,6 +156,9 @@ public class LlvmCodeGenerator {
     }
     
     public void number(String number, Type type) {
+        if(type == Type.bool) {
+            number = "true".equals(number) ? "1" : "0";
+        }
         pushExpression(number, type);
     }
     
@@ -186,6 +189,9 @@ public class LlvmCodeGenerator {
             case integer:
                 res += "i32";
                 break;
+            case bool:
+                res += "i1";
+                break;
             default:
                 throw new UnsupportedTypeException(type, "varDeclaration");
         }
@@ -200,10 +206,16 @@ public class LlvmCodeGenerator {
             case integer:
                 llvmType = "i32";
                 break;
+            case bool:
+                llvmType = "i1";
+                break;
             default:
                 throw new UnsupportedTypeException(type, "assignation");
         }
         Expression exp = expressions.pop();
+        if (!type.equals(exp.type)) {
+            throw new IncompatibleTypeException(type, exp.type, "assignation");
+        }
         res += llvmType + " " + exp.content + ", " + llvmType + "* " + varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
     }

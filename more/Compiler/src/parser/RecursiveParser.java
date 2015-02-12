@@ -390,6 +390,7 @@ public class RecursiveParser {
         }
         // [35] <AtomicExpression> -> BOOLEAN
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 35) {
+            generator.number(currentSymbol.getValue().toString(), Type.bool);
             match(currentTerminal);
         }
         // [36] <AtomicExpression> -> <BuiltInFunctionCall>
