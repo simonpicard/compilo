@@ -157,7 +157,7 @@ public class LlvmCodeGenerator {
     
     public void number(String number, Type type) {
         if(type == Type.bool) {
-            number = "true".equals(number) ? "1" : "0";
+            number = "false".equals(number) ? "0" : "1";
         }
         pushExpression(number, type);
     }
