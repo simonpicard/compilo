@@ -512,8 +512,8 @@ public class LlvmCodeGenerator {
 
     public void not() throws IOException, CodeGeneratorException {
         pushExpression(Type.bool);
-        Expression test = expressions.pop();
-        Expression operand = expressions.pop();
+        Expression test = popExpression();
+        Expression operand = popExpression();
         String type= "";
         String res = "";
         switch(operand.type){
