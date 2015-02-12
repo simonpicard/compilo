@@ -69,6 +69,10 @@ public class ActionTable {
     public HashMap<Variable, HashMap<Terminal, ProductionRule>> getTable() {
         return this.table;
     }
+    
+    public int getRuleNo(ProductionRule pr, Terminal t){
+        return table.get(pr.getLeftPart()).get(t).getId();
+    }
 
     @Override
     public String toString() {

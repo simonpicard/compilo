@@ -78,7 +78,7 @@ public class RecursiveParser {
         generator.main();
         tableOfSymbols.addFrame(new Frame());
         // [1] <Program> -> <InstructionList>
-        if (ProductionRule.productionRules.get(1).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 1) {
             parseInstructionList();
         } // Error
         else {
@@ -97,22 +97,22 @@ public class RecursiveParser {
     private void parseInstruction() throws Exception {
         initStep("<Instruction>");
         // [2] <Instruction> -> <IdentifierInstruction>
-        if (ProductionRule.productionRules.get(2).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 2) {
             parseIdentifierInstruction();
         } // [3] <Instruction> -> <ConstDefinition>
-        else if (ProductionRule.productionRules.get(3).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 3) {
             parseConstDefinition();
         } // [4] <Instruction> -> <Block>
-        else if (ProductionRule.productionRules.get(4).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 4) {
             parseBlock();
         } // [5] <Instruction> -> <Loop>
-        else if (ProductionRule.productionRules.get(5).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 5) {
             parseLoop();
         } // [6] <Instruction> -> <BuiltInFunctionCall>
-        else if (ProductionRule.productionRules.get(6).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 6) {
             parseBuiltInFunctionCall();
         } // [7] <Instruction> -> <FunctionDefinition>
-        else if (ProductionRule.productionRules.get(7).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 7) {
             parseFunctionDefinition();
         } // Error
         else {
@@ -123,11 +123,11 @@ public class RecursiveParser {
     private void parseInstructionList() throws Exception {
         initStep("<InstructionList>");
         // [8] <InstructionList> -> <Instruction> <InstructionListTail>
-        if (ProductionRule.productionRules.get(8).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 8) {
             parseInstruction();
             parseInstructionListTail();
         } // [9] <InstructionList> -> <InstructionListTail>
-        else if (ProductionRule.productionRules.get(9).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 9) {
             parseInstructionListTail();
         } // Error
         else {
@@ -138,11 +138,11 @@ public class RecursiveParser {
     private void parseInstructionListTail() throws Exception {
         initStep("<InstructionListTail>");
         // [10] <InstructionListTail> -> END_OF_INSTRUCTION <InstructionList>
-        if (ProductionRule.productionRules.get(10).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 10) {
             match(currentTerminal);
             parseInstructionList();
         } // [11] <InstructionListTail> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(11).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 11) {
             matchEpsilon();
         } // Error
         else {
@@ -153,7 +153,7 @@ public class RecursiveParser {
     private void parseIdentifierInstruction() throws Exception {
         initStep("<IdentifierInstruction>");
         // [12] <IdentifierInstruction> -> IDENTIFIER <IdentifierInstructionTail>
-        if (ProductionRule.productionRules.get(12).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 12) {
             String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
             parseIdentifierInstructionTail(identifier);
@@ -166,14 +166,14 @@ public class RecursiveParser {
     private void parseIdentifierInstructionTail(String identifier) throws Exception {
         initStep("<IdentifierInstructionTail>");
         // [13] <IdentifierInstructionTail> -> <AssignationTail>
-        if (ProductionRule.productionRules.get(13).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 13) {
             parseAssignationTail(identifier);
         } // [14] <IdentifierInstructionTail> -> TYPE_DEFINITION <Type>
-        else if (ProductionRule.productionRules.get(14).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 14) {
             match(currentTerminal);
             parseType(identifier);
         } // [15] <IdentifierInstructionTail> -> <FunctionCallTail>
-        else if (ProductionRule.productionRules.get(15).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 15) {
             parseFunctionCallTail();
         } // Error
         else {
@@ -184,7 +184,7 @@ public class RecursiveParser {
     private void parseAssignationTail(String identifier) throws Exception {
         initStep("<AssignationTail>");
         // [16] <AssignationTail> -> ASSIGNATION <Expression>
-        if (ProductionRule.productionRules.get(16).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 16) {
             match(currentTerminal);
             parseExpression();
             FrameVar var = (FrameVar) tableOfSymbols.lookup(identifier);
@@ -192,7 +192,7 @@ public class RecursiveParser {
         }
 
         // [17] <AssignationTail> -> COMMA IDENTIFIER <AssignationTail> COMMA <Expression>
-        else if (ProductionRule.productionRules.get(17).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 17) {
             match(currentTerminal);
             identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
@@ -210,7 +210,7 @@ public class RecursiveParser {
     private void parseConstDefinition() throws Exception {
         initStep("<ConstDefinition>");
         // [18] <ConstDefinition> -> CONST IDENTIFIER <AssignationTail>
-        if (ProductionRule.productionRules.get(18).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 18) {
             match(currentTerminal);
             String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
@@ -227,7 +227,7 @@ public class RecursiveParser {
         initStep("<Block>");
         tableOfSymbols.addFrame(new Frame());
         // [19] <Block> -> LET IDENTIFIER <AssignationTail> END_OF_INSTRUCTION <InstructionList> END
-        if (ProductionRule.productionRules.get(19).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 19) {
             match(currentTerminal);
             String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
@@ -245,11 +245,11 @@ public class RecursiveParser {
     private void parseLoop() throws Exception {
         initStep("<Loop>");
         // [20] <Loop> -> <If>
-        if (ProductionRule.productionRules.get(20).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 20) {
             parseIf();
         }
         // [21] <Loop> -> WHILE <Expression> END_OF_INSTRUCTION <InstructionList> END
-        else if (ProductionRule.productionRules.get(21).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 21) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
@@ -259,7 +259,7 @@ public class RecursiveParser {
             tableOfSymbols.removeFrame();
         }
         // [22] <Loop> -> FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <ForTail>
-        else if (ProductionRule.productionRules.get(22).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 22) {
             match(currentTerminal);
             match(currentTerminal);
             match(currentTerminal);
@@ -277,7 +277,7 @@ public class RecursiveParser {
     private void parseForTail() throws Exception {
         initStep("<ForTail>");
         // [23] <ForTail> -> END_OF_INSTRUCTION <InstructionList> END
-        if (ProductionRule.productionRules.get(23).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 23) {
             match(currentTerminal);
             tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
@@ -285,7 +285,7 @@ public class RecursiveParser {
             tableOfSymbols.removeFrame();
         }
         // [24] <ForTail> -> TERNARY_ELSE <Expresssion> END_OF_INSTRUCTION <InstructionList> END
-        else if (ProductionRule.productionRules.get(24).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 24) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
@@ -303,21 +303,21 @@ public class RecursiveParser {
     private void parseType(String identifier) throws Exception {
         initStep("<Type>");
         // [25] <Type> -> BOOLEAN_TYPE
-        if (ProductionRule.productionRules.get(25).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 25) {
             FrameVar fv = new FrameVar(Type.bool);
             tableOfSymbols.addNewEntry(identifier, fv);
             generator.varDeclaration(fv.getAddress(), fv.getType());
             match(currentTerminal);
         }
         // [26] <Type> -> REAL_TYPE
-        else if (ProductionRule.productionRules.get(26).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 26) {
             FrameVar fv = new FrameVar(Type.real);
             tableOfSymbols.addNewEntry(identifier, fv);
             generator.varDeclaration(fv.getAddress(), fv.getType());
             match(currentTerminal);
         }
         // [27] <Type> -> INTEGER_TYPE
-        else if (ProductionRule.productionRules.get(27).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 27) {
             FrameVar fv = new FrameVar(Type.integer);
             tableOfSymbols.addNewEntry(identifier, fv);
             generator.varDeclaration(fv.getAddress(), fv.getType());
@@ -332,7 +332,7 @@ public class RecursiveParser {
     private void parseExpression() throws Exception {
         initStep("<Expression>");
         // [28] <Expression> -> <BinaryExpression> <TernaryIfExpression>
-        if (ProductionRule.productionRules.get(28).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 28) {
             parseBinaryExpression();
             parseTernaryIfExpression();
         }
@@ -345,13 +345,13 @@ public class RecursiveParser {
     private void parseTernaryIfExpression() throws Exception {
         initStep("<TernaryIfExpression>");
         // [29] <TernaryIfExpression> -> TERNARY_IF <Expression> <TernaryElseExpression>
-        if (ProductionRule.productionRules.get(29).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 29) {
             match(currentTerminal);
             parseExpression();
             parseTernaryElseExpression();
         }
         // [30] <TernaryIfExpression> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(30).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 30) {
             matchEpsilon();
         }
         // Error
@@ -363,7 +363,7 @@ public class RecursiveParser {
     private void parseTernaryElseExpression() throws Exception {
         initStep("<TernaryElseExpression>");
         // [31] <TernaryElseExpression> -> TERNARY_ELSE <Expression>
-        if (ProductionRule.productionRules.get(31).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 31) {
             match(currentTerminal);
             parseExpression();
         }
@@ -376,24 +376,24 @@ public class RecursiveParser {
     private void parseAtomicExpression() throws Exception {
         initStep("<AtomicExpression>");
         // [32] <AtomicExpression> -> <AtomicIdentifierExpression>
-        if (ProductionRule.productionRules.get(32).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 32) {
             parseAtomicIdentifierExpression();
         }
         // [33] <AtomicExpression> -> INTEGER
-        else if (ProductionRule.productionRules.get(33).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 33) {
             generator.number(currentSymbol.getValue().toString(), Type.integer);
             match(currentTerminal);
         }
         // [34] <AtomicExpression> -> REAL
-        else if (ProductionRule.productionRules.get(34).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 34) {
             match(currentTerminal);
         }
         // [35] <AtomicExpression> -> BOOLEAN
-        else if (ProductionRule.productionRules.get(35).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 35) {
             match(currentTerminal);
         }
         // [36] <AtomicExpression> -> <BuiltInFunctionCall>
-        else if (ProductionRule.productionRules.get(36).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 36) {
             parseBuiltInFunctionCall();
         }
         // Error
@@ -405,7 +405,7 @@ public class RecursiveParser {
     private void parseAtomicIdentifierExpression() throws Exception {
         initStep("<AtomicIdentifierExpression>");
         // [37] <AtomicIdentifierExpression> -> IDENTIFIER <AtomicIdentifierExpressionTail>
-        if (ProductionRule.productionRules.get(37).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 37) {
             match(currentTerminal);
             parseAtomicIdentifierExpressionTail();
         }
@@ -418,11 +418,11 @@ public class RecursiveParser {
     private void parseAtomicIdentifierExpressionTail() throws Exception {
         initStep("<AtomicIdentifierExpressionTail>");
         // [38] <AtomicIdentifierExpressionTail> -> <FunctionCallTail>
-        if (ProductionRule.productionRules.get(38).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 38) {
             parseFunctionCallTail();
         }
         // [39] <AtomicIdentifierExpressionTail> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(39).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 39) {
             matchEpsilon();
         }
         // Error
@@ -434,12 +434,12 @@ public class RecursiveParser {
     private void parseUnaryExpression() throws Exception {
         initStep("<UnaryExpression>");
         // [40] <UnaryExpression> -> NEGATION <UnaryExpression>
-        if (ProductionRule.productionRules.get(40).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 40) {
             match(currentTerminal);
             parseUnaryExpression();
         }
         // [41] <UnaryExpression> -> <UnaryBitwiseNotExpression>
-        else if (ProductionRule.productionRules.get(41).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 41) {
             parseUnaryBitwiseNotExpression();
         }
         // Error
@@ -451,12 +451,12 @@ public class RecursiveParser {
     private void parseUnaryBitwiseNotExpression() throws Exception {
         initStep("<UnaryBitwiseNotExpression>");
         // [42] <UnaryBitwiseNotExpression> -> BITWISE_NOT <UnaryBitwiseNotExpression>
-        if (ProductionRule.productionRules.get(42).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 42) {
             match(currentTerminal);
             parseUnaryBitwiseNotExpression();
         }
         // [43] <UnaryBitwiseNotExpression> -> <UnaryMinusPlusExpression>
-        else if (ProductionRule.productionRules.get(43).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 43) {
             parseUnaryMinusPlusExpression();
         }
         // Error
@@ -468,17 +468,17 @@ public class RecursiveParser {
     private void parseUnaryMinusPlusExpression() throws Exception {
         initStep("<UnaryMinusPlusExpression>");
         // [44] <UnaryMinusPlusExpression> -> MINUS <UnaryMinusPlusExpression>
-        if (ProductionRule.productionRules.get(44).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 44) {
             match(currentTerminal);
             parseUnaryMinusPlusExpression();
         }
         // [45] <UnaryMinusPlusExpression> -> PLUS <UnaryMinusPlusExpression>
-        else if (ProductionRule.productionRules.get(45).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 45) {
             match(currentTerminal);
             parseUnaryMinusPlusExpression();
         }
         // [46] <UnaryMinusPlusExpression> -> <UnaryAtomicExpression>
-        else if (ProductionRule.productionRules.get(46).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 46) {
             parseUnaryAtomicExpression();
         }
         // Error
@@ -490,11 +490,11 @@ public class RecursiveParser {
     private void parseUnaryAtomicExpression() throws Exception {
         initStep("<UnaryAtomicExpression>");
         // [47] <UnaryAtomicExpression> -> <AtomicExpression>
-        if (ProductionRule.productionRules.get(47).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 47) {
             parseAtomicExpression();
         }
         // [48] <UnaryAtomicExpression> -> LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
-        else if (ProductionRule.productionRules.get(48).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 48) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
@@ -508,7 +508,7 @@ public class RecursiveParser {
     private void parseBinaryExpression() throws Exception {
         initStep("<BinaryExpression>");
         // [49] <BinaryExpression>-><BinaryLazyOrExpression> <BinaryExpression'>
-        if (ProductionRule.productionRules.get(49).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 49) {
             parseBinaryLazyOrExpression();
             parseBinaryExpressionPrim();
         }
@@ -521,13 +521,13 @@ public class RecursiveParser {
     private void parseBinaryExpressionPrim() throws Exception {
         initStep("<BinaryExpression'>");
         // [50] <BinaryExpression'> -> LAZY_OR <BinaryLazyOrExpression> <BinaryExpression'>
-        if (ProductionRule.productionRules.get(50).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 50) {
             match(currentTerminal);
             parseBinaryLazyOrExpression();
             parseBinaryExpressionPrim();
         }
         // [51] <BinaryExpression'> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(51).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 51) {
             matchEpsilon();
         }
         // Error
@@ -539,7 +539,7 @@ public class RecursiveParser {
     private void parseBinaryLazyOrExpression() throws Exception {
         initStep("<BinaryLazyOrExpression>");
         // [52] <BinaryLazyOrExpression> -> <BinaryLazyAndExpression> <BinaryLazyOrExpression'>
-        if (ProductionRule.productionRules.get(52).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 52) {
             parseBinaryLazyAndExpression();
             parseBinaryLazyOrExpressionPrim();
         }
@@ -552,13 +552,13 @@ public class RecursiveParser {
     private void parseBinaryLazyOrExpressionPrim() throws Exception {
         initStep("<BinaryLazyOrExpression'>");
         // [53] <BinaryLazyOrExpression'> -> LAZY_AND <BinaryLazyAndExpression> <BinaryLazyOrExpression'>
-        if (ProductionRule.productionRules.get(53).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 53) {
             match(currentTerminal);
             parseBinaryLazyAndExpression();
             parseBinaryLazyOrExpressionPrim();
         }
         // [54] <BinaryExpression'> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(54).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 54) {
             matchEpsilon();
         }
         // Error
@@ -570,7 +570,7 @@ public class RecursiveParser {
     private void parseBinaryLazyAndExpression() throws Exception {
         initStep("<BinaryLazyAndExpression>");
         // [55] <BinaryLazyAndExpression> -> <BinaryNumericExpression> <BinaryLazyAndExpression'>
-        if (ProductionRule.productionRules.get(55).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 55) {
             parseBinaryNumericExpression();
             parseBinaryLazyAndExpressionPrim();
         }
@@ -583,43 +583,43 @@ public class RecursiveParser {
     private void parseBinaryLazyAndExpressionPrim() throws Exception {
         initStep("<BinaryLazyAndExpression'>");
         // [56] <BinaryLazyAndExpression'> -> GREATER_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
-        if (ProductionRule.productionRules.get(56).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 56) {
             match(currentTerminal);
             parseBinaryNumericExpression();
             parseBinaryLazyAndExpressionPrim();
         }
         // [57] <BinaryLazyAndExpression'> -> LESS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
-        else if (ProductionRule.productionRules.get(57).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 57) {
             match(currentTerminal);
             parseBinaryNumericExpression();
             parseBinaryLazyAndExpressionPrim();
         }
         // [58] <BinaryLazyAndExpression'> -> GREATER_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
-        else if (ProductionRule.productionRules.get(58).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 58) {
             match(currentTerminal);
             parseBinaryNumericExpression();
             parseBinaryLazyAndExpressionPrim();
         }
         // [59] <BinaryLazyAndExpression'> -> LESS_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
-        else if (ProductionRule.productionRules.get(59).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 59) {
             match(currentTerminal);
             parseBinaryNumericExpression();
             parseBinaryLazyAndExpressionPrim();
         }
         // [60] <BinaryLazyAndExpression'> -> EQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
-        else if (ProductionRule.productionRules.get(60).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 60) {
             match(currentTerminal);
             parseBinaryNumericExpression();
             parseBinaryLazyAndExpressionPrim();
         }
         // [61] <BinaryLazyAndExpression'> -> INEQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
-        else if (ProductionRule.productionRules.get(61).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 61) {
             match(currentTerminal);
             parseBinaryNumericExpression();
             parseBinaryLazyAndExpressionPrim();
         }
         // [62] <BinaryLazyAndExpression'> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(62).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 62) {
             matchEpsilon();
         }
         // Error
@@ -631,7 +631,7 @@ public class RecursiveParser {
     private void parseBinaryNumericExpression() throws Exception {
         initStep("<BinaryNumericExpression>");
         // [63] <BinaryNumericExpression> -> <BinaryTermExpression> <BinaryNumericExpression'>
-        if (ProductionRule.productionRules.get(63).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 63) {
             parseBinaryTermExpression();
             parseBinaryNumericExpressionPrim();
         }
@@ -644,32 +644,32 @@ public class RecursiveParser {
     private void parseBinaryNumericExpressionPrim() throws Exception {
         initStep("<BinaryNumericExpression'>");
         // [64] <BinaryNumericExpression'> -> PLUS <BinaryTermExpression> <BinaryNumericExpression'>
-        if (ProductionRule.productionRules.get(64).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 64) {
             match(currentTerminal);
             parseBinaryTermExpression();
             generator.plus();
             parseBinaryNumericExpressionPrim();
         }
         // [65] <BinaryNumericExpression'> -> MINUS <BinaryTermExpression> <BinaryNumericExpression'>
-        else if (ProductionRule.productionRules.get(65).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 65) {
             match(currentTerminal);
             parseBinaryTermExpression();
             parseBinaryNumericExpressionPrim();
         }
         // [66] <BinaryNumericExpression'> -> BITWISE_OR <BinaryTermExpression> <BinaryNumericExpression'>
-        else if (ProductionRule.productionRules.get(66).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 66) {
             match(currentTerminal);
             parseBinaryTermExpression();
             parseBinaryNumericExpressionPrim();
         }
         // [67] <BinaryNumericExpression'> -> BITWISE_XOR <BinaryTermExpression> <BinaryNumericExpression'>
-        else if (ProductionRule.productionRules.get(67).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 67) {
             match(currentTerminal);
             parseBinaryTermExpression();
             parseBinaryNumericExpressionPrim();
         }
         // [68] <BinaryNumericExpression'> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(68).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 68) {
             matchEpsilon();
         }
         // Error
@@ -681,7 +681,7 @@ public class RecursiveParser {
     private void parseBinaryTermExpression() throws Exception {
         initStep("<BinaryTermExpression>");
         // [69] <BinaryTermExpression> -> <BinaryShiftedExpression> <BinaryTermExpression'>
-        if (ProductionRule.productionRules.get(69).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 69) {
             parseBinaryShiftedExpression();
             parseBinaryTermExpressionPrim();
         }
@@ -694,19 +694,19 @@ public class RecursiveParser {
     private void parseBinaryTermExpressionPrim() throws Exception {
         initStep("<BinaryTermExpression'>");
         // [70] <BinaryTermExpression'> -> ARITHMETIC_SHIFT_LEFT <BinaryShiftedExpression> <BinaryTermExpression'>
-        if (ProductionRule.productionRules.get(70).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 70) {
             match(currentTerminal);
             parseBinaryShiftedExpression();
             parseBinaryTermExpressionPrim();
         }
         // [71] <BinaryTermExpression'> -> ARITHMETIC_SHIFT_RIGHT <BinaryShiftedExpression> <BinaryTermExpression'>
-        else if (ProductionRule.productionRules.get(71).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 71) {
             match(currentTerminal);
             parseBinaryShiftedExpression();
             parseBinaryTermExpressionPrim();
         }
         // [72] <BinaryTermExpression'> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(72).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 72) {
             matchEpsilon();
         }
         // Error
@@ -718,7 +718,7 @@ public class RecursiveParser {
     private void parseBinaryShiftedExpression() throws Exception {
         initStep("<BinaryShiftedExpression>");
         // [73] <BinaryShiftedExpression> -> <BinaryFactorExpression> <BinaryShiftedExpression'>
-        if (ProductionRule.productionRules.get(73).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 73) {
             parseBinaryFactorExpression();
             parseBinaryShiftedExpressionPrim();
         }
@@ -731,37 +731,37 @@ public class RecursiveParser {
     private void parseBinaryShiftedExpressionPrim() throws Exception {
         initStep("<BinaryShiftedExpression'>");
         // [74] <BinaryShiftedExpression'> -> TIMES <BinaryFactorExpression> <BinaryShiftedExpression'>
-        if (ProductionRule.productionRules.get(74).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 74) {
             match(currentTerminal);
             parseBinaryFactorExpression();
             parseBinaryShiftedExpressionPrim();
         }
         // [75] <BinaryShiftedExpression'> -> DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>
-        else if (ProductionRule.productionRules.get(75).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 75) {
             match(currentTerminal);
             parseBinaryFactorExpression();
             parseBinaryShiftedExpressionPrim();
         }
         // [76] <BinaryShiftedExpression'> -> REMAINDER <BinaryFactorExpression> <BinaryShiftedExpression'>
-        else if (ProductionRule.productionRules.get(76).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 76) {
             match(currentTerminal);
             parseBinaryFactorExpression();
             parseBinaryShiftedExpressionPrim();
         }
         // [77] <BinaryShiftedExpression'> -> BITWISE_AND <BinaryFactorExpression> <BinaryShiftedExpression'>
-        else if (ProductionRule.productionRules.get(77).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 77) {
             match(currentTerminal);
             parseBinaryFactorExpression();
             parseBinaryShiftedExpressionPrim();
         }
         // [78] <BinaryShiftedExpression'> -> INVERSE_DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>
-        else if (ProductionRule.productionRules.get(78).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 78) {
             match(currentTerminal);
             parseBinaryFactorExpression();
             parseBinaryShiftedExpressionPrim();
         }
         // [79] <BinaryShiftedExpression'> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(79).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 79) {
             matchEpsilon();
         }
         // Error
@@ -773,7 +773,7 @@ public class RecursiveParser {
     private void parseBinaryFactorExpression() throws Exception {
         initStep("<BinaryFactorExpression>");
         // [80] <BinaryFactorExpression> -> <UnaryExpression> <BinaryFactorExpression'>
-        if (ProductionRule.productionRules.get(80).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 80) {
             parseUnaryExpression();
             parseBinaryFactorExpressionPrim();
         }
@@ -786,13 +786,13 @@ public class RecursiveParser {
     private void parseBinaryFactorExpressionPrim() throws Exception {
         initStep("<BinaryFactorExpression'>");
         // [81] <BinaryFactorExpression'> -> POWER <UnaryExpression> <BinaryFactorExpression'>
-        if (ProductionRule.productionRules.get(81).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 81) {
             match(currentTerminal);
             parseUnaryExpression();
             parseBinaryFactorExpressionPrim();
         }
         // [82] <BinaryFactorExpression'> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(82).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 82) {
             matchEpsilon();
         }
         // Error
@@ -804,7 +804,7 @@ public class RecursiveParser {
     private void parseIf() throws Exception {
         initStep("<If>");
         // [83] <If> -> IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
-        if (ProductionRule.productionRules.get(83).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 83) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
@@ -822,7 +822,7 @@ public class RecursiveParser {
         initStep("<IfEnd>");
         tableOfSymbols.removeFrame();
         // [84] <IfEnd> -> ELSE_IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
-        if (ProductionRule.productionRules.get(84).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 84) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
@@ -831,7 +831,7 @@ public class RecursiveParser {
             parseIfEnd();
         }
         // [85] <IfEnd> -> ELSE <InstructionList> END
-        else if (ProductionRule.productionRules.get(85).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 85) {
             match(currentTerminal);
             tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
@@ -839,7 +839,7 @@ public class RecursiveParser {
             tableOfSymbols.removeFrame();
         }
         // [86] <IfEnd> -> END
-        else if (ProductionRule.productionRules.get(86).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 86) {
             match(currentTerminal);
         }
         // Error
@@ -851,40 +851,40 @@ public class RecursiveParser {
     private void parseBuiltInFunctionCall() throws Exception {
         initStep("<BuiltInFunctionCall>");
         // [87] <BuiltInFunctionCall> -> READ_REAL LEFT_PARENTHESIS RIGHT_PARENTHESIS
-        if (ProductionRule.productionRules.get(87).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 87) {
             match(currentTerminal);
             match(currentTerminal);
             match(currentTerminal);
         }
         // [88] <BuiltInFunctionCall> -> READ_INTEGER LEFT_PARENTHESIS RIGHT_PARENTHESIS
-        else if (ProductionRule.productionRules.get(88).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 88) {
             match(currentTerminal);
             match(currentTerminal);
             match(currentTerminal);
         }
         // [89] <BuiltInFunctionCall> -> INTEGER_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
-        else if (ProductionRule.productionRules.get(89).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 89) {
             match(currentTerminal);
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
         }
         // [90] <BuiltInFunctionCall> -> REAL_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
-        else if (ProductionRule.productionRules.get(90).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 90) {
             match(currentTerminal);
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
         }
         // [91] <BuiltInFunctionCall> -> BOOLEAN_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
-        else if (ProductionRule.productionRules.get(91).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 91) {
             match(currentTerminal);
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
         }
         // [92] <BuiltInFunctionCall> -> PRINTLN LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
-        else if (ProductionRule.productionRules.get(92).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 92) {
             match(currentTerminal);
             match(currentTerminal);
             parseExpression();
@@ -900,7 +900,7 @@ public class RecursiveParser {
     private void parseFunctionCallTail() throws Exception {
         initStep("<FunctionCallTail>");
         // [93] <FunctionCallTail> -> LEFT_PARENTHESIS <Parameter> RIGHT_PARENTHESIS
-        if (ProductionRule.productionRules.get(93).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 93) {
             match(currentTerminal);
             parseParameter();
             match(currentTerminal);
@@ -914,12 +914,12 @@ public class RecursiveParser {
     private void parseParameter() throws Exception {
         initStep("<Parameter>");
         // [94] <Parameter> -> <Expression> <ParameterTail>
-        if (ProductionRule.productionRules.get(94).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 94) {
             parseExpression();
             parseParameterTail();
         }
         // [95] <Parameter> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(95).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 95) {
             matchEpsilon();
         }
         // Error
@@ -931,13 +931,13 @@ public class RecursiveParser {
     private void parseParameterTail() throws Exception {
         initStep("<ParameterTail>");
         // [96] <ParameterTail> -> COMMA <Expression> <ParameterTail>
-        if (ProductionRule.productionRules.get(96).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 96) {
             match(currentTerminal);
             parseExpression();
             parseParameterTail();
         }
         // [97] <ParameterTail> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(97).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 97) {
             matchEpsilon();
         }
         // Error
@@ -949,7 +949,7 @@ public class RecursiveParser {
     private void parseFunctionDefinition() throws Exception {
         initStep("<FunctionDefinition>");
         // [98] <FunctionDefinition> -> FUNCTION IDENTIFIER LEFT_PARENTHESIS <Argument> RIGHT_PARENTHESIS <InstructionList> <FunctionDefinitionEnd>
-        if (ProductionRule.productionRules.get(98).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 98) {
             match(currentTerminal);
             match(currentTerminal);
             match(currentTerminal);
@@ -969,13 +969,13 @@ public class RecursiveParser {
     private void parseFunctionDefinitionEnd() throws Exception {
         initStep("<FunctionDefinitionEnd>");
         // [99] <FunctionDefinitionEnd> -> RETURN <Expression> END
-        if (ProductionRule.productionRules.get(99).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 99) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
         }
         // [100] <FunctionDefinitionEnd> -> END
-        else if (ProductionRule.productionRules.get(100).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 100) {
             match(currentTerminal);
         }
         // Error
@@ -988,7 +988,7 @@ public class RecursiveParser {
         initStep("<Argument>");
         
         // [101] <Argument> -> IDENTIFIER TYPE_DEFINITION <Type> <ArgumentTail>
-        if (ProductionRule.productionRules.get(101).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 101) {
             String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
             match(currentTerminal);
@@ -996,7 +996,7 @@ public class RecursiveParser {
             parseArgumentTail();
         }
         // [102] <Argument> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(102).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 102) {
             matchEpsilon();
         }
         // Error
@@ -1008,7 +1008,7 @@ public class RecursiveParser {
     private void parseArgumentTail() throws Exception {
         initStep("<ArgumentTail>");
         // [103] <ArgumentTail> -> COMMA IDENTIFIER TYPE_DEFINITION <Type> <ArgumentTail>
-        if (ProductionRule.productionRules.get(103).equals(currentProductionRule)) {
+        if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 103) {
             match(currentTerminal);
             String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
@@ -1017,7 +1017,7 @@ public class RecursiveParser {
             parseArgumentTail();
         }
         // [104] <ArgumentTail> -> EPSILON_VALUE
-        else if (ProductionRule.productionRules.get(104).equals(currentProductionRule)) {
+        else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 104) {
             matchEpsilon();
         }
         // Error
