@@ -1,3 +1,4 @@
-a::Integer
-a=4294967295
+a::Bool
+a=false
+a = !a
 println(a)
