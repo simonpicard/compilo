@@ -491,14 +491,12 @@ public class LlvmCodeGenerator {
     }
 
     public void bitwiseNot() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
         // que des 1 en binaire = 2**32-1
         String maxInt32bits = "4294967295";
         pushExpression(maxInt32bits, Type.integer);
-        binaryOperation("xor", types);
+        binaryOperationInt("xor");
         pushExpression("0", Type.integer);
-        binaryOperation("xor", types);
+        binaryOperationInt("xor");
     }
 
     public void not() throws IOException, CodeGeneratorException {
