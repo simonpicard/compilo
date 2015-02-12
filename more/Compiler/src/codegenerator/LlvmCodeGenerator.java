@@ -28,11 +28,25 @@ public class LlvmCodeGenerator {
             this.type = type;
         }
     }
+    
+    public class Label {
+        public String content;
+        
+        public Label() {
+            content = "label" + String.valueOf(labelCounter);
+            ++labelCounter;
+        }
+    }
 
     private FileOutputStream outputFile;
     //sur le stack : les variables temporaires et les nombres
     private Stack<Expression> expressions;
     private int expressionCounter;
+    
+    //sur le stack : les labels
+    private Stack<Label> labels;
+    private int labelCounter;
+    private Label endIf;
 
     private static String endOfLine = System.getProperty("line.separator");
     private static Charset charset = Charset.forName("UTF-8");
@@ -42,6 +56,8 @@ public class LlvmCodeGenerator {
         outputFile = new FileOutputStream(new File(outputPath));
         expressions = new Stack<>();
         expressionCounter = 0;
+        labels = new Stack<>();
+        labelCounter = 0;
     }
     
     private void pushExpression(Type type) {
@@ -59,7 +75,19 @@ public class LlvmCodeGenerator {
     }
     
     private Expression topExpression() {
-        return expressions.firstElement();
+        return expressions.lastElement();
+    }
+    
+    private void pushLabel(Label label) {
+        labels.push(label);
+    }
+    
+    private Label popLabel() {
+        return labels.pop();
+    }
+    
+    private Label topLabel() {
+        return labels.lastElement();
     }
 
     public void initialize() throws IOException {
@@ -277,5 +305,43 @@ public class LlvmCodeGenerator {
     
     public void bitwiseXor() throws IOException, CodeGeneratorException {
         binaryOperation("xor");
+    }
+    
+    public void ifOperation() throws CodeGeneratorException, IOException {
+        endIf = new Label();
+        elseIfOperation();
+    }
+    
+    public void endIf() throws IOException {
+        String res = "br label %" + endIf.content + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void elseIfOperation() throws CodeGeneratorException, IOException {
+        String res = "br i1 ";
+        Expression exp = expressions.pop();
+        if (!Type.bool.equals(exp.type)) {
+            throw new UnsupportedTypeException(exp.type, "if");
+        }
+        
+        Label ifLabel = new Label();
+        Label elseLabel = new Label();
+        res += exp.content + ", label %" + ifLabel.content + ", label %" + elseLabel.content + endOfLine;
+        res += ifLabel.content + ":" + endOfLine;
+        labels.push(elseLabel);
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void elseOperation() throws IOException {
+        Label elseLabel = popLabel();
+        String res = "br label %" + elseLabel.content + endOfLine;
+        res += elseLabel.content + ":" + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void endIfBlock() throws IOException {
+        String res = "br label %" + endIf.content + endOfLine;
+        res += endIf.content + ":" + endOfLine;
+        outputFile.write(res.getBytes(charset));
     }
 }
