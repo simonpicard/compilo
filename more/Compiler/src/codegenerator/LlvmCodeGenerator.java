@@ -266,7 +266,7 @@ public class LlvmCodeGenerator {
         String res = lastExpression().content + " = load ";
         switch (type) {
             case integer:
-                res += "i32* ";
+                res += "i32*";
                 break;
             case bool:
                 res += "i1*";
@@ -276,6 +276,12 @@ public class LlvmCodeGenerator {
         }
         res += " " + varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
+    }
+
+    private void binaryOperationInt(String op) throws IOException, CodeGeneratorException {
+        ArrayList<Type> types = new ArrayList<Type>();
+        types.add(Type.integer);
+        binaryOperation(op, types);
     }
 
     private void binaryOperation(String op, ArrayList<Type> types) throws IOException, CodeGeneratorException {
@@ -303,6 +309,12 @@ public class LlvmCodeGenerator {
         pushExpression(operand1.type);
         res = lastExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
+    }
+
+    private void binaryComparisonInt(String op) throws IOException, CodeGeneratorException {
+        ArrayList<Type> types = new ArrayList<Type>();
+        types.add(Type.integer);
+        binaryComparison(op, types);
     }
 
     private void binaryComparison(String op, ArrayList<Type> types) throws IOException, CodeGeneratorException {
@@ -333,63 +345,43 @@ public class LlvmCodeGenerator {
     }
 
     public void plus() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("add", types);
+        binaryOperationInt("add");
     }
 
     public void minus() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("sub", types);
+        binaryOperationInt("sub");
     }
 
     public void bitwiseOr() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("or", types);
+        binaryOperationInt("or");
     }
 
     public void bitwiseXor() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("xor", types);
+        binaryOperationInt("xor");
     }
 
     public void leftShift() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("shl", types);
+        binaryOperationInt("shl");
     }
 
     public void rightShift() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("lshr", types);
+        binaryOperationInt("lshr");
     }
 
     public void bitwiseAnd() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("and", types);
+        binaryOperationInt("and");
     }
 
     public void times() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("mul", types);
+        binaryOperationInt("mul");
     }
 
     public void divide() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("udiv", types);
+        binaryOperationInt("udiv");
     }
 
     public void remainder() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryOperation("urem", types);
+        binaryOperationInt("urem");
     }
 
     //inverse divide ??
@@ -397,27 +389,19 @@ public class LlvmCodeGenerator {
     //    binaryOperation("urem");
     //}
     public void greaterThan() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryComparison("sgt", types);
+        binaryComparisonInt("sgt");
     }
 
     public void greaterOrEqualsThan() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryComparison("sge", types);
+        binaryComparisonInt("sge");
     }
 
     public void lessThan() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryComparison("slt", types);
+        binaryComparisonInt("slt");
     }
 
     public void lessOrEqualsThan() throws IOException, CodeGeneratorException {
-        ArrayList<Type> types = new ArrayList<Type>();
-        types.add(Type.integer);
-        binaryComparison("sle", types);
+        binaryComparisonInt("sle");
     }
 
     public void equalsThan() throws IOException, CodeGeneratorException {
@@ -461,9 +445,14 @@ public class LlvmCodeGenerator {
 
     public void elseOperation() throws IOException {
         Label elseLabel = popLabel();
-        String res = "br label %" + elseLabel.content + endOfLine;
+        String res = "br label %" + endIf.content + endOfLine;
         res += elseLabel.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
+    }
+
+    public void ternaryElseOperation() throws IOException {
+        elseOperation();
+        expressionCounter--;
     }
 
     public void endIfBlock() throws IOException {

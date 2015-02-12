@@ -350,8 +350,10 @@ public class RecursiveParser {
         // [29] <TernaryIfExpression> -> TERNARY_IF <Expression> <TernaryElseExpression>
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 29) {
             match(currentTerminal);
+            generator.ifOperation();
             parseExpression();
             parseTernaryElseExpression();
+            generator.endIfBlock();
         }
         // [30] <TernaryIfExpression> -> EPSILON_VALUE
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 30) {
@@ -367,6 +369,7 @@ public class RecursiveParser {
         initStep("<TernaryElseExpression>");
         // [31] <TernaryElseExpression> -> TERNARY_ELSE <Expression>
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 31) {
+            generator.ternaryElseOperation();
             match(currentTerminal);
             parseExpression();
         }
