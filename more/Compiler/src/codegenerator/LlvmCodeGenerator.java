@@ -468,7 +468,7 @@ public class LlvmCodeGenerator {
     public void bitwiseNot() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
-        int size = expressions.lastElement().content.length();
+        int size = topExpression().content.length();
         pushExpression(repeatString("1", size), Type.integer);
         binaryOperation("xor", types);
         pushExpression(repeatString("0", size), Type.integer);
