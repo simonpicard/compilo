@@ -474,7 +474,9 @@ public class RecursiveParser {
         // [44] <UnaryMinusPlusExpression> -> MINUS <UnaryMinusPlusExpression>
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 44) {
             match(currentTerminal);
+            generator.number("0", Type.integer);
             parseUnaryMinusPlusExpression();
+            generator.minus();
         }
         // [45] <UnaryMinusPlusExpression> -> PLUS <UnaryMinusPlusExpression>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 45) {
