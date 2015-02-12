@@ -97,7 +97,7 @@ public class LlvmCodeGenerator {
                 + endOfLine;
 
         // write integer to input
-        res += "define void @println(i32 %n) {" + endOfLine
+        res += "define void @printlnint(i32 %n) {" + endOfLine
                 + "%digitInChar = alloca [32 x i32]" + endOfLine
                 + "%number = alloca i32" + endOfLine
                 + "store i32 %n, i32* %number" + endOfLine
@@ -136,6 +136,14 @@ public class LlvmCodeGenerator {
                 + "br i1 %temp7, label %beginloop2, label %endloop2" + endOfLine
                 + "endloop2:" + endOfLine
                 + "call i32 @putchar(i32 10)" + endOfLine
+                + "ret void" + endOfLine
+                + "}" + endOfLine
+                + endOfLine;
+        
+        // write bool to input
+        res += "define void @printlnbool(i1 %n) {" + endOfLine
+                + "%temp1 = zext i1 %n to i32" + endOfLine
+                + "call void @printlnint(i32 %temp1)" + endOfLine
                 + "ret void" + endOfLine
                 + "}" + endOfLine
                 + endOfLine;
@@ -200,11 +208,14 @@ public class LlvmCodeGenerator {
     }
     
     public void println() throws CodeGeneratorException, IOException {
-        String res = "call void @println(";
+        String res = "call void ";
         Expression exp = expressions.pop();
         switch(exp.type) {
             case integer:
-                res += "i32";
+                res += "@printlnint(i32";
+                break;
+            case bool:
+                res += "@printlnbool(i1";
                 break;
             default:
                 throw new UnsupportedTypeException(exp.type, "println");
@@ -221,10 +232,13 @@ public class LlvmCodeGenerator {
             case integer:
                 res += "i32* ";
                 break;
+            case bool:
+                res += "i1*";
+                break;
             default:
                 throw new UnsupportedTypeException(type, "valueOfVariable");
         }
-        res += varPrefix + varAddress + endOfLine;
+        res += " " + varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
     
