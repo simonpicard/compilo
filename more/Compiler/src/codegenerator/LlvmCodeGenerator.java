@@ -245,13 +245,8 @@ public class LlvmCodeGenerator {
 
     public void println() throws CodeGeneratorException, IOException {
         String res = "call void ";
-<<<<<<< HEAD
-        Expression exp = expressions.pop();
-        switch (exp.type) {
-=======
         Expression exp = popExpression();
         switch(exp.type) {
->>>>>>> e338d26415106d37acb782ac6b6d5fab8b9f5d69
             case integer:
                 res += "@printlnint(i32";
                 break;
@@ -476,7 +471,6 @@ public class LlvmCodeGenerator {
         res += endIf.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-<<<<<<< HEAD
 
     private String repeatString(String s, int i) {
         String res = "";
