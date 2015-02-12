@@ -78,10 +78,6 @@ public class LlvmCodeGenerator {
         return expressions.pop();
     }
 
-    private Expression lastExpression() {
-        return expressions.lastElement();
-    }
-
     private Expression topExpression() {
         return expressions.lastElement();
     }
@@ -263,7 +259,7 @@ public class LlvmCodeGenerator {
     // Charge le contenu d'une variable
     public void valueOfVariable(int varAddress, Type type) throws UnsupportedTypeException, IOException {
         pushExpression(type);
-        String res = lastExpression().content + " = load ";
+        String res = topExpression().content + " = load ";
         switch (type) {
             case integer:
                 res += "i32*";
@@ -307,7 +303,7 @@ public class LlvmCodeGenerator {
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(operand1.type);
-        res = lastExpression().content + " = " + res;
+        res = topExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
 
@@ -340,7 +336,7 @@ public class LlvmCodeGenerator {
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(Type.bool);
-        res = lastExpression().content + " = " + res;
+        res = topExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
 
@@ -498,9 +494,9 @@ public class LlvmCodeGenerator {
         res += test.content + " = eq "+type+" " + operand.content + " , 0"+endOfLine;
         res += "br i1 "+ test.content + ", label %iftru" + (expressionCounter-1) + " , label %iffls" + (expressionCounter-1)+endOfLine;
         pushExpression(Type.bool);
-        res += "iftru" + (expressionCounter-2) + ": "+ lastExpression().content + " = 1"+endOfLine;
+        res += "iftru" + (expressionCounter-2) + ": "+ topExpression().content + " = 1"+endOfLine;
         res += "br label %endNot" + (expressionCounter-2)+endOfLine;
-        res += "iifls" + (expressionCounter-2) + ": " + lastExpression().content + " = 0"+endOfLine;
+        res += "iifls" + (expressionCounter-2) + ": " + topExpression().content + " = 0"+endOfLine;
         res += "endNot" + (expressionCounter-2) + ": "+endOfLine;
         outputFile.write(res.getBytes(charset));
     }
