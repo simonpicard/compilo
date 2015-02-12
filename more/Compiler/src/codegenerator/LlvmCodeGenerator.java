@@ -233,7 +233,7 @@ public class LlvmCodeGenerator {
             default:
                 throw new UnsupportedTypeException(type, "assignation");
         }
-        Expression exp = expressions.pop();
+        Expression exp = popExpression();
         if (!type.equals(exp.type)) {
             throw new IncompatibleTypeException(type, exp.type, "assignation", res + llvmType + " " + exp.content + ", " + llvmType + "* " + varPrefix + varAddress + endOfLine);
         }
@@ -243,7 +243,7 @@ public class LlvmCodeGenerator {
     
     public void println() throws CodeGeneratorException, IOException {
         String res = "call void ";
-        Expression exp = expressions.pop();
+        Expression exp = popExpression();
         switch(exp.type) {
             case integer:
                 res += "@printlnint(i32";
@@ -446,7 +446,7 @@ public class LlvmCodeGenerator {
     
     public void elseIfOperation() throws CodeGeneratorException, IOException {
         String res = "br i1 ";
-        Expression exp = expressions.pop();
+        Expression exp = popExpression();
         if (!Type.bool.equals(exp.type)) {
             throw new UnsupportedTypeException(exp.type, "if");
         }
@@ -455,7 +455,7 @@ public class LlvmCodeGenerator {
         Label elseLabel = new Label();
         res += exp.content + ", label %" + ifLabel.content + ", label %" + elseLabel.content + endOfLine;
         res += ifLabel.content + ":" + endOfLine;
-        labels.push(elseLabel);
+        pushLabel(elseLabel);
         outputFile.write(res.getBytes(charset));
     }
     
@@ -469,6 +469,39 @@ public class LlvmCodeGenerator {
     public void endIfBlock() throws IOException {
         String res = "br label %" + endIf.content + endOfLine;
         res += endIf.content + ":" + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void whileBegin() throws IOException {
+        Label loop = new Label();
+        String res = "br label %" + loop.content + endOfLine;
+        res += loop.content + ":" + endOfLine;
+        pushLabel(loop);
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void whileOperation() throws CodeGeneratorException, IOException {
+        
+        Label beginLoop = new Label();
+        Label endLoop = new Label();
+        String res = "";
+        
+        Expression exp = popExpression();
+        if (!Type.bool.equals(exp.type)) {
+            throw new UnsupportedTypeException(exp.type, "while");
+        }
+        res += "br i1 " + exp.content + ", label %" + beginLoop.content + ", label %" + endLoop.content + endOfLine;
+        res += beginLoop.content + ":" + endOfLine;
+        
+        pushLabel(endLoop);
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void whileEnd() throws IOException {
+        Label endLoop = popLabel();
+        Label loop = popLabel();
+        String res = "br label %" + loop.content + endOfLine;
+        res += endLoop.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 }
