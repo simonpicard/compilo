@@ -493,7 +493,7 @@ public class LlvmCodeGenerator {
     public void bitwiseNot() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
-        // que des 1 en binaire
+        // que des 1 en binaire = 2**32-1
         String maxInt32bits = "4294967295";
         pushExpression(maxInt32bits, Type.integer);
         binaryOperation("xor", types);
@@ -502,31 +502,20 @@ public class LlvmCodeGenerator {
     }
 
     public void not() throws IOException, CodeGeneratorException {
-        pushExpression(Type.bool);
-        Expression test = popExpression();
-        Expression operand = popExpression();
-        String type= "";
-        String res = "";
-        switch(operand.type){
-            case integer:
-                type = "i32";
-                break;
-            case bool:
-                type = "i1";
-                break;
-            default:
-                throw new UnsupportedTypeException(operand.type, "not");
+        Expression exp = popExpression();
+        if(!Type.bool.equals(exp.type)) {
+            throw new UnsupportedTypeException(exp.type, "not");
         }
-        Label nTrue = new Label();
-        Label nFalse = new Label();
-        Label nEnd = new Label();
-        res += test.content + " = eq "+type+" " + operand.content + " , 0"+endOfLine;
-        res += "br i1 "+ test.content + ", label %"+ nTrue.content + " , label %"+nFalse.content+endOfLine;
+        pushExpression(Type.integer);
+        Expression expansion32bits = topExpression();
+        String res = expansion32bits.content + " = zext i1 " + exp.content + " to i32" + endOfLine;
+        outputFile.write(res.getBytes(charset));;
+        bitwiseNot();
+        res = "";
+        Expression not32bits = popExpression();
         pushExpression(Type.bool);
-        res += nTrue.content + ": "+ topExpression().content + " = 1"+endOfLine;
-        res += "br label %"+nEnd.content+endOfLine;
-        res += nFalse.content + ": " + topExpression().content + " = 0"+endOfLine;
-        res += nEnd.content + ": "+endOfLine;
+        Expression not1bit = topExpression();
+        res += not1bit.content + " = trunc i32 " + not32bits.content + " to i1" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
     
