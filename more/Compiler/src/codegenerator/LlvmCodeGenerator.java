@@ -38,6 +38,7 @@ public class LlvmCodeGenerator {
     private static String endOfLine = System.getProperty("line.separator");
     private static Charset charset = Charset.forName("UTF-8");
     private static String varPrefix = "%var";
+    private boolean unary = false;
 
     public LlvmCodeGenerator(String outputPath) throws FileNotFoundException {
         outputFile = new FileOutputStream(new File(outputPath));
@@ -270,7 +271,7 @@ public class LlvmCodeGenerator {
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(operand1.type);
-        res = topExpression().content + " = " + res;
+        res = lastExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
     
@@ -297,7 +298,7 @@ public class LlvmCodeGenerator {
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(Type.bool);
-        res = topExpression().content + " = " + res;
+        res = lastExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
     
@@ -403,5 +404,15 @@ public class LlvmCodeGenerator {
         types.add(Type.integer);
         types.add(Type.bool);
         binaryComparison("ne", types);
+    }
+    
+    public void unaryMinus() throws IOException, CodeGeneratorException {
+        ArrayList<Type> types = new ArrayList<>();
+        types.add(Type.integer);
+        Expression temp = expressions.pop();
+        pushExpression("0", Type.integer);
+        expressions.push(temp);
+        binaryOperation("sub", types);
+        
     }
 }
