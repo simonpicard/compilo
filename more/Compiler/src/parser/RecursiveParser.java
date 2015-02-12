@@ -264,12 +264,22 @@ public class RecursiveParser {
         // [22] <Loop> -> FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <ForTail>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 22) {
             match(currentTerminal);
+            
+            String identifier = currentSymbol.getValue().toString();
+            tableOfSymbols.addFrame(new Frame());
+            FrameVar fv = new FrameVar(Type.integer);
+            tableOfSymbols.addNewEntry(identifier, fv);
+            generator.varDeclaration(fv.getAddress(), fv.getType());
+            
             match(currentTerminal);
             match(currentTerminal);
             parseExpression();
+            generator.assignation(fv.getAddress(), fv.getType());
             match(currentTerminal);
+            generator.whileBegin();
             parseExpression();
-            parseForTail();
+            generator.whileOperation();
+            parseForTail(fv);
         }
         // Error
         else {
@@ -277,25 +287,25 @@ public class RecursiveParser {
         }
     }
     
-    private void parseForTail() throws Exception {
+    private void parseForTail(FrameVar fv) throws Exception {
         initStep("<ForTail>");
         // [23] <ForTail> -> END_OF_INSTRUCTION <InstructionList> END
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 23) {
             match(currentTerminal);
-            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
             tableOfSymbols.removeFrame();
+            generator.whileEnd();
         }
         // [24] <ForTail> -> TERNARY_ELSE <Expresssion> END_OF_INSTRUCTION <InstructionList> END
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 24) {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
-            tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
             tableOfSymbols.removeFrame();
+            generator.forEnd(fv.getAddress(), fv.getType());
         }
         // Error
         else {
