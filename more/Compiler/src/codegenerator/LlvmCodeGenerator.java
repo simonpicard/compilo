@@ -382,10 +382,18 @@ public class LlvmCodeGenerator {
         binaryOperationInt("urem");
     }
 
-    //inverse divide ??
+    public void inverseDivide() throws IOException, CodeGeneratorException {
+        Expression temp1 = popExpression();
+        Expression temp2 = popExpression();
+        expressions.push(temp1);
+        expressions.push(temp2);
+        binaryOperationInt("udiv");
+    }
+
     //public void power() throws IOException, CodeGeneratorException {
     //    binaryOperation("urem");
     //}
+    
     public void greaterThan() throws IOException, CodeGeneratorException {
         binaryComparisonInt("sgt");
     }
