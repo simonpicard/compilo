@@ -6,6 +6,7 @@
 package utils.datastructure;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,12 @@ public class ProductionRule {
         this.leftPart = leftPart;
         this.rightPart = rightPart;
         productionRules.put(id, this);
+    }
+    
+    public ProductionRule(int id, Variable leftPart, Token... rightPart) {
+        this.id = id;
+        this.leftPart = leftPart;
+        this.rightPart = Arrays.asList(rightPart);
     }
     
     public static List<ProductionRule> generateProductionRulesFromGrammar(Grammar grammar) {
