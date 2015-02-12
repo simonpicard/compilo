@@ -30,6 +30,7 @@ public class LlvmCodeGenerator {
     }
 
     private FileOutputStream outputFile;
+    //sur le stack : les variables temporaires et les nombres
     private Stack<Expression> expressions;
     private int expressionCounter;
 
@@ -48,6 +49,7 @@ public class LlvmCodeGenerator {
         ++expressionCounter;
     }
     
+    // push un nombre sur le stack
     private void pushExpression(String value, Type type) {
         expressions.push(new Expression(value, type));
     }
@@ -157,7 +159,7 @@ public class LlvmCodeGenerator {
         pushExpression(number, type);
     }
     
-    public void plus() throws IOException, Exception {
+    public void plus() throws IOException, CodeGeneratorException {
         String res = "add ";
         Expression top = topExpression();
         switch (top.type) {
@@ -165,12 +167,12 @@ public class LlvmCodeGenerator {
                 res += "i32 ";
                 break;
             default:
-                throw new Exception("Unsupported type");
+                throw new UnsupportedTypeException(top.type, "plus");
         }
         Expression operand2 = popExpression();
         Expression operand1 = popExpression();
         if (operand1.type != operand2.type) {
-            throw new Exception("Incompatible type for operation add");
+            throw new IncompatibleTypeException(operand1.type, operand2.type, "add");
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(operand1.type);
@@ -178,20 +180,20 @@ public class LlvmCodeGenerator {
         outputFile.write(res.getBytes(charset));
     }
     
-    public void varDeclaration(int varAddress, Type type) throws Exception {
+    public void varDeclaration(int varAddress, Type type) throws CodeGeneratorException, IOException {
         String res = varPrefix + varAddress + " = alloca ";
         switch (type) {
             case integer:
                 res += "i32";
                 break;
             default:
-                throw new Exception("Unsupported type");
+                throw new UnsupportedTypeException(type, "varDeclaration");
         }
         res += endOfLine;
         outputFile.write(res.getBytes(charset));
     }
     
-    public void assignation(int varAddress, Type type) throws Exception {
+    public void assignation(int varAddress, Type type) throws CodeGeneratorException, IOException {
         String res = "store ";
         String llvmType = "";
         switch(type) {
@@ -199,14 +201,14 @@ public class LlvmCodeGenerator {
                 llvmType = "i32";
                 break;
             default:
-                throw new Exception("Unsupported type");
+                throw new UnsupportedTypeException(type, "assignation");
         }
         Expression exp = expressions.pop();
         res += llvmType + " " + exp.content + ", " + llvmType + "* " + varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
     
-    public void println() throws Exception {
+    public void println() throws CodeGeneratorException, IOException {
         String res = "call void @println(";
         Expression exp = expressions.pop();
         switch(exp.type) {
@@ -214,9 +216,24 @@ public class LlvmCodeGenerator {
                 res += "i32";
                 break;
             default:
-                throw new Exception("Unsupported type");
+                throw new UnsupportedTypeException(exp.type, "println");
         }
         res += " " + exp.content + ")" + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    // Charge le contenu d'une variable
+    public void valueOfVariable(int varAddress, Type type) throws UnsupportedTypeException, IOException {
+        pushExpression(type);
+        String res = topExpression().content + " = load ";
+        switch(type) {
+            case integer:
+                res += "i32*";
+                break;
+            default:
+                throw new UnsupportedTypeException(type, "valueOfVariable");
+        }
+        res += varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 }

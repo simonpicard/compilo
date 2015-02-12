@@ -406,8 +406,9 @@ public class RecursiveParser {
         initStep("<AtomicIdentifierExpression>");
         // [37] <AtomicIdentifierExpression> -> IDENTIFIER <AtomicIdentifierExpressionTail>
         if (ProductionRule.productionRules.get(37).equals(currentProductionRule)) {
+            String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
-            parseAtomicIdentifierExpressionTail();
+            parseAtomicIdentifierExpressionTail(identifier);
         }
         // Error
         else {
@@ -415,7 +416,7 @@ public class RecursiveParser {
         }
     }
     
-    private void parseAtomicIdentifierExpressionTail() throws Exception {
+    private void parseAtomicIdentifierExpressionTail(String identifier) throws Exception {
         initStep("<AtomicIdentifierExpressionTail>");
         // [38] <AtomicIdentifierExpressionTail> -> <FunctionCallTail>
         if (ProductionRule.productionRules.get(38).equals(currentProductionRule)) {
@@ -423,6 +424,8 @@ public class RecursiveParser {
         }
         // [39] <AtomicIdentifierExpressionTail> -> EPSILON_VALUE
         else if (ProductionRule.productionRules.get(39).equals(currentProductionRule)) {
+            FrameVar var = (FrameVar) tableOfSymbols.lookup(identifier);
+            generator.valueOfVariable(var.getAddress(), var.getType());
             matchEpsilon();
         }
         // Error
