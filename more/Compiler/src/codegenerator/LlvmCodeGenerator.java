@@ -170,27 +170,6 @@ public class LlvmCodeGenerator {
         pushExpression(number, type);
     }
     
-    public void plus() throws IOException, CodeGeneratorException {
-        String res = "add ";
-        Expression top = topExpression();
-        switch (top.type) {
-            case integer:
-                res += "i32 ";
-                break;
-            default:
-                throw new UnsupportedTypeException(top.type, "plus");
-        }
-        Expression operand2 = popExpression();
-        Expression operand1 = popExpression();
-        if (operand1.type != operand2.type) {
-            throw new IncompatibleTypeException(operand1.type, operand2.type, "add");
-        }
-        res += operand1.content + ", " + operand2.content + endOfLine;
-        pushExpression(operand1.type);
-        res = topExpression().content + " = " + res;
-        outputFile.write(res.getBytes(charset));
-    }
-    
     public void varDeclaration(int varAddress, Type type) throws CodeGeneratorException, IOException {
         String res = varPrefix + varAddress + " = alloca ";
         switch (type) {
@@ -251,7 +230,7 @@ public class LlvmCodeGenerator {
         String res = topExpression().content + " = load ";
         switch(type) {
             case integer:
-                res += "i32*";
+                res += "i32* ";
                 break;
             case bool:
                 res += "i1*";
@@ -261,5 +240,42 @@ public class LlvmCodeGenerator {
         }
         res += " " + varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
+    }
+    
+    private void binaryOperation(String op) throws IOException, CodeGeneratorException {
+        String res = op +" ";
+        Expression top = topExpression();
+        switch (top.type) {
+            case integer:
+                res += "i32 ";
+                break;
+            default:
+                throw new UnsupportedTypeException(top.type, op);
+        }
+        Expression operand2 = popExpression();
+        Expression operand1 = popExpression();
+        if (operand1.type != operand2.type) {
+            throw new IncompatibleTypeException(operand1.type, operand2.type, op);
+        }
+        res += operand1.content + ", " + operand2.content + endOfLine;
+        pushExpression(operand1.type);
+        res = topExpression().content + " = " + res;
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void plus() throws IOException, CodeGeneratorException {
+        binaryOperation("add");
+    }
+    
+    public void minus() throws IOException, CodeGeneratorException {
+        binaryOperation("sub");
+    }
+    
+    public void bitwiseOr() throws IOException, CodeGeneratorException {
+        binaryOperation("or");
+    }
+    
+    public void bitwiseXor() throws IOException, CodeGeneratorException {
+        binaryOperation("xor");
     }
 }
