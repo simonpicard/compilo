@@ -1,13 +1,19 @@
 b::Bool
 c::Integer
-a::Integer
+e::Integer
 d::Bool
 b=true
-a=1+-1+1
-println(a)
+e=1+-1+1
+println(e)
 println(b)
-c=a|1-2$10
+c=e|1-2$10
 println(c)
 d=!!(-8==c)
 c=~c
+a::Integer
+a=1
 
+while a<=3
+  println(a)
+  a = a + 1
+end

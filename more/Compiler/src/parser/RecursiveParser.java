@@ -251,12 +251,15 @@ public class RecursiveParser {
         // [21] <Loop> -> WHILE <Expression> END_OF_INSTRUCTION <InstructionList> END
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 21) {
             match(currentTerminal);
+            generator.whileBegin();
             parseExpression();
             match(currentTerminal);
+            generator.whileOperation();
             tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
             tableOfSymbols.removeFrame();
+            generator.whileEnd();
         }
         // [22] <Loop> -> FOR IDENTIFIER ASSIGNATION <Expression> TERNARY_ELSE <Expression> <ForTail>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 22) {
