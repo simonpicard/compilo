@@ -22,3 +22,7 @@ end
 f::Integer
 
 f=c<e?1+1:2*3
+
+for t=3:t<8
+a=a+1
+end

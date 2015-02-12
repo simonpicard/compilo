@@ -571,4 +571,15 @@ public class LlvmCodeGenerator {
         res += endLoop.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
+    
+    public void forEnd(int varAddress, Type type) throws IOException, UnsupportedTypeException, CodeGeneratorException {
+        valueOfVariable(varAddress, type);
+        plus();
+        assignation(varAddress, type);
+        Label endLoop = popLabel();
+        Label loop = popLabel();
+        String res = "br label %" + loop.content + endOfLine;
+        res += endLoop.content + ":" + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
 }
