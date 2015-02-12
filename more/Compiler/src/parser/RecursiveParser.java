@@ -6,7 +6,6 @@
 package parser;
 
 import codegenerator.LlvmCodeGenerator;
-import codegenerator.LlvmDeclaration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -69,12 +68,14 @@ public class RecursiveParser {
         currentSymbol = lexicalAnalyzer.nextToken();
         this.actionTable = actionTable;
         this.tableOfSymbols = new TableOfSymbols();
-        generator = new LlvmCodeGenerator("./o.txt");
+        generator = new LlvmCodeGenerator("../../test/test.ll");
     }
     
     public void parseProgram() throws Exception {
         initStep("<Program>");
         
+        generator.initialize();
+        generator.main();
         tableOfSymbols.addFrame(new Frame());
         // [1] <Program> -> <InstructionList>
         if (ProductionRule.productionRules.get(1).equals(currentProductionRule)) {
@@ -84,6 +85,7 @@ public class RecursiveParser {
             error(currentVariable, currentTerminal);
         }
         tableOfSymbols.removeFrame();
+        generator.mainEnd();
         if (currentTerminal.equals(Epsilon.getInstance())) {
             System.out.println("Accept");
         }
@@ -183,6 +185,7 @@ public class RecursiveParser {
         initStep("<AssignationTail>");
         // [16] <AssignationTail> -> ASSIGNATION <Expression>
         if (ProductionRule.productionRules.get(16).equals(currentProductionRule)) {
+            generator.generate("<AssignationTail>", currentTerminal, tableOfSymbols.lookup(identifier));
             match(currentTerminal);
             parseExpression();
         }
@@ -297,21 +300,21 @@ public class RecursiveParser {
         if (ProductionRule.productionRules.get(25).equals(currentProductionRule)) {
             FrameVar fv = new FrameVar(Type.bool);
             tableOfSymbols.addNewEntry(identifier, fv);
-            generator.write(new LlvmDeclaration(fv));
+            generator.generate("<Type>", currentTerminal, fv);
             match(currentTerminal);
         }
         // [26] <Type> -> REAL_TYPE
         else if (ProductionRule.productionRules.get(26).equals(currentProductionRule)) {
             FrameVar fv = new FrameVar(Type.real);
             tableOfSymbols.addNewEntry(identifier, fv);
-            generator.write(new LlvmDeclaration(fv));
+            generator.generate("<Type>", currentTerminal, fv);
             match(currentTerminal);
         }
         // [27] <Type> -> INTEGER_TYPE
         else if (ProductionRule.productionRules.get(27).equals(currentProductionRule)) {
             FrameVar fv = new FrameVar(Type.integer);
             tableOfSymbols.addNewEntry(identifier, fv);
-            generator.write(new LlvmDeclaration(fv));
+            generator.generate("<Type>", currentTerminal, fv);
             match(currentTerminal);
         }
         // Error
@@ -425,6 +428,7 @@ public class RecursiveParser {
         initStep("<UnaryExpression>");
         // [40] <UnaryExpression> -> NEGATION <UnaryExpression>
         if (ProductionRule.productionRules.get(40).equals(currentProductionRule)) {
+            generator.generate("<UnaryExpression>", currentTerminal, null);
             match(currentTerminal);
             parseUnaryExpression();
         }
