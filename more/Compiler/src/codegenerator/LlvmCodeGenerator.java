@@ -301,7 +301,7 @@ public class LlvmCodeGenerator {
         Expression operand2 = popExpression();
         Expression operand1 = popExpression();
         if (operand1.type != operand2.type) {
-            throw new IncompatibleTypeException(operand1.type, operand2.type, op, topExpression().content + " = " + res);
+            throw new IncompatibleTypeException(operand1.type, operand2.type, op, "varToBeCreated = " + res);
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(operand1.type);
@@ -561,5 +561,17 @@ public class LlvmCodeGenerator {
         String res = "br label %" + loop.content + endOfLine;
         res += endLoop.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
+    }
+    
+    public void binaryAnd() throws IOException, CodeGeneratorException{
+        ArrayList<Type> types = new ArrayList<Type>();
+        types.add(Type.bool);
+        binaryOperation("and", types);
+    }
+    
+    public void binaryOr() throws IOException, CodeGeneratorException{
+        ArrayList<Type> types = new ArrayList<Type>();
+        types.add(Type.bool);
+        binaryOperation("or", types);
     }
 }

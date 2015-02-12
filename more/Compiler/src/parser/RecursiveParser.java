@@ -291,11 +291,12 @@ public class RecursiveParser {
         initStep("<ForTail>");
         // [23] <ForTail> -> END_OF_INSTRUCTION <InstructionList> END
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 23) {
+            generator.number("1", Type.integer);
             match(currentTerminal);
             parseInstructionList();
             match(currentTerminal);
             tableOfSymbols.removeFrame();
-            generator.whileEnd();
+            generator.forEnd(fv.getAddress(), fv.getType());
         }
         // [24] <ForTail> -> TERNARY_ELSE <Expresssion> END_OF_INSTRUCTION <InstructionList> END
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 24) {
@@ -548,6 +549,7 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 50) {
             match(currentTerminal);
             parseBinaryLazyOrExpression();
+            generator.binaryOr();
             parseBinaryExpressionPrim();
         }
         // [51] <BinaryExpression'> -> EPSILON_VALUE
@@ -579,6 +581,7 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 53) {
             match(currentTerminal);
             parseBinaryLazyAndExpression();
+            generator.binaryAnd();
             parseBinaryLazyOrExpressionPrim();
         }
         // [54] <BinaryExpression'> -> EPSILON_VALUE

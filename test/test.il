@@ -13,3 +13,7 @@ end
 
 a=4294967295
 println(a)
+
+b::Bool
+
+b=true||false&&true
