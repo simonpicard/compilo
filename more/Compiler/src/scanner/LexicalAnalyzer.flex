@@ -144,8 +144,8 @@ RealOctal = {Octal}\.[0-9]+
 {EqualsSign} {return new Symbol(LexicalUnit.ASSIGNATION, yyline, yycolumn, yytext());}
 {Asterisk} {return new Symbol(LexicalUnit.TIMES, yyline, yycolumn, yytext());}
 {Slash} {return new Symbol(LexicalUnit.DIVIDE, yyline, yycolumn, yytext());}
-{True} {return new Symbol(LexicalUnit.BOOLEAN, yyline, yycolumn, Boolean.TRUE);}
-{False} {return new Symbol(LexicalUnit.BOOLEAN, yyline, yycolumn, Boolean.FALSE);}
+{True} {return new Symbol(LexicalUnit.BOOLEAN, yyline, yycolumn, yytext());}
+{False} {return new Symbol(LexicalUnit.BOOLEAN, yyline, yycolumn, yytext());}
 {LowerSign} {return new Symbol(LexicalUnit.LESS_THAN, yyline, yycolumn, yytext());}
 {GreaterSign} {return new Symbol(LexicalUnit.GREATER_THAN, yyline, yycolumn, yytext());}
 {LowerOrEquals} {return new Symbol(LexicalUnit.LESS_OR_EQUALS_THAN, yyline, yycolumn, yytext());}
@@ -160,8 +160,8 @@ RealOctal = {Octal}\.[0-9]+
     }
     return identifier;
 }
-{Integer} {return new Symbol(LexicalUnit.INTEGER, yyline, yycolumn, new Integer(yytext()));}
-{Real} {return new Symbol(LexicalUnit.REAL, yyline, yycolumn, new Double(yytext()));}
+{Integer} {return new Symbol(LexicalUnit.INTEGER, yyline, yycolumn, yytext());}
+{Real} {return new Symbol(LexicalUnit.REAL, yyline, yycolumn, yytext());}
 
 {Space} {}
 {EndOfLine} {return new Symbol(LexicalUnit.END_OF_INSTRUCTION, yyline, yycolumn, yytext());}

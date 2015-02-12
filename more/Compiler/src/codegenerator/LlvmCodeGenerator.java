@@ -179,16 +179,14 @@ public class LlvmCodeGenerator {
                 + "ret void" + endOfLine
                 + "}" + endOfLine
                 + endOfLine;
-        
-        res += "%ternaryInt = alloca i32" + endOfLine
-                +"%ternaryBool = alloca i1" + endOfLine
-                + endOfLine;
 
         outputFile.write(res.getBytes(charset));
     }
 
     public void main() throws IOException {
         String res = "define i32 @main() {" + endOfLine;
+        res += "%ternaryInt = alloca i32" + endOfLine
+                +"%ternaryBool = alloca i1" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 
@@ -492,21 +490,14 @@ public class LlvmCodeGenerator {
         outputFile.write(res.getBytes(charset));
     }
 
-    private String repeatString(String s, int i) {
-        String res = "";
-        for (int j = 0; j < i; j++) {
-            res += s;
-        }
-        return res;
-    }
-
     public void bitwiseNot() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
-        int size = expressions.lastElement().content.length();
-        pushExpression(repeatString("1", size), Type.integer);
+        // que des 1 en binaire
+        String maxInt32bits = "4294967295";
+        pushExpression(maxInt32bits, Type.integer);
         binaryOperation("xor", types);
-        pushExpression(repeatString("0", size), Type.integer);
+        pushExpression("0", Type.integer);
         binaryOperation("xor", types);
     }
 
