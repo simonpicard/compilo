@@ -590,36 +590,42 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 56) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.greaterThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [57] <BinaryLazyAndExpression'> -> LESS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 57) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.lessThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [58] <BinaryLazyAndExpression'> -> GREATER_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 58) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.greaterOrEqualsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [59] <BinaryLazyAndExpression'> -> LESS_OR_EQUALS_THAN <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 59) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.lessOrEqualsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [60] <BinaryLazyAndExpression'> -> EQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 60) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.equalsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [61] <BinaryLazyAndExpression'> -> INEQUALITY <BinaryNumericExpression> <BinaryLazyAndExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 61) {
             match(currentTerminal);
             parseBinaryNumericExpression();
+            generator.notEqualsThan();
             parseBinaryLazyAndExpressionPrim();
         }
         // [62] <BinaryLazyAndExpression'> -> EPSILON_VALUE
@@ -704,12 +710,14 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 70) {
             match(currentTerminal);
             parseBinaryShiftedExpression();
+            generator.leftShift();
             parseBinaryTermExpressionPrim();
         }
         // [71] <BinaryTermExpression'> -> ARITHMETIC_SHIFT_RIGHT <BinaryShiftedExpression> <BinaryTermExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 71) {
             match(currentTerminal);
             parseBinaryShiftedExpression();
+            generator.rightShift();
             parseBinaryTermExpressionPrim();
         }
         // [72] <BinaryTermExpression'> -> EPSILON_VALUE
@@ -741,24 +749,28 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 74) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.times();
             parseBinaryShiftedExpressionPrim();
         }
         // [75] <BinaryShiftedExpression'> -> DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 75) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.divide();
             parseBinaryShiftedExpressionPrim();
         }
         // [76] <BinaryShiftedExpression'> -> REMAINDER <BinaryFactorExpression> <BinaryShiftedExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 76) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.remainder();
             parseBinaryShiftedExpressionPrim();
         }
         // [77] <BinaryShiftedExpression'> -> BITWISE_AND <BinaryFactorExpression> <BinaryShiftedExpression'>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 77) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.bitwiseAnd();
             parseBinaryShiftedExpressionPrim();
         }
         // [78] <BinaryShiftedExpression'> -> INVERSE_DIVIDE <BinaryFactorExpression> <BinaryShiftedExpression'>

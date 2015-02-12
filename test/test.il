@@ -1,11 +1,11 @@
 b::Bool
+c::Integer
+d::Integer
 b=true
-c::Bool
-c=false
-if b
-  println(1)
-elseif c
-  println(2)
-else
-  println(3)
-end
+a=1+1+1
+println(a)
+println(b)
+c=a|1-2$10
+println(c)
+d=8+c
+

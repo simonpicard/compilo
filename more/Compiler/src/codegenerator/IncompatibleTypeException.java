@@ -12,8 +12,8 @@ import parser.Type;
  */
 public class IncompatibleTypeException extends CodeGeneratorException {
 
-    public IncompatibleTypeException(Type type1, Type type2, String operation) {
-        super("incompatible types " + type1.toString() + " and " + type2.toString() + " for operation " + operation);
+    public IncompatibleTypeException(Type type1, Type type2, String operation, String line) {
+        super("incompatible types " + type1.toString() + " and " + type2.toString() + " for operation " + operation +"\nLine: "+line);
     }
     
 }
