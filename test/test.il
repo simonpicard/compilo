@@ -1,5 +1,7 @@
 a::Integer
-b::Integer
+b::Bool
+c::Integer
+b=true
 a=1+1+1
-b=a|1-2$10
+c=a|1-2$10
 println(a)
