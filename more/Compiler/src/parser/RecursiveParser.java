@@ -353,7 +353,7 @@ public class RecursiveParser {
             generator.ifOperation();
             parseExpression();
             parseTernaryElseExpression();
-            generator.endIfBlock();
+            generator.ternaryEndIfBlock();
         }
         // [30] <TernaryIfExpression> -> EPSILON_VALUE
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 30) {

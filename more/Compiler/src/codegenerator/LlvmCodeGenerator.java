@@ -78,10 +78,6 @@ public class LlvmCodeGenerator {
         return expressions.pop();
     }
 
-    private Expression lastExpression() {
-        return expressions.lastElement();
-    }
-
     private Expression topExpression() {
         return expressions.lastElement();
     }
@@ -183,6 +179,10 @@ public class LlvmCodeGenerator {
                 + "ret void" + endOfLine
                 + "}" + endOfLine
                 + endOfLine;
+        
+        res += "%ternaryInt = alloca i32" + endOfLine
+                +"%ternaryBool = alloca i1" + endOfLine
+                + endOfLine;
 
         outputFile.write(res.getBytes(charset));
     }
@@ -263,7 +263,7 @@ public class LlvmCodeGenerator {
     // Charge le contenu d'une variable
     public void valueOfVariable(int varAddress, Type type) throws UnsupportedTypeException, IOException {
         pushExpression(type);
-        String res = lastExpression().content + " = load ";
+        String res = topExpression().content + " = load ";
         switch (type) {
             case integer:
                 res += "i32*";
@@ -307,7 +307,7 @@ public class LlvmCodeGenerator {
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(operand1.type);
-        res = lastExpression().content + " = " + res;
+        res = topExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
 
@@ -340,7 +340,7 @@ public class LlvmCodeGenerator {
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(Type.bool);
-        res = lastExpression().content + " = " + res;
+        res = topExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
 
@@ -450,9 +450,40 @@ public class LlvmCodeGenerator {
         outputFile.write(res.getBytes(charset));
     }
 
-    public void ternaryElseOperation() throws IOException {
+    public void ternaryStore(boolean push) throws IOException, UnsupportedTypeException {
+        String res = "";
+        Expression output = popExpression();
+        String type= "";
+        String var= "%ternary";
+        switch(output.type){
+            case integer:
+                type = "i32";
+                var += "Int";
+                break;
+            case bool:
+                type = "i1";
+                var += "Bool";
+                break;
+            default:
+                throw new UnsupportedTypeException(output.type, "ternary");
+        }
+        res = "store "+type+" "+output.content+", "+type+"* "+var+endOfLine;
+        if(push)
+            pushExpression(var, output.type);
+        outputFile.write(res.getBytes(charset));
+    }
+
+    public void ternaryElseOperation() throws IOException, UnsupportedTypeException {
+        ternaryStore(false);
         elseOperation();
-        expressionCounter--;
+    }
+
+    public void ternaryEndIfBlock() throws IOException, UnsupportedTypeException {
+        ternaryStore(true);
+        
+        String res = "br label %" + endIf.content + endOfLine;
+        res += endIf.content + ":" + endOfLine;
+        outputFile.write(res.getBytes(charset));
     }
 
     public void endIfBlock() throws IOException {
@@ -495,13 +526,16 @@ public class LlvmCodeGenerator {
             default:
                 throw new UnsupportedTypeException(operand.type, "not");
         }
+        Label nTrue = new Label();
+        Label nFalse = new Label();
+        Label nEnd = new Label();
         res += test.content + " = eq "+type+" " + operand.content + " , 0"+endOfLine;
-        res += "br i1 "+ test.content + ", label %iftru" + (expressionCounter-1) + " , label %iffls" + (expressionCounter-1)+endOfLine;
+        res += "br i1 "+ test.content + ", label %"+ nTrue.content + " , label %"+nFalse.content+endOfLine;
         pushExpression(Type.bool);
-        res += "iftru" + (expressionCounter-2) + ": "+ lastExpression().content + " = 1"+endOfLine;
-        res += "br label %endNot" + (expressionCounter-2)+endOfLine;
-        res += "iifls" + (expressionCounter-2) + ": " + lastExpression().content + " = 0"+endOfLine;
-        res += "endNot" + (expressionCounter-2) + ": "+endOfLine;
+        res += nTrue.content + ": "+ topExpression().content + " = 1"+endOfLine;
+        res += "br label %"+nEnd.content+endOfLine;
+        res += nFalse.content + ": " + topExpression().content + " = 0"+endOfLine;
+        res += nEnd.content + ": "+endOfLine;
         outputFile.write(res.getBytes(charset));
     }
     
