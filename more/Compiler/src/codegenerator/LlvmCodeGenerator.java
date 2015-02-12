@@ -19,20 +19,22 @@ import parser.Type;
  * @author arnaud
  */
 public class LlvmCodeGenerator {
-    
+
     public class Expression {
+
         public String content;
         public Type type;
-        
+
         public Expression(String content, Type type) {
             this.content = content;
             this.type = type;
         }
     }
-    
+
     public class Label {
+
         public String content;
-        
+
         public Label() {
             content = "label" + String.valueOf(labelCounter);
             ++labelCounter;
@@ -43,7 +45,7 @@ public class LlvmCodeGenerator {
     //sur le stack : les variables temporaires et les nombres
     private Stack<Expression> expressions;
     private int expressionCounter;
-    
+
     //sur le stack : les labels
     private Stack<Label> labels;
     private int labelCounter;
@@ -61,37 +63,37 @@ public class LlvmCodeGenerator {
         labels = new Stack<>();
         labelCounter = 0;
     }
-    
+
     private void pushExpression(Type type) {
-        expressions.push(new Expression("%expr"+String.valueOf(expressionCounter), type));
+        expressions.push(new Expression("%expr" + String.valueOf(expressionCounter), type));
         ++expressionCounter;
     }
-    
+
     // push un nombre sur le stack
     private void pushExpression(String value, Type type) {
         expressions.push(new Expression(value, type));
     }
-    
+
     private Expression popExpression() {
         return expressions.pop();
     }
-    
+
     private Expression lastExpression() {
         return expressions.lastElement();
     }
-    
+
     private Expression topExpression() {
         return expressions.lastElement();
     }
-    
+
     private void pushLabel(Label label) {
         labels.push(label);
     }
-    
+
     private Label popLabel() {
         return labels.pop();
     }
-    
+
     private Label topLabel() {
         return labels.lastElement();
     }
@@ -173,7 +175,7 @@ public class LlvmCodeGenerator {
                 + "ret void" + endOfLine
                 + "}" + endOfLine
                 + endOfLine;
-        
+
         // write bool to input
         res += "define void @printlnbool(i1 %n) {" + endOfLine
                 + "%temp1 = zext i1 %n to i32" + endOfLine
@@ -196,14 +198,14 @@ public class LlvmCodeGenerator {
                 + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void number(String number, Type type) {
-        if(type == Type.bool) {
+        if (type == Type.bool) {
             number = "false".equals(number) ? "0" : "1";
         }
         pushExpression(number, type);
     }
-    
+
     public void varDeclaration(int varAddress, Type type) throws CodeGeneratorException, IOException {
         String res = varPrefix + varAddress + " = alloca ";
         switch (type) {
@@ -219,11 +221,11 @@ public class LlvmCodeGenerator {
         res += endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void assignation(int varAddress, Type type) throws CodeGeneratorException, IOException {
         String res = "store ";
         String llvmType = "";
-        switch(type) {
+        switch (type) {
             case integer:
                 llvmType = "i32";
                 break;
@@ -240,11 +242,11 @@ public class LlvmCodeGenerator {
         res += llvmType + " " + exp.content + ", " + llvmType + "* " + varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void println() throws CodeGeneratorException, IOException {
         String res = "call void ";
         Expression exp = expressions.pop();
-        switch(exp.type) {
+        switch (exp.type) {
             case integer:
                 res += "@printlnint(i32";
                 break;
@@ -257,12 +259,12 @@ public class LlvmCodeGenerator {
         res += " " + exp.content + ")" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     // Charge le contenu d'une variable
     public void valueOfVariable(int varAddress, Type type) throws UnsupportedTypeException, IOException {
         pushExpression(type);
         String res = lastExpression().content + " = load ";
-        switch(type) {
+        switch (type) {
             case integer:
                 res += "i32* ";
                 break;
@@ -275,11 +277,11 @@ public class LlvmCodeGenerator {
         res += " " + varPrefix + varAddress + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     private void binaryOperation(String op, ArrayList<Type> types) throws IOException, CodeGeneratorException {
-        String res = op +" ";
+        String res = op + " ";
         Expression top = topExpression();
-        if (!types.contains(top.type)){
+        if (!types.contains(top.type)) {
             throw new UnsupportedTypeException(top.type, op);
         }
         switch (top.type) {
@@ -302,11 +304,11 @@ public class LlvmCodeGenerator {
         res = lastExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     private void binaryComparison(String op, ArrayList<Type> types) throws IOException, CodeGeneratorException {
-        String res = "icmp "+op +" ";
+        String res = "icmp " + op + " ";
         Expression top = topExpression();
-        if (!types.contains(top.type)){
+        if (!types.contains(top.type)) {
             throw new UnsupportedTypeException(top.type, op);
         }
         switch (top.type) {
@@ -322,111 +324,109 @@ public class LlvmCodeGenerator {
         Expression operand2 = popExpression();
         Expression operand1 = popExpression();
         if (operand1.type != operand2.type) {
-            throw new IncompatibleTypeException(operand1.type, operand2.type, op, topExpression().content + " = " + res + operand1.content + ", " + operand2.content + endOfLine);
+            throw new IncompatibleTypeException(operand1.type, operand2.type, op, "varToBeCreated = " + res + operand1.content + ", " + operand2.content + endOfLine);
         }
         res += operand1.content + ", " + operand2.content + endOfLine;
         pushExpression(Type.bool);
         res = lastExpression().content + " = " + res;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void plus() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("add", types);
     }
-    
+
     public void minus() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("sub", types);
     }
-    
+
     public void bitwiseOr() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("or", types);
     }
-    
+
     public void bitwiseXor() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("xor", types);
     }
-    
+
     public void leftShift() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("shl", types);
     }
-    
+
     public void rightShift() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("lshr", types);
     }
-    
+
     public void bitwiseAnd() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("and", types);
     }
-    
+
     public void times() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("mul", types);
     }
-    
+
     public void divide() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("udiv", types);
     }
-    
+
     public void remainder() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryOperation("urem", types);
     }
-    
+
     //inverse divide ??
-    
     //public void power() throws IOException, CodeGeneratorException {
     //    binaryOperation("urem");
     //}
-    
     public void greaterThan() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryComparison("sgt", types);
     }
-    
+
     public void greaterOrEqualsThan() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryComparison("sge", types);
     }
-    
+
     public void lessThan() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryComparison("slt", types);
     }
-    
+
     public void lessOrEqualsThan() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         binaryComparison("sle", types);
     }
-    
+
     public void equalsThan() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.integer);
         types.add(Type.bool);
         binaryComparison("eq", types);
     }
-    
+
     public void notEqualsThan() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<>();
         types.add(Type.integer);
@@ -438,19 +438,19 @@ public class LlvmCodeGenerator {
         endIf = new Label();
         elseIfOperation();
     }
-    
+
     public void endIf() throws IOException {
         String res = "br label %" + endIf.content + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void elseIfOperation() throws CodeGeneratorException, IOException {
         String res = "br i1 ";
         Expression exp = expressions.pop();
         if (!Type.bool.equals(exp.type)) {
             throw new UnsupportedTypeException(exp.type, "if");
         }
-        
+
         Label ifLabel = new Label();
         Label elseLabel = new Label();
         res += exp.content + ", label %" + ifLabel.content + ", label %" + elseLabel.content + endOfLine;
@@ -458,17 +458,61 @@ public class LlvmCodeGenerator {
         labels.push(elseLabel);
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void elseOperation() throws IOException {
         Label elseLabel = popLabel();
         String res = "br label %" + elseLabel.content + endOfLine;
         res += elseLabel.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void endIfBlock() throws IOException {
         String res = "br label %" + endIf.content + endOfLine;
         res += endIf.content + ":" + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
+
+    private String repeatString(String s, int i) {
+        String res = "";
+        for (int j = 0; j < i; j++) {
+            res += s;
+        }
+        return res;
+    }
+
+    public void bitwiseNot() throws IOException, CodeGeneratorException {
+        ArrayList<Type> types = new ArrayList<Type>();
+        types.add(Type.integer);
+        int size = expressions.lastElement().content.length();
+        pushExpression(repeatString("1", size), Type.integer);
+        binaryOperation("xor", types);
+        pushExpression(repeatString("0", size), Type.integer);
+        binaryOperation("xor", types);
+    }
+
+    public void not() throws IOException, CodeGeneratorException {
+        pushExpression(Type.bool);
+        Expression test = expressions.pop();
+        Expression operand = expressions.pop();
+        String type= "";
+        String res = "";
+        switch(operand.type){
+            case integer:
+                type = "i32";
+                break;
+            case bool:
+                type = "i1";
+                break;
+            default:
+                throw new UnsupportedTypeException(operand.type, "not");
+        }
+        res += test.content + " = eq "+type+" " + operand.content + " , 0"+endOfLine;
+        res += "br i1 "+ test.content + ", label %iftru" + (expressionCounter-1) + " , label %iffls" + (expressionCounter-1)+endOfLine;
+        pushExpression(Type.bool);
+        res += "iftru" + (expressionCounter-2) + ": "+ lastExpression().content + " = 1"+endOfLine;
+        res += "br label %endNot" + (expressionCounter-2)+endOfLine;
+        res += "iifls" + (expressionCounter-2) + ": " + lastExpression().content + " = 0"+endOfLine;
+        res += "endNot" + (expressionCounter-2) + ": "+endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 }

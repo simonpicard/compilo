@@ -441,6 +441,7 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 40) {
             match(currentTerminal);
             parseUnaryExpression();
+            generator.not();
         }
         // [41] <UnaryExpression> -> <UnaryBitwiseNotExpression>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 41) {
@@ -458,6 +459,7 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 42) {
             match(currentTerminal);
             parseUnaryBitwiseNotExpression();
+            generator.bitwiseNot();
         }
         // [43] <UnaryBitwiseNotExpression> -> <UnaryMinusPlusExpression>
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 43) {
