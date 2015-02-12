@@ -206,4 +206,17 @@ public class LlvmCodeGenerator {
         outputFile.write(res.getBytes(charset));
     }
     
+    public void println() throws Exception {
+        String res = "call void @println(";
+        Expression exp = expressions.pop();
+        switch(exp.type) {
+            case integer:
+                res += "i32";
+                break;
+            default:
+                throw new Exception("Unsupported type");
+        }
+        res += " " + exp.content + ")" + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
 }

@@ -889,6 +889,7 @@ public class RecursiveParser {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
+            generator.println();
         }
         // Error
         else {
