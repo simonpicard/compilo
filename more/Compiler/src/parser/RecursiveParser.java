@@ -187,16 +187,23 @@ public class RecursiveParser {
         if (ProductionRule.productionRules.get(16).equals(currentProductionRule)) {
             match(currentTerminal);
             parseExpression();
+            FrameVar var = (FrameVar) tableOfSymbols.lookup(identifier);
+            generator.assignation(var.getAddress(), var.getType());
         }
 
         // [17] <AssignationTail> -> COMMA IDENTIFIER <AssignationTail> COMMA <Expression>
-        if (ProductionRule.productionRules.get(17).equals(currentProductionRule)) {
+        else if (ProductionRule.productionRules.get(17).equals(currentProductionRule)) {
             match(currentTerminal);
             identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
             parseAssignationTail(identifier);
             match(currentTerminal);
             parseExpression();
+        }
+        
+        // Error
+        else {
+            error(currentVariable, currentTerminal);
         }
     }
     
@@ -299,18 +306,21 @@ public class RecursiveParser {
         if (ProductionRule.productionRules.get(25).equals(currentProductionRule)) {
             FrameVar fv = new FrameVar(Type.bool);
             tableOfSymbols.addNewEntry(identifier, fv);
+            generator.varDeclaration(fv.getAddress(), fv.getType());
             match(currentTerminal);
         }
         // [26] <Type> -> REAL_TYPE
         else if (ProductionRule.productionRules.get(26).equals(currentProductionRule)) {
             FrameVar fv = new FrameVar(Type.real);
             tableOfSymbols.addNewEntry(identifier, fv);
+            generator.varDeclaration(fv.getAddress(), fv.getType());
             match(currentTerminal);
         }
         // [27] <Type> -> INTEGER_TYPE
         else if (ProductionRule.productionRules.get(27).equals(currentProductionRule)) {
             FrameVar fv = new FrameVar(Type.integer);
             tableOfSymbols.addNewEntry(identifier, fv);
+            generator.varDeclaration(fv.getAddress(), fv.getType());
             match(currentTerminal);
         }
         // Error
@@ -371,6 +381,7 @@ public class RecursiveParser {
         }
         // [33] <AtomicExpression> -> INTEGER
         else if (ProductionRule.productionRules.get(33).equals(currentProductionRule)) {
+            generator.number(currentSymbol.getValue().toString(), Type.integer);
             match(currentTerminal);
         }
         // [34] <AtomicExpression> -> REAL
@@ -636,6 +647,7 @@ public class RecursiveParser {
         if (ProductionRule.productionRules.get(64).equals(currentProductionRule)) {
             match(currentTerminal);
             parseBinaryTermExpression();
+            generator.plus();
             parseBinaryNumericExpressionPrim();
         }
         // [65] <BinaryNumericExpression'> -> MINUS <BinaryTermExpression> <BinaryNumericExpression'>

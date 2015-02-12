@@ -10,19 +10,54 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Stack;
+import parser.Type;
 
 /**
  *
  * @author arnaud
  */
 public class LlvmCodeGenerator {
+    
+    public class Expression {
+        public String content;
+        public Type type;
+        
+        public Expression(String content, Type type) {
+            this.content = content;
+            this.type = type;
+        }
+    }
 
     private FileOutputStream outputFile;
+    private Stack<Expression> expressions;
+    private int expressionCounter;
+
     private static String endOfLine = System.getProperty("line.separator");
     private static Charset charset = Charset.forName("UTF-8");
+    private static String varPrefix = "%var";
 
     public LlvmCodeGenerator(String outputPath) throws FileNotFoundException {
         outputFile = new FileOutputStream(new File(outputPath));
+        expressions = new Stack<>();
+        expressionCounter = 0;
+    }
+    
+    private void pushExpression(Type type) {
+        expressions.push(new Expression("%expr"+String.valueOf(expressionCounter), type));
+        ++expressionCounter;
+    }
+    
+    private void pushExpression(String value, Type type) {
+        expressions.push(new Expression(value, type));
+    }
+    
+    private Expression popExpression() {
+        return expressions.pop();
+    }
+    
+    private Expression topExpression() {
+        return expressions.firstElement();
     }
 
     public void initialize() throws IOException {
@@ -112,9 +147,63 @@ public class LlvmCodeGenerator {
     }
 
     public void mainEnd() throws IOException {
-        String res = "  ret i32 0" + endOfLine
+        String res = "ret i32 0" + endOfLine
                 + "}" + endOfLine
                 + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
+    
+    public void number(String number, Type type) {
+        pushExpression(number, type);
+    }
+    
+    public void plus() throws IOException, Exception {
+        String res = "add ";
+        Expression top = topExpression();
+        switch (top.type) {
+            case integer:
+                res += "i32 ";
+                break;
+            default:
+                throw new Exception("Unsupported type");
+        }
+        Expression operand2 = popExpression();
+        Expression operand1 = popExpression();
+        if (operand1.type != operand2.type) {
+            throw new Exception("Incompatible type for operation add");
+        }
+        res += operand1.content + ", " + operand2.content + endOfLine;
+        pushExpression(operand1.type);
+        res = topExpression().content + " = " + res;
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void varDeclaration(int varAddress, Type type) throws Exception {
+        String res = varPrefix + varAddress + " = alloca ";
+        switch (type) {
+            case integer:
+                res += "i32";
+                break;
+            default:
+                throw new Exception("Unsupported type");
+        }
+        res += endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
+    
+    public void assignation(int varAddress, Type type) throws Exception {
+        String res = "store ";
+        String llvmType = "";
+        switch(type) {
+            case integer:
+                llvmType = "i32";
+                break;
+            default:
+                throw new Exception("Unsupported type");
+        }
+        Expression exp = expressions.pop();
+        res += llvmType + " " + exp.content + ", " + llvmType + "* " + varPrefix + varAddress + endOfLine;
+        outputFile.write(res.getBytes(charset));
+    }
+    
 }
