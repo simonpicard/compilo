@@ -829,9 +829,11 @@ public class RecursiveParser {
             match(currentTerminal);
             parseExpression();
             match(currentTerminal);
+            generator.ifOperation();
             tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             parseIfEnd();
+            generator.endIfBlock();
         }
         // Error
         else {
@@ -842,11 +844,14 @@ public class RecursiveParser {
     private void parseIfEnd() throws Exception {
         initStep("<IfEnd>");
         tableOfSymbols.removeFrame();
+        generator.endIf();
         // [84] <IfEnd> -> ELSE_IF <Expression> END_OF_INSTRUCTION <InstructionList> <IfEnd>
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 84) {
             match(currentTerminal);
+            generator.elseOperation();
             parseExpression();
             match(currentTerminal);
+            generator.elseIfOperation();
             tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             parseIfEnd();
@@ -854,6 +859,7 @@ public class RecursiveParser {
         // [85] <IfEnd> -> ELSE <InstructionList> END
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 85) {
             match(currentTerminal);
+            generator.elseOperation();
             tableOfSymbols.addFrame(new Frame());
             parseInstructionList();
             match(currentTerminal);
@@ -862,6 +868,7 @@ public class RecursiveParser {
         // [86] <IfEnd> -> END
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 86) {
             match(currentTerminal);
+            generator.elseOperation();
         }
         // Error
         else {

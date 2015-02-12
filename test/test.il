@@ -1,4 +1,3 @@
-a::Integer
 b::Bool
 c::Integer
 d::Bool
