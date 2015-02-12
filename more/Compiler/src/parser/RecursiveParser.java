@@ -802,6 +802,7 @@ public class RecursiveParser {
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 78) {
             match(currentTerminal);
             parseBinaryFactorExpression();
+            generator.inverseDivide();
             parseBinaryShiftedExpressionPrim();
         }
         // [79] <BinaryShiftedExpression'> -> EPSILON_VALUE

@@ -20,4 +20,4 @@ b=true||false&&true
 
 c::Integer
 d::Integer
-c,d=3,18
+c,d=3,18\36
