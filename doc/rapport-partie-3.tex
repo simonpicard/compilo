@@ -309,4 +309,10 @@ On commence par tester la condition, si elle est fausse, on saute à la fin de l
 La boucle $for$ est une autre façons d'écrire une boucle $while$ en définnisant une variable avec une valeur de base qui permettra de définir la condition de la boucle, celle ci est que cette valeur de base doit être inférieure à un maximum défini par l'utilisateur.\\
 Enfin, après avoir éxecuter le coeur de la boucle il faut incrémenter la valeur de base par un nombre défini lui aussi par l'utilisateur et puis sauter au test de la condition de la boucle.
 
+\subsection{Fonctionnalités du langages implémentées}
+Comme mentionné ci-dessus, la grammaire contient tous les élements présents dans le langage, en ce compris les fonctions. De ce fait, le parser est capable de reconnaitre la syntaxe de tous les éléments du langage Iulius.
+
+Pour ce qui est de l'analyse sémantique et la génération de code, seuls deux types de données sont manipulables : les booléens et les entiers. Les fonctions ne sont également pas disponibles pour la génération de code. Le reste des fonctionnalités est quand à lui disponible lors de la génération de code. Ces fonctionnalités sont, par exemple : la déclaration de variables, de constantes (vérification qu'il n'y a pas d'assignation après l'assignation d'origine), l'assignation (et l'assignation multiple), la conversion, les opérations arithméthiques de base (avec vérification des types de chaque opérande afin de vérifier qu'ils sont compatibles), les opérations bits à bits, les boucles (while et for), les branchements conditionnels (if, elseif, else), l'affichage, la récupération de caractères de l'input, la création de bloc. 
+La gestion du scope des variables est également réalisé.
+
 \end{document}
