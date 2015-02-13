@@ -5,15 +5,8 @@
  */
 package core;
 
-import parser.RecursiveParser;
-import parser.StackParser;
-import utils.algorithms.FirstFollow;
+import parser.Parser;
 import utils.datastructure.ActionTable;
-import utils.datastructure.Epsilon;
-import utils.datastructure.Grammar;
-import utils.datastructure.GrammarParser;
-import utils.datastructure.Terminal;
-import utils.datastructure.Variable;
 
 /**
  *
@@ -22,15 +15,8 @@ import utils.datastructure.Variable;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        GrammarParser gp = new GrammarParser("../grammar/iulius-grammar-with-func-v2.grammar");
-        Grammar grammar = gp.generateGrammar();
-        //grammar.writeLatexTable("../../doc/grammar.tex");
-        //FirstFollow firstFollow = new FirstFollow(grammar);
-        //firstFollow.process();
-        //firstFollow.printFF("../../doc/ff.tex");
         ActionTable at = InitActionTable.createActionTable();
-        //at.writTable("../../doc/action-table.tex");
-        RecursiveParser rp = new RecursiveParser("../../test/test.il", at);
+        Parser rp = new Parser("../../test/test.il", at);
         rp.parseProgram();
     }
 }

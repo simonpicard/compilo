@@ -23,7 +23,7 @@ import utils.datastructure.ProductionRule;
  * Recursive parser which uses a CodeGenerator in order to produce LLVM code.
  * @author arnaud
  */
-public class RecursiveParser {
+public class Parser {
 
     private LexicalAnalyzer lexicalAnalyzer;
     private Symbol currentSymbol;
@@ -63,7 +63,7 @@ public class RecursiveParser {
         produce(currentProductionRule);
     }
 
-    public RecursiveParser(String sourcePath, ActionTable actionTable) throws FileNotFoundException, IOException, PatternSyntaxException, SyntaxErrorException {
+    public Parser(String sourcePath, ActionTable actionTable) throws FileNotFoundException, IOException, PatternSyntaxException, SyntaxErrorException {
         this.lexicalAnalyzer = new LexicalAnalyzer(new FileInputStream(sourcePath));
         currentSymbol = lexicalAnalyzer.nextToken();
         this.actionTable = actionTable;
