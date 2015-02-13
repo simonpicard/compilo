@@ -276,8 +276,11 @@ Dans le tableau suivant, EPSILON\_VALUE $\equiv$ $\epsilon$.
 \clearpage
 
 \section{Génération de code}
-Pour la génération de code nous somme passé par un parser reccursif ordinaire, ce dernier appel des méthode de la classe $LlvmCodeGenerate$ qui génére le code correspodant.\\
-$LlvmCodeGenerate$ possède un stack global qui permet d'y stocker des expressions, donc des variables, des valeurs entièred ou booléenne.\\
+\subsection{Introduction}
+Dans la génération code, la prise en charge du type réel et de la création de fonction n'a pas été faite car non requise.\\
+ \\
+Pour la génération de code nous somme passé par un parser reccursif ordinaire, ce dernier appel des méthode de la classe $LlvmCodeGenerate$ qui générent le code correspodant.\\
+$LlvmCodeGenerate$ possède un stack global qui permet d'y stocker des expressions, donc des variables, des valeurs entières ou booléennes.\\
 Ce stack est indispenssable car toute instruction combinée doit être divisée en une série d'actions binaires, par exemple :\\
 $a = 1 + 1$\\
 Il faut commencer par evaluer $1 + 1$, sotcker le résultat dans une variable temporaire et puis assigner cette variable temporaire à $a$.\\
