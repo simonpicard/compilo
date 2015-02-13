@@ -301,11 +301,11 @@ def i32 compareTo ( i32 %a, i32 %b){
         %1 = sub i32 %a ,%b
         ret i32 %1
 \end{verbatim}
-Le $else\ if$ est une cascade de $if\ else$ ou le $else$ est une ancre vers le prochaine $if$.\\\\
+Le $else\ if$ est une cascade de $if\ else$ où le $else$ est une ancre vers le prochaine $if$.\\\\
 Le if ternaire n'est qu'une autre façons d'écrire un if.
 \subsection{Boucles}
 La boucle $while$ fonctionne en utilisant trois ancres, une pour le test de la condition, une pour le coeur de la boucle et une pour sortir de la boucle.\\
-On commence par tester la condition, si elle est fause on saute à la fin de la boucle, si elle est vraie on saute au coeur de la boucle, une fois celle ci terminée, on saute au test de la condition.\\\\
+On commence par tester la condition, si elle est fausse, on saute à la fin de la boucle, si elle est vraie, on saute au coeur de la boucle, une fois celui ci terminé, on saute au test de la condition.\\\\
 La boucle $for$ est une autre façons d'écrire une boucle $while$ en définnisant une variable avec une valeur de base qui permettra de définir la condition de la boucle, celle ci est que cette valeur de base doit être inférieure à un maximum défini par l'utilisateur.\\
 Enfin, après avoir éxecuter le coeur de la boucle il faut incrémenter la valeur de base par un nombre défini lui aussi par l'utilisateur et puis sauter au test de la condition de la boucle.
 
