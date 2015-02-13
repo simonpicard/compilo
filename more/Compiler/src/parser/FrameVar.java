@@ -6,7 +6,7 @@
 package parser;
 
 /**
- *
+ * Variable in a Frame.
  * @author Simon
  */
 public class FrameVar implements FrameItem {

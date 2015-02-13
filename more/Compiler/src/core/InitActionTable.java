@@ -12,11 +12,12 @@ import utils.datastructure.Variable;
 import utils.datastructure.ProductionRule;
 
 /**
- *
+ * Initialize the action table for parsing from a harcoded grammar.
  * @author arnaud
  */
 public class InitActionTable {
 
+    // Hardcoded variables
     private static final Variable Program = new Variable("<Program>"),
             Instruction = new Variable("<Instruction>"),
             InstructionList = new Variable("<InstructionList>"),
@@ -64,6 +65,7 @@ public class InitActionTable {
             Argument = new Variable("<Argument>"),
             ArgumentTail = new Variable("<ArgumentTail>");
 
+    // Hardcoded terminals
     private static final Terminal EPSILON_VALUE = Epsilon.getInstance(),
             IDENTIFIER = new Terminal("IDENTIFIER"),
             TYPE_DEFINITION = new Terminal("TYPE_DEFINITION"),
@@ -119,6 +121,7 @@ public class InitActionTable {
             FUNCTION = new Terminal("FUNCTION"),
             RETURN = new Terminal("RETURN");
     
+    // Hardcoded production rules
     private static final ProductionRule[] productionRules
             = new ProductionRule[] 
             {new ProductionRule(1, Program, InstructionList),

@@ -6,7 +6,7 @@
 package parser;
 
 /**
- *
+ * Content of a Frame.
  * @author Simon
  */
 public interface FrameItem {

@@ -7,7 +7,7 @@ package codegenerator;
 import parser.Type;
 
 /**
- *
+ * Exception occuring 
  * @author arnaud
  */
 public class IncompatibleTypeException extends CodeGeneratorException {

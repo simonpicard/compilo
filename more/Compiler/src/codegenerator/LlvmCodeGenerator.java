@@ -15,11 +15,14 @@ import java.util.Stack;
 import parser.Type;
 
 /**
- *
+ * Code generator for LLVM intermediate code.
  * @author arnaud
  */
 public class LlvmCodeGenerator {
 
+    /**
+     * Local variable for storing expression.
+     */
     public class Expression {
 
         public String content;
@@ -31,6 +34,9 @@ public class LlvmCodeGenerator {
         }
     }
 
+    /**
+     * LLVM label
+     */
     public class Label {
 
         public String content;
@@ -42,15 +48,16 @@ public class LlvmCodeGenerator {
     }
 
     private FileOutputStream outputFile;
-    //sur le stack : les variables temporaires et les nombres
+    // Stack of temporary variables and numbers
     private Stack<Expression> expressions;
     private int expressionCounter;
 
-    //sur le stack : les labels
+    // Stack of labels
     private Stack<Label> labels;
     private int labelCounter;
     private Label endIf;
 
+    // Some specific constant
     private static String endOfLine = System.getProperty("line.separator");
     private static Charset charset = Charset.forName("UTF-8");
     private static String varPrefix = "%var";
@@ -69,7 +76,7 @@ public class LlvmCodeGenerator {
         ++expressionCounter;
     }
 
-    // push un nombre sur le stack
+    // Push a number on the stack
     private void pushExpression(String value, Type type) {
         expressions.push(new Expression(value, type));
     }
@@ -94,6 +101,10 @@ public class LlvmCodeGenerator {
         return labels.lastElement();
     }
 
+    /**
+     * Initialize, declare built-in functions.
+     * @throws IOException 
+     */
     public void initialize() throws IOException {
         String res = "";
 
@@ -183,6 +194,10 @@ public class LlvmCodeGenerator {
         outputFile.write(res.getBytes(charset));
     }
 
+    /**
+     * Begining of main function.
+     * @throws IOException 
+     */
     public void main() throws IOException {
         String res = "define i32 @main() {" + endOfLine;
         res += "%ternaryInt = alloca i32" + endOfLine
@@ -190,6 +205,10 @@ public class LlvmCodeGenerator {
         outputFile.write(res.getBytes(charset));
     }
 
+    /**
+     * End of main funciton.
+     * @throws IOException 
+     */
     public void mainEnd() throws IOException {
         String res = "ret i32 0" + endOfLine
                 + "}" + endOfLine
@@ -412,7 +431,7 @@ public class LlvmCodeGenerator {
         res += "br label %"+test.content+endOfLine;
         res += test.content+":"+endOfLine;
         pushExpression(Type.bool);
-        res += topExpression().content+" = icmp ne "+exposant.content+", 0"+endOfLine;
+        res += topExpression().content+" = icmp ne i32 "+exposant.content+", 0"+endOfLine;
         res += "br i1 "+topExpression().content+", label %"+mul.content+", label %"+end.content+endOfLine;
         res += mul.content+":"+endOfLine;
         res += current.content+" = mul i32 "+previous.content+", "+base.content+endOfLine;

@@ -20,7 +20,7 @@ import utils.datastructure.Variable;
 import utils.datastructure.ProductionRule;
 
 /**
- *
+ * Recursive parser which uses a CodeGenerator in order to produce LLVM code.
  * @author arnaud
  */
 public class RecursiveParser {
