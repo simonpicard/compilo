@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,35 @@ public class Grammar {
         this.terminals = terminals;
         this.relations = relations;
         this.start = start;
+    }
+    
+    public Grammar(ProductionRule[] productionRules) {
+        this.variables = new ArrayList<>();
+        this.terminals = new ArrayList<>();
+        this.start = productionRules[0].getLeftPart();
+        
+        this.relations = new HashMap<>();
+        for(ProductionRule productionRule : productionRules) {
+            Variable leftPart = productionRule.getLeftPart();
+            List<Token> rightPart = productionRule.getRightPart();
+            // Add new variable
+            if(!this.variables.contains(leftPart)) {
+                this.variables.add(leftPart);
+            }
+            // Add new terminal
+            for(Token token : rightPart) {
+                if(token.isTerminal()) {
+                    Terminal terminal = (Terminal) token;
+                    if(!this.terminals.contains(terminal)) {
+                        this.terminals.add(terminal);
+                    }
+                }
+            }
+            if(!this.relations.containsKey(leftPart)) {
+                this.relations.put(leftPart, new ArrayList<List<Token>>());
+            }
+            this.relations.get(leftPart).add(rightPart);
+        }
     }
 
     public void addVariableToVariableSet(Variable variable) {

@@ -28,7 +28,7 @@ public class Main {
         //FirstFollow firstFollow = new FirstFollow(grammar);
         //firstFollow.process();
         //firstFollow.printFF("../../doc/ff.tex");
-        ActionTable at = new ActionTable(grammar);
+        ActionTable at = InitActionTable.createActionTable();
         //at.writTable("../../doc/action-table.tex");
         RecursiveParser rp = new RecursiveParser("../../test/test.il", at);
         rp.parseProgram();
