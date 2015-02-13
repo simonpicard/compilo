@@ -68,7 +68,9 @@ public class Parser {
         currentSymbol = lexicalAnalyzer.nextToken();
         this.actionTable = actionTable;
         this.tableOfSymbols = new TableOfSymbols();
-        generator = new LlvmCodeGenerator("../../test/test.ll");
+        String outputPath = sourcePath.substring(0, sourcePath.length()-2);
+        outputPath += "ll";
+        generator = new LlvmCodeGenerator(outputPath);
     }
     
     public void parseProgram() throws Exception {
