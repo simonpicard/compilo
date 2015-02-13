@@ -413,9 +413,9 @@ public class LlvmCodeGenerator {
 
     public void power() throws IOException, CodeGeneratorException {
         String res = "";
-        Expression base = popExpression();
         Expression pow = popExpression();
-        res += "store i32 1, i32 * %res"+endOfLine;
+        Expression base = popExpression();
+        res += "store i32 " + base.content + ", i32 * %res"+endOfLine;
         res += "store i32 "+pow.content+", i32 * %pow"+endOfLine;
         Label test = new Label();
         Label mul = new Label();
@@ -426,7 +426,7 @@ public class LlvmCodeGenerator {
         Expression powTest = popExpression();
         res += powTest.content+" = load i32 * %pow"+endOfLine;
         pushExpression(Type.bool);
-        res += topExpression().content+" = icmp ne i32 "+powTest.content+", 0"+endOfLine;
+        res += topExpression().content+" = icmp ne i32 "+powTest.content+", 1"+endOfLine;
         res += "br i1 "+topExpression().content+", label %"+mul.content+", label %"+end.content+endOfLine;
         res += mul.content+":"+endOfLine;
         pushExpression(Type.integer);
@@ -442,10 +442,11 @@ public class LlvmCodeGenerator {
         pushExpression(Type.integer);
         Expression powCurr = popExpression();
         res += powCurr.content+" = sub i32 "+powPrevious.content+", 1"+endOfLine;
-        res += "store i32 "+powCurr.content+", i32 * %base"+endOfLine;
+        res += "store i32 "+powCurr.content+", i32 * %pow"+endOfLine;
         res += "br label %"+test.content+endOfLine;
         res += end.content+":"+endOfLine;
-        expressions.push(powCurr);
+        pushExpression(Type.integer);
+        res += topExpression().content + " = load i32* %res" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 
