@@ -6,7 +6,7 @@
 package codegenerator;
 
 /**
- *
+ * Generic exception occuring during code generation step.
  * @author arnaud
  */
 public class CodeGeneratorException extends Exception {

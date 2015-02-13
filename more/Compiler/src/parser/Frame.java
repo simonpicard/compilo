@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- *
+ * Block of declaration for identifier.
  * @author Simon
  */
 public class Frame {
