@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -23,6 +24,13 @@ public class ActionTable {
     public ActionTable(Grammar grammar) throws Exception {
         this.grammar = grammar;
         this.productionRules = ProductionRule.generateProductionRulesFromGrammar(this.grammar);
+        table = new HashMap<>();
+        this.generateActionTable();
+    }
+    
+    public ActionTable(ProductionRule[] productionRules) throws Exception {
+        this.grammar = new Grammar(productionRules);
+        this.productionRules = Arrays.asList(productionRules);
         table = new HashMap<>();
         this.generateActionTable();
     }
