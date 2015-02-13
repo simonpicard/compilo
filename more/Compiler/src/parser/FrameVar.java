@@ -14,6 +14,7 @@ public class FrameVar implements FrameItem {
     private Type t;
     private int address;
     private static int addressCounter = 0;
+    private boolean constant = false;
 
     public FrameVar(Type t) {
         this.t = t;
@@ -23,6 +24,14 @@ public class FrameVar implements FrameItem {
 
     public Type getType() {
         return t;
+    }
+
+    public boolean isConst() {
+        return this.constant;
+    }
+
+    public void setConst() {
+        this.constant = true;
     }
 
     public void setType(Type t) {

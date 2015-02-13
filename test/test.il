@@ -29,3 +29,8 @@ c=e+1
 end
 
 b=bool(c)
+
+e::Integer
+
+const e = 5+7
+c=e+1

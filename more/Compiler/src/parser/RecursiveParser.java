@@ -188,7 +188,10 @@ public class RecursiveParser {
             match(currentTerminal);
             parseExpression();
             FrameVar var = (FrameVar) tableOfSymbols.lookup(identifier);
-            generator.assignation(var.getAddress(), var.getType());
+            if (!var.isConst())
+                generator.assignation(var.getAddress(), var.getType());
+            else
+                throw new Exception("Const variable cannot be reassigned : " + identifier);
         }
 
         // [17] <AssignationTail> -> COMMA IDENTIFIER <AssignationTail> COMMA <Expression>
@@ -200,7 +203,10 @@ public class RecursiveParser {
             parseAssignationTail(identifier);
             match(currentTerminal);
             parseExpression();
-            generator.assignation(var.getAddress(), var.getType());
+            if (!var.isConst())
+                generator.assignation(var.getAddress(), var.getType());
+            else
+                throw new Exception("Const variable cannot be reassigned : " + identifier);
         }
         
         // Error
@@ -217,6 +223,7 @@ public class RecursiveParser {
             String identifier = currentSymbol.getValue().toString();
             match(currentTerminal);
             parseAssignationTail(identifier);
+            ((FrameVar)tableOfSymbols.lookup(identifier)).setConst();
         }
         // Error
         else {

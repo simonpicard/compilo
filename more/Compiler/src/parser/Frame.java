@@ -28,6 +28,16 @@ public class Frame {
         entries.put(identifier, item);
     }
     
+    public boolean remove(String identifier){
+        try{
+            entries.remove(identifier);
+            return true;
+        }
+        catch(Exception e) {
+            return false;
+        }
+    }
+    
     public FrameItem get(String identifier){
         return entries.get(identifier);
     }

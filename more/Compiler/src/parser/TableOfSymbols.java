@@ -42,6 +42,15 @@ public class TableOfSymbols {
         return null;
     }
     
+    public void removeItem(String identifier){
+        for(int frame = 0; frame< tos.size(); frame++){
+            boolean f = tos.get(frame).remove(identifier);
+            if (f){
+                return;
+            }
+        }
+    }
+    
     @Override
     public String toString() {
         String res = "=====Table of symbols=====\n";
