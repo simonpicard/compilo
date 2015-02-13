@@ -834,6 +834,7 @@ public class RecursiveParser {
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 81) {
             match(currentTerminal);
             parseUnaryExpression();
+            generator.power();
             parseBinaryFactorExpressionPrim();
         }
         // [82] <BinaryFactorExpression'> -> EPSILON_VALUE

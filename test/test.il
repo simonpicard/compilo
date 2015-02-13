@@ -21,3 +21,5 @@ b=true||false&&true
 c::Integer
 d::Integer
 c,d=3,18\36
+
+c=3^8
