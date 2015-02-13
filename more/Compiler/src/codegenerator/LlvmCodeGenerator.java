@@ -186,7 +186,7 @@ public class LlvmCodeGenerator {
     public void main() throws IOException {
         String res = "define i32 @main() {" + endOfLine;
         res += "%ternaryInt = alloca i32" + endOfLine
-                +"%ternaryBool = alloca i1" + endOfLine;
+                + "%ternaryBool = alloca i1" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 
@@ -244,7 +244,7 @@ public class LlvmCodeGenerator {
     public void println() throws CodeGeneratorException, IOException {
         String res = "call void ";
         Expression exp = popExpression();
-        switch(exp.type) {
+        switch (exp.type) {
             case integer:
                 res += "@printlnint(i32";
                 break;
@@ -390,10 +390,36 @@ public class LlvmCodeGenerator {
         binaryOperationInt("udiv");
     }
 
-    //public void power() throws IOException, CodeGeneratorException {
-    //    binaryOperation("urem");
-    //}
-    
+    public void power() throws IOException, CodeGeneratorException {
+        String res = "";
+        Expression base = popExpression();
+        Expression exposant = popExpression();
+        pushExpression(Type.integer);
+        res += topExpression().content+" = add i32 "+exposant.content+", 0"+endOfLine;
+        pushExpression(Type.integer);
+        res += topExpression().content+" = add i32 "+base.content+", 0"+endOfLine;
+        pushExpression(Type.integer);
+        res += topExpression().content+" = add i32 0, 1"+endOfLine;
+        Expression current = popExpression();
+        exposant = popExpression();
+        base = popExpression();
+        Label test = new Label();
+        Label mul = new Label();
+        Label end = new Label();
+        res += "br label %"+test.content+endOfLine;
+        res += test.content+":"+endOfLine;
+        pushExpression(Type.bool);
+        res += topExpression().content+" = icmp ne "+exposant.content+", 0"+endOfLine;
+        res += "br i1 "+topExpression().content+", label %"+mul.content+", label %"+end.content+endOfLine;
+        res += mul.content+":"+endOfLine;
+        res += current.content+" = mul i32 "+current.content+", "+base.content+endOfLine;
+        res += exposant.content+" = sub i32 "+exposant.content+", 1"+endOfLine;
+        res += "br label %"+test.content+endOfLine;
+        res += end.content+":"+endOfLine;
+        expressions.push(current);
+        outputFile.write(res.getBytes(charset));
+    }
+
     public void greaterThan() throws IOException, CodeGeneratorException {
         binaryComparisonInt("sgt");
     }
@@ -459,9 +485,9 @@ public class LlvmCodeGenerator {
     public void ternaryStore(boolean push) throws IOException, UnsupportedTypeException {
         String res = "";
         Expression output = popExpression();
-        String type= "";
-        String var= "%ternary";
-        switch(output.type){
+        String type = "";
+        String var = "%ternary";
+        switch (output.type) {
             case integer:
                 type = "i32";
                 var += "Int";
@@ -473,9 +499,10 @@ public class LlvmCodeGenerator {
             default:
                 throw new UnsupportedTypeException(output.type, "ternary");
         }
-        res = "store "+type+" "+output.content+", "+type+"* "+var+endOfLine;
-        if(push)
+        res = "store " + type + " " + output.content + ", " + type + "* " + var + endOfLine;
+        if (push) {
             pushExpression(var, output.type);
+        }
         outputFile.write(res.getBytes(charset));
     }
 
@@ -486,7 +513,7 @@ public class LlvmCodeGenerator {
 
     public void ternaryEndIfBlock() throws IOException, UnsupportedTypeException {
         ternaryStore(true);
-        
+
         String res = "br label %" + endIf.content + endOfLine;
         res += endIf.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
@@ -509,7 +536,7 @@ public class LlvmCodeGenerator {
 
     public void not() throws IOException, CodeGeneratorException {
         Expression exp = popExpression();
-        if(!Type.bool.equals(exp.type)) {
+        if (!Type.bool.equals(exp.type)) {
             throw new UnsupportedTypeException(exp.type, "not");
         }
         pushExpression(Type.integer);
@@ -524,7 +551,7 @@ public class LlvmCodeGenerator {
         res += not1bit.content + " = trunc i32 " + not32bits.content + " to i1" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void whileBegin() throws IOException {
         Label loop = new Label();
         String res = "br label %" + loop.content + endOfLine;
@@ -532,24 +559,24 @@ public class LlvmCodeGenerator {
         pushLabel(loop);
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void whileOperation() throws CodeGeneratorException, IOException {
-        
+
         Label beginLoop = new Label();
         Label endLoop = new Label();
         String res = "";
-        
+
         Expression exp = popExpression();
         if (!Type.bool.equals(exp.type)) {
             throw new UnsupportedTypeException(exp.type, "while");
         }
         res += "br i1 " + exp.content + ", label %" + beginLoop.content + ", label %" + endLoop.content + endOfLine;
         res += beginLoop.content + ":" + endOfLine;
-        
+
         pushLabel(endLoop);
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void whileEnd() throws IOException {
         Label endLoop = popLabel();
         Label loop = popLabel();
@@ -557,7 +584,7 @@ public class LlvmCodeGenerator {
         res += endLoop.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
+
     public void forEnd(int varAddress, Type type) throws IOException, UnsupportedTypeException, CodeGeneratorException {
         valueOfVariable(varAddress, type);
         plus();
@@ -568,14 +595,14 @@ public class LlvmCodeGenerator {
         res += endLoop.content + ":" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-    
-    public void binaryAnd() throws IOException, CodeGeneratorException{
+
+    public void binaryAnd() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.bool);
         binaryOperation("and", types);
     }
-    
-    public void binaryOr() throws IOException, CodeGeneratorException{
+
+    public void binaryOr() throws IOException, CodeGeneratorException {
         ArrayList<Type> types = new ArrayList<Type>();
         types.add(Type.bool);
         binaryOperation("or", types);
