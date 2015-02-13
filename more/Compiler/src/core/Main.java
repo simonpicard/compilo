@@ -15,8 +15,13 @@ import utils.datastructure.ActionTable;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        ActionTable at = InitActionTable.createActionTable();
-        Parser rp = new Parser("../../test/test.il", at);
-        rp.parseProgram();
+        if (args.length != 2) {
+            System.out.println("L'utilisation est : java -jar compiler.jar Main Iuliusfile");
+        }
+        else {
+            ActionTable at = InitActionTable.createActionTable();
+            Parser rp = new Parser(args[1], at);
+            rp.parseProgram();
+        }
     }
 }
