@@ -640,7 +640,7 @@ public class LlvmCodeGenerator {
     public void itob() throws IOException {
         Expression temp = popExpression();
         pushExpression(Type.bool);
-        String res = topExpression().content+" = sext i32  "+temp.content+" to i1"+ endOfLine;
+        String res = topExpression().content+" = trunc i32  "+temp.content+" to i1"+ endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 
