@@ -52,6 +52,8 @@ Les fonctions amènent deux types d'instructions en plus : les définitions de f
 De plus, il faut qu'une fonction puisse être appelée sans avoir besoin de faire une assignation ou un autre type d'instruction car une fonction peut ne rien retourner et simplement avoir un effet de bord. Par exemple, la fonction println est une fonction qui ne retourne rien mais produit un effet de bord qui est l'affichage dans le terminal. Il faut donc pouvoir faire, par exemple, println(a). C'est pour cela qu'il faut qu'un appel de fonction soit une instruction à part entière.
 \subsection{Instructions commencant par un identifier}
 Plusieurs instructions commencent par un identifier. Il s'agit des assignations, des déclarations de variables et des appels de fonctions. Afin que la grammaire soit LL(1) il faut factoriser ces instructions. C'est pour cela que la variable <IdentifierInstruction> a été créée. Celle-ci représente une instruction qui commence par un identifier. La variable <IdentifierInstructionTail> a été également créée afin de distinguer les différents types d'instructions qui commencent par un identifier. La distinction est après aisément faite car lorsque le symbole suivant l'identifier est ``='', on sait que c'est une assignation, lorsque ce symbole est ``::'', on sait que c'est une déclaration de variable et lorsque que ce symbole est ``('', on sait que c'est un appel de fonction.
+\subsection{Automatisation}
+Nous avons développé une série d'algorithm qui permettent de supprimer la reccurssion à gauche, de factoriser à gauche, de supprimer les symboles inutiles et de générer une table d'action ce qui nous permet de vérifier si une grammaire est bien LL(1) via l'action table ou de nous aider à la transformer en grammaire LL(1) grçace aux autres algorithmes.
 
 
 \section{Grammaire}
@@ -285,5 +287,26 @@ Ce stack est indispenssable car toute instruction combinée doit être divisée 
 $a = 1 + 1$\\
 Il faut commencer par evaluer $1 + 1$, sotcker le résultat dans une variable temporaire et puis assigner cette variable temporaire à $a$.\\
 Le stack permet ici de transférer la variable temporaire.
+\subsection{Structures conditionnelles}
+Le $if\ else$ est déjà implémenté dans LLVM grâce une fonction qui permet de jumper à une ancre ou une autre en fonction de la valeur d'une expression booléenne.\\
+Exemple:
+\begin{verbatim}
+def i32 compareTo ( i32 %a, i32 %b){
+    entry :
+        % cond = icmp slt i32 %a ,%b
+        br i1 %cond , label %lower , label % greaterORequals
+    lower :
+        ret i32 -1
+    greaterORequals :
+        %1 = sub i32 %a ,%b
+        ret i32 %1
+\end{verbatim}
+Le $else\ if$ est une cascade de $if\ else$ ou le $else$ est une ancre vers le prochaine $if$.\\\\
+Le if ternaire n'est qu'une autre façons d'écrire un if.
+\subsection{Boucles}
+La boucle $while$ fonctionne en utilisant trois ancres, une pour le test de la condition, une pour le coeur de la boucle et une pour sortir de la boucle.\\
+On commence par tester la condition, si elle est fause on saute à la fin de la boucle, si elle est vraie on saute au coeur de la boucle, une fois celle ci terminée, on saute au test de la condition.\\\\
+La boucle $for$ est une autre façons d'écrire une boucle $while$ en définnisant une variable avec une valeur de base qui permettra de définir la condition de la boucle, celle ci est que cette valeur de base doit être inférieure à un maximum défini par l'utilisateur.\\
+Enfin, après avoir éxecuter le coeur de la boucle il faut incrémenter la valeur de base par un nombre défini lui aussi par l'utilisateur et puis sauter au test de la condition de la boucle.
 
 \end{document}
