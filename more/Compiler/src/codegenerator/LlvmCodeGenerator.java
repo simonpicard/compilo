@@ -607,4 +607,19 @@ public class LlvmCodeGenerator {
         types.add(Type.bool);
         binaryOperation("or", types);
     }
+
+    public void itob() throws IOException, CodeGeneratorException {
+        String res = "sext i32  "+popExpression()+" to i1";
+        outputFile.write(res.getBytes(charset));
+    }
+
+    public void btoi() throws IOException, CodeGeneratorException {
+        String res = "sext i1  "+popExpression()+" to i32";
+        outputFile.write(res.getBytes(charset));
+    }
+
+    public void let() throws IOException, CodeGeneratorException {
+        String res = "sext i1  "+popExpression()+" to i32";
+        outputFile.write(res.getBytes(charset));
+    }
 }

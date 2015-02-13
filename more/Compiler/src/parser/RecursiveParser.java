@@ -231,12 +231,17 @@ public class RecursiveParser {
         // [19] <Block> -> LET IDENTIFIER <AssignationTail> END_OF_INSTRUCTION <InstructionList> END
         if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 19) {
             match(currentTerminal);
+            tableOfSymbols.addFrame(new Frame());
             String identifier = currentSymbol.getValue().toString();
+            FrameVar fv = new FrameVar(Type.integer);
+            tableOfSymbols.addNewEntry(identifier, fv);
+            generator.varDeclaration(fv.getAddress(), fv.getType());
             match(currentTerminal);
             parseAssignationTail(identifier);
             match(currentTerminal);
             parseInstructionList();
             match(currentTerminal);
+            tableOfSymbols.removeFrame();
         }
         // Error
         else {
@@ -920,6 +925,7 @@ public class RecursiveParser {
             match(currentTerminal);
             match(currentTerminal);
             parseExpression();
+            generator.btoi();
             match(currentTerminal);
         }
         // [90] <BuiltInFunctionCall> -> REAL_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
@@ -934,6 +940,7 @@ public class RecursiveParser {
             match(currentTerminal);
             match(currentTerminal);
             parseExpression();
+            generator.itob();
             match(currentTerminal);
         }
         // [92] <BuiltInFunctionCall> -> PRINTLN LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS

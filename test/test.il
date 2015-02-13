@@ -22,4 +22,8 @@ c::Integer
 d::Integer
 c,d=3,18\36
 
-c=3^8
+c=8^2
+
+let e=1
+c=e+1
+end
