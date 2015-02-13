@@ -919,6 +919,7 @@ public class RecursiveParser {
             match(currentTerminal);
             match(currentTerminal);
             match(currentTerminal);
+            generator.readInt();
         }
         // [89] <BuiltInFunctionCall> -> INTEGER_CAST LEFT_PARENTHESIS <Expression> RIGHT_PARENTHESIS
         else if (actionTable.getRuleNo(currentProductionRule, currentTerminal) == 89) {

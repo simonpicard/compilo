@@ -400,7 +400,10 @@ public class LlvmCodeGenerator {
         res += topExpression().content+" = add i32 "+base.content+", 0"+endOfLine;
         pushExpression(Type.integer);
         res += topExpression().content+" = add i32 0, 1"+endOfLine;
+        pushExpression(Type.integer);
+        res += topExpression().content+" = add i32 0, 1"+endOfLine;
         Expression current = popExpression();
+        Expression previous = popExpression();
         exposant = popExpression();
         base = popExpression();
         Label test = new Label();
@@ -412,7 +415,8 @@ public class LlvmCodeGenerator {
         res += topExpression().content+" = icmp ne "+exposant.content+", 0"+endOfLine;
         res += "br i1 "+topExpression().content+", label %"+mul.content+", label %"+end.content+endOfLine;
         res += mul.content+":"+endOfLine;
-        res += current.content+" = mul i32 "+current.content+", "+base.content+endOfLine;
+        res += current.content+" = mul i32 "+previous.content+", "+base.content+endOfLine;
+        res += previous.content+" = add i32 "+current.content+", 0"+endOfLine;
         res += exposant.content+" = sub i32 "+exposant.content+", 1"+endOfLine;
         res += "br label %"+test.content+endOfLine;
         res += end.content+":"+endOfLine;
@@ -608,18 +612,24 @@ public class LlvmCodeGenerator {
         binaryOperation("or", types);
     }
 
-    public void itob() throws IOException, CodeGeneratorException {
-        String res = "sext i32  "+popExpression()+" to i1";
+    public void itob() throws IOException {
+        Expression temp = popExpression();
+        pushExpression(Type.bool);
+        String res = topExpression().content+" = sext i32  "+temp.content+" to i1"+ endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 
-    public void btoi() throws IOException, CodeGeneratorException {
-        String res = "sext i1  "+popExpression()+" to i32";
+    public void btoi() throws IOException {
+        Expression temp = popExpression();
+        pushExpression(Type.integer);
+        String res = topExpression().content+" = sext i1  "+temp.content+" to i32"+ endOfLine;
         outputFile.write(res.getBytes(charset));
     }
-
-    public void let() throws IOException, CodeGeneratorException {
-        String res = "sext i1  "+popExpression()+" to i32";
+    
+    public void readInt() throws IOException {
+        pushExpression(Type.integer);
+        String res = topExpression().content+" = call i32 @readInt()"+ endOfLine;
         outputFile.write(res.getBytes(charset));
+        
     }
 }

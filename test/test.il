@@ -27,3 +27,5 @@ c=8^2
 let e=1
 c=e+1
 end
+
+b=bool(c)
