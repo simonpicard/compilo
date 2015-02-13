@@ -201,7 +201,9 @@ public class LlvmCodeGenerator {
     public void main() throws IOException {
         String res = "define i32 @main() {" + endOfLine;
         res += "%ternaryInt = alloca i32" + endOfLine
-                + "%ternaryBool = alloca i1" + endOfLine;
+                + "%ternaryBool = alloca i1" + endOfLine
+                + "%pow = alloca i32" + endOfLine
+                + "%res = alloca i32" + endOfLine;
         outputFile.write(res.getBytes(charset));
     }
 
@@ -412,34 +414,38 @@ public class LlvmCodeGenerator {
     public void power() throws IOException, CodeGeneratorException {
         String res = "";
         Expression base = popExpression();
-        Expression exposant = popExpression();
-        pushExpression(Type.integer);
-        res += topExpression().content+" = add i32 "+exposant.content+", 0"+endOfLine;
-        pushExpression(Type.integer);
-        res += topExpression().content+" = add i32 "+base.content+", 0"+endOfLine;
-        pushExpression(Type.integer);
-        res += topExpression().content+" = add i32 0, 1"+endOfLine;
-        pushExpression(Type.integer);
-        res += topExpression().content+" = add i32 0, 1"+endOfLine;
-        Expression current = popExpression();
-        Expression previous = popExpression();
-        exposant = popExpression();
-        base = popExpression();
+        Expression pow = popExpression();
+        res += "store i32 1, i32 * %res"+endOfLine;
+        res += "store i32 "+pow.content+", i32 * %pow"+endOfLine;
         Label test = new Label();
         Label mul = new Label();
         Label end = new Label();
         res += "br label %"+test.content+endOfLine;
         res += test.content+":"+endOfLine;
+        pushExpression(Type.integer);
+        Expression powTest = popExpression();
+        res += powTest.content+" = load i32 * %pow"+endOfLine;
         pushExpression(Type.bool);
-        res += topExpression().content+" = icmp ne i32 "+exposant.content+", 0"+endOfLine;
+        res += topExpression().content+" = icmp ne i32 "+powTest.content+", 0"+endOfLine;
         res += "br i1 "+topExpression().content+", label %"+mul.content+", label %"+end.content+endOfLine;
         res += mul.content+":"+endOfLine;
-        res += current.content+" = mul i32 "+previous.content+", "+base.content+endOfLine;
-        res += previous.content+" = add i32 "+current.content+", 0"+endOfLine;
-        res += exposant.content+" = sub i32 "+exposant.content+", 1"+endOfLine;
+        pushExpression(Type.integer);
+        Expression resPrevious = popExpression();
+        res += resPrevious.content+" = load i32 * %res"+endOfLine;
+        pushExpression(Type.integer);
+        Expression resCurr = popExpression();
+        res += resCurr.content+" = mul i32 "+resPrevious.content+", "+base.content+endOfLine;
+        res += "store i32 "+resCurr.content+", i32 * %res"+endOfLine;
+        pushExpression(Type.integer);
+        Expression powPrevious = popExpression();
+        res += powPrevious.content+" = load i32 * %pow"+endOfLine;
+        pushExpression(Type.integer);
+        Expression powCurr = popExpression();
+        res += powCurr.content+" = sub i32 "+powPrevious.content+", 1"+endOfLine;
+        res += "store i32 "+powCurr.content+", i32 * %base"+endOfLine;
         res += "br label %"+test.content+endOfLine;
         res += end.content+":"+endOfLine;
-        expressions.push(current);
+        expressions.push(powCurr);
         outputFile.write(res.getBytes(charset));
     }
 
