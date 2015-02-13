@@ -413,8 +413,8 @@ public class LlvmCodeGenerator {
 
     public void power() throws IOException, CodeGeneratorException {
         String res = "";
-        Expression base = popExpression();
         Expression pow = popExpression();
+        Expression base = popExpression();
         res += "store i32 1, i32 * %res"+endOfLine;
         res += "store i32 "+pow.content+", i32 * %pow"+endOfLine;
         Label test = new Label();
