@@ -114,7 +114,7 @@ public class ActionTable {
         return result;
     }
 
-    public void writTable(String path) throws IOException {
+    public void writeTable(String path) throws IOException {
         BufferedWriter file = new BufferedWriter(new FileWriter(path));
         
         file.write("\\documentclass[8pt]{article}\n" +
