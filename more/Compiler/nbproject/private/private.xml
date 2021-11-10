@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/codegenerator/LlvmCodeGenerator.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/utils/datastructure/ProductionRule.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/codegenerator/LlvmDeclaration.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/parser/Type.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/parser/RecursiveParser.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/utils/datastructure/Grammar.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/parser/FrameVar.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/core/Main.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/codegenerator/LlvmAssignation.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/codegenerator/LlvmItem.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/codegenerator/LlvmAdd.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/utils/algorithms/FirstFollow.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/utils/datastructure/GrammarParser.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/scanner/LexicalUnit.java</file>
+            <file>file:/C:/Users/Simon/Desktop/git/compilo/more/Compiler/src/codegenerator/BaseEnvironment.java</file>
+        </group>
+    </open-files>
+</project-private>
