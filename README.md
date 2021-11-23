@@ -211,3 +211,6 @@ la section grammaire.
 
 Dans le tableau suivant, EPSILON\_VALUE ≡ *ϵ*.
 
+
+[See action table here](/doc/action-table.md)
+
