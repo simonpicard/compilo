@@ -23,7 +23,7 @@ Each line of this table is composed of the name of the token, the type in the Le
 
 ## Number management and operations
 
-To handle arithmetic expressions containing numbers and the plus and operators, we had to remove the plus and minus operators in the regular expression of integers and real numbers. For example, if we have 4+5 we will detect "4", “+”, and "5" with our implementation while if we had left the plus in the regular expression of integers expression we would have obtained "4" and "+5". On the other hand, an integer +2 will be detected as "+" and "2" but it will be easier to interpret when building the syntax tree.
+To handle arithmetic expressions containing numbers and the plus and operators, we had to remove the plus and minus operators in the regular expression of integers and real numbers. For example, if we have 4+5 we will detect  `4`,  `+`, and  `5` with our implementation while if we had left the plus in the regular expression of integers expression we would have obtained  `4` and  `+5`. On the other hand, an integer +2 will be detected as  `+` and  `2` but it will be easier to interpret when building the syntax tree.
 
 ## DFA
 
@@ -45,8 +45,8 @@ The first step in making the grammar LL(1) was to distinguish two types of opera
 
 ## Operator priority and associativity
 
-In this step, we modified the grammar to set the priority and associativity of priority and associativity of the different operators, to make the grammar less ambiguous. We noticed that the unary operators had a higher priority than binary operators and that unary operators were all associative on the right, while the binary operators were all associative on the left. To fix the priority, we put the lowest priority operators as high as possible in the "the highest possible priority in the grammar and the highest priority as low as possible.
-possible. In the grammar below where the "start symbol" is E, the operator "+" is considered as "higher" than the operator "\*" operator in the grammar because it is possible to obtain the "+" operator by using fewer production rules from the "start symbol" than to obtain the "\*" operator.
+In this step, we modified the grammar to set the priority and associativity of priority and associativity of the different operators, to make the grammar less ambiguous. We noticed that the unary operators had a higher priority than binary operators and that unary operators were all associative on the right, while the binary operators were all associative on the left. To fix the priority, we put the lowest priority operators as high as possible and the highest priority as low as possible.
+possible. In the grammar below where the  `start symbol` is E, the operator  `+` is considered as "higher" than the operator  `\*` operator in the grammar because it is possible to obtain the  `+` operator by using fewer production rules from the  `start symbol` than to obtain the  `\*` operator.
 
     E->E + T
      ->T
@@ -66,7 +66,7 @@ in common. This is necessary because the parser we are going to create is LL(1),
 
 ## The variables &lt;Instruction&gt; and &lt;InstructionList&gt;
 
-In the given grammar, whenever the variable &lt;Instruction&gt; was in the right part of a production rule except when the left part of the except when the left part of the rule was &lt;InstructionList&gt;, there was another production rule for this same left this same left part where &lt;Instruction&gt; was replaced by &lt;InstructionList&gt;. For example, &lt;If&gt;→&lt;Expression&gt; &lt;Empty&gt; &lt;InstructionList&gt; &lt;IfEnd&gt; and &lt;If&gt;→&lt;Expression&gt; &lt;Empty&gt; &lt;Instruction&gt; &lt;IfEnd&gt;. This makes it possible not to put an END_OF_INSTRUCTION at the end of a &lt;Instruction&gt; when the body of a block (here, the body of a block (here, the body of the "if") contained only one &lt;Instruction&gt;. The problem posed by the systematic doubling of production rules containing instructions containing instructions (one rule for &lt;Instruction&gt; and another one for another for &lt;InstructionList&gt;) is that it is not factorized on the left and that the first and that the first of &lt;InstructionList&gt; can be &lt;Instruction&gt;. In order to solve this problem, we decided to only use the variable &lt;InstructionList&gt; in the other production rules. Thus, we avoid the duplication of the rules of production rules. An &lt;InstructionList&gt; is a list of &lt;Instruction&gt; separated by ENDs, with the last &lt;Instruction&gt; being the last &lt;Instruction&gt; not necessarily followed by an END_OF_INSTRUCTION. This makes it possible to have a program like : if(a&gt;b);a=10 end; So only a &lt;InstructionList&gt; allows to produce &lt;Instruction&gt;. Moreover, since a InstructionList&gt; can contain empty instructions (an instruction containing only END_OF_INSTRUCTION) the variable &lt;Empty&gt; variable is no longer necessary because it was only used to to indicate that at least one END terminal was required.
+In the given grammar, whenever the variable &lt;Instruction&gt; was in the right part of a production rule except when the left part of the except when the left part of the rule was &lt;InstructionList&gt;, there was another production rule for this same left this same left part where &lt;Instruction&gt; was replaced by &lt;InstructionList&gt;. For example, &lt;If&gt;→&lt;Expression&gt; &lt;Empty&gt; &lt;InstructionList&gt; &lt;IfEnd&gt; and &lt;If&gt;→&lt;Expression&gt; &lt;Empty&gt; &lt;Instruction&gt; &lt;IfEnd&gt;. This makes it possible not to put an END_OF_INSTRUCTION at the end of a &lt;Instruction&gt; when the body of a block (here, the body of a block (here, the body of the  `if`) contained only one &lt;Instruction&gt;. The problem posed by the systematic doubling of production rules containing instructions containing instructions (one rule for &lt;Instruction&gt; and another one for another for &lt;InstructionList&gt;) is that it is not factorized on the left and that the first and that the first of &lt;InstructionList&gt; can be &lt;Instruction&gt;. In order to solve this problem, we decided to only use the variable &lt;InstructionList&gt; in the other production rules. Thus, we avoid the duplication of the rules of production rules. An &lt;InstructionList&gt; is a list of &lt;Instruction&gt; separated by ENDs, with the last &lt;Instruction&gt; being the last &lt;Instruction&gt; not necessarily followed by an END_OF_INSTRUCTION. This makes it possible to have a program like : if(a&gt;b);a=10 end; So only a &lt;InstructionList&gt; allows to produce &lt;Instruction&gt;. Moreover, since a InstructionList&gt; can contain empty instructions (an instruction containing only END_OF_INSTRUCTION) the variable &lt;Empty&gt; variable is no longer necessary because it was only used to to indicate that at least one END terminal was required.
 
 ## Functions
 
@@ -76,7 +76,7 @@ Functions provide two additional types of instructions: function definitions and
 
 Several instructions start with an identifier. These are assignments, variable declarations, and function calls.
 For the grammar to be LL(1) we need to factor in these statements.
-This is why the variable &lt;IdentifierInstruction&gt; was created. This variable represents an instruction that starts with an identifier. The variable &lt; IdentifierInstructionTail&gt; has also been created to distinguish the different types of instructions that start with an identifier. The distinction is then easily made because when the symbol following the identifier is "=", we know that it is an assignment when this symbol is "::", we know that it is a variable declaration and when this symbol is "(", we know that it is a function call.
+This is why the variable &lt;IdentifierInstruction&gt; was created. This variable represents an instruction that starts with an identifier. The variable &lt; IdentifierInstructionTail&gt; has also been created to distinguish the different types of instructions that start with an identifier. The distinction is then easily made because when the symbol following the identifier is  `=`, we know that it is an assignment when this symbol is  `::`, we know that it is a variable declaration and when this symbol is  `(`, we know that it is a function call.
 
 # Grammar
 
@@ -92,7 +92,7 @@ In the following table, EPSILON_VALUE ≡ _ϵ_.
 
 # Action Table
 
-The rows of the "action table" represent the variables and the columns represent the terminals. A cell of this table contains the number of a production rule corresponding to the number in the grammar section.
+The rows of the  `action table` represent the variables and the columns represent the terminals. A cell of this table contains the number of a production rule corresponding to the number in the grammar section.
 
 In the following table, EPSILON_VALUE ≡ _ϵ_.
 
