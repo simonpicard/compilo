@@ -8,14 +8,14 @@ Explore results in `test/test.ll`
 
 # Introduction
 
-Goal of this project is to create a compilator for a programming language called Iulius.
+The goal of this project is to create a compilator for a programming language called Iulius.
 
 # Regular expressions
 
-In order to describe the words (tokens) accepted by the Iulius language, we use the extended regular expressions.
+To describe the words (tokens) accepted by the Iulius language, we use extended regular expressions.
 
 Here is the table which contains all the tokens of the Iulius language.
-Each line of this table is composed of the name of the token, the type in the LexicalUnit enum associated with it and the regular expression that corresponds to corresponding to this token.
+Each line of this table is composed of the name of the token, the type in the LexicalUnit enum associated with it, and the regular expression that corresponds to corresponding to this token.
 
 [See table here](/doc/regex_token.md)
 
@@ -23,7 +23,7 @@ Each line of this table is composed of the name of the token, the type in the Le
 
 ## Number management and operations
 
-In order to handle arithmetic expressions containing numbers and the plus and operators, we had to remove the plus and minus operators in the regular minus operators in the regular expression of integers and real numbers. For example, if we have 4+5 we will detect "4", "+" and "5" with our implementation while if we had left the plus in the regular expression of integers expression we would have obtained "4" and "+5". On the other hand an integer +2 will be detected as "+" and "2" but it will be easier to easier to interpret when building the syntax tree.
+To handle arithmetic expressions containing numbers and the plus and operators, we had to remove the plus and minus operators in the regular expression of integers and real numbers. For example, if we have 4+5 we will detect "4", “+”, and "5" with our implementation while if we had left the plus in the regular expression of integers expression we would have obtained "4" and "+5". On the other hand, an integer +2 will be detected as "+" and "2" but it will be easier to interpret when building the syntax tree.
 
 ## DFA
 
@@ -35,17 +35,17 @@ First, we use the following notations:
 - By extension \[d-y\] means the set of lower case letters from d to y
 - means the . in regular expressions, i.e. all the characters
 
-Then, in the right part of the initial state in the graph, that is the different keywords and identifiers, for more readability we have not included the transitions from a state that is part of a keyword to an keyword to an identifier, normally each state of a keyword should contain a transition from contain a transition from itself to the identifier state, the transition includes {\[a-z\] , \[A-Z\], \[0-9\], \_} excluding the other transitions out of this state other transitions out of this state.
+Then, in the right part of the initial state in the graph, that is the different keywords and identifiers, for more readability, we have not included the transitions from a state that is part of a keyword to a keyword to an identifier, normally each state of a keyword should contain a transition from itself to the identifier state, the transition includes {\[a-z\], \[A-Z\], \[0-9\], \_} excluding the other transitions out of this state.
 
 # Transformation of the given grammar into LL1
 
 ## Binary and unary operators
 
-The first step in making the grammar LL(1) was to distinguish two types of two types of operators: the binary operators which act on two expressions expressions, one on the left and the other on the right of these operators operators and unary operators which act on a single expression located on the right of of these operators. It is necessary to differentiate the two types of of operators in order not to have expressions like : &gt;&gt;4, \*2, 6\|,... There are four unary operators: ! (negation), ∼ (not bit by bit), + and -. The operators + and - are are also binary operators.
+The first step in making the grammar LL(1) was to distinguish two types of operators: the binary operators which act on two expressions, one on the left and the other on the right of these operators, and unary operators which act on a single expression located on the right of these operators. It is necessary to differentiate the two types of operators in order not to have expressions like: &gt;&gt;4, \*2, 6\|,... There are four unary operators: ! (negation), ∼ (not bit by bit), + and -. The operators + and - are also binary operators.
 
 ## Operator priority and associativity
 
-In this step, we modified the grammar in order to set the priority and associativity of priority and associativity of the different operators, in order to make the grammar make the grammar less ambiguous. We noticed that the unary operators had a higher priority than binary operators and that unary operators were all associative on the right, while while the binary operators were all associative on the left. To fix the priority, we put the lowest priority operators as high as possible in the "the highest possible priority in the grammar and the highest priority as low as possible.
+In this step, we modified the grammar to set the priority and associativity of priority and associativity of the different operators, to make the grammar less ambiguous. We noticed that the unary operators had a higher priority than binary operators and that unary operators were all associative on the right, while the binary operators were all associative on the left. To fix the priority, we put the lowest priority operators as high as possible in the "the highest possible priority in the grammar and the highest priority as low as possible.
 possible. In the grammar below where the "start symbol" is E, the operator "+" is considered as "higher" than the operator "\*" operator in the grammar because it is possible to obtain the "+" operator by using fewer production rules from the "start symbol" than to obtain the "\*" operator.
 
     E->E + T
@@ -57,12 +57,12 @@ possible. In the grammar below where the "start symbol" is E, the operator "+" i
 
 ## Deleting left-hand recursions
 
-The next step was the removal of left-hand recursions which are incompatible with incompatible with the top-down parser because it makes this kind of parser enter an parser into an infinite loop or recursion. This step makes any associative operator to the right if nothing is done to solve this problem problem during the semantic analysis.
+The next step was the removal of left-hand recursions which are incompatible with the top-down parser because it makes this kind of parser enter a parser into an infinite loop or recursion. This step makes any associative operator to the right if nothing is done to solve this problem during the semantic analysis.
 
 ## Left factoring
 
-This step gathers the production rules of a variable that have a common prefix into a single production rule that contains this common prefix and a and a new variable. This new variable has production rules to the different suffixes that were originally present in the originally present in the different production rules that have been pooled.
-in common. This is necessary because the parser we are going to create is LL(1), so it must be able to choose the right so it must be able to choose the right production rule by looking at the next only looking at the next token that is in input.
+This step gathers the production rules of a variable that has a common prefix into a single production rule that contains this common prefix and a new variable. This new variable has production rules to the different suffixes that were originally present in the different production rules that have been pooled.
+in common. This is necessary because the parser we are going to create is LL(1), so it must be able to choose the right production rule by looking at the next only looking at the next token that is in input.
 
 ## The variables &lt;Instruction&gt; and &lt;InstructionList&gt;
 
@@ -70,17 +70,17 @@ In the given grammar, whenever the variable &lt;Instruction&gt; was in the right
 
 ## Functions
 
-Functions provide two additional types of instructions: function definitions and function definitions and function calls. The calls are considered as atomic expressions in order to be able to put function calls function calls within an expression. For example, a=foo()+5; In addition, a Moreover, a function must be able to be called without the need to to make an assignment or another type of instruction because a function can return nothing and simply have an edge effect. For For example, the println function is a function that returns nothing but produces an edge effect which is the display in the terminal. It is necessary to therefore be able to do, for example, println(a). That's why it is necessary a function call to be a statement in its own right.
+Functions provide two additional types of instructions: function definitions and function definitions and function calls. The calls are considered atomic expressions to be able to put function calls within an expression. For example, a=foo()+5; In addition, a function must be able to be called without the need to make an assignment or another type of instruction because a function can return nothing and simply have an edge effect. For example, the println function is a function that returns nothing but produces an edge effect which is the display in the terminal. It is necessary to therefore be able to do, for example, println(a). That's why a function call must be a statement in its own right.
 
 ## Instructions starting with an identifier
 
-Several instructions start with an identifier. These are assignments, variable declarations and function calls.
-In order for the grammar to be LL(1) we need to factor these statements.
-This is why the variable &lt;IdentifierInstruction&gt; was created. This variable represents an instruction that starts with an identifier. The variable &lt;IdentifierInstructionTail&gt; has also been also created in order to distinguish the different types of instructions that start with an identifier. The distinction is then easily made because when the symbol following the identifier is "=", we know that it is an assignment, when this symbol is "::", we know that it is a a variable declaration and when this symbol is "(", we know that it is a function that it is a function call.
+Several instructions start with an identifier. These are assignments, variable declarations, and function calls.
+For the grammar to be LL(1) we need to factor in these statements.
+This is why the variable &lt;IdentifierInstruction&gt; was created. This variable represents an instruction that starts with an identifier. The variable &lt; IdentifierInstructionTail&gt; has also been created to distinguish the different types of instructions that start with an identifier. The distinction is then easily made because when the symbol following the identifier is "=", we know that it is an assignment when this symbol is "::", we know that it is a variable declaration and when this symbol is "(", we know that it is a function call.
 
 # Grammar
 
-Here is the grammar given in the statement and transformed into LL(1). To each production rule corresponds a number which identifies that rule.
+Here is the grammar given in the statement and transformed into LL(1). Each production rule corresponds to a number that identifies that rule.
 
 [See table here](/doc/grammar.md)
 
@@ -92,7 +92,7 @@ In the following table, EPSILON_VALUE ≡ _ϵ_.
 
 # Action Table
 
-The rows of the "action table" represent the variables and the columns represent the columns represent the terminals. A cell of this table contains the number of a production rule corresponding to the number in the the grammar section.
+The rows of the "action table" represent the variables and the columns represent the terminals. A cell of this table contains the number of a production rule corresponding to the number in the grammar section.
 
 In the following table, EPSILON_VALUE ≡ _ϵ_.
 
@@ -102,14 +102,14 @@ In the following table, EPSILON_VALUE ≡ _ϵ_.
 
 ## Introduction
 
-In the code generation, the support of the real type and of the function function creation has not been done because it is not required.
+In the code generation, the support of the real type and the function creation has not been done because it is not required.
 
-For the code generation we used an ordinary recursive parser parser, which calls methods of the class class _LlvmCodeGenerate_ which generate the code. _LlvmCodeGenerate_ has a global stack which allows to store expressions, so variables, integer or boolean values.
-integer or boolean values. This stack is indispensable because any combined instruction must be divided into a series of binary actions, for example : _a_ = 1 + 1 You have to start by evaluating 1 + 1, sotcker the result in a temporary temporary variable and then assign this temporary variable to _a_. The stack is used to transfer the temporary variable.
+For the code generation, we used an ordinary recursive parser, which calls methods of the class _LlvmCodeGenerate_ which generates the code. _LlvmCodeGenerate_ has a global stack that allows storing expressions, so variables, integer, or boolean values.
+integer or boolean values. This stack is indispensable because any combined instruction must be divided into a series of binary actions, for example, _a_ = 1 + 1 You have to start by evaluating 1 + 1, then store the result in a temporary temporary variable and then assign this temporary variable to _a_. The stack is used to transfer the temporary variable.
 
 ## Conditional structures
 
-The _if_ _else_ is already implemented in LLVM by a function which allows to jumper to an anchor or another one according to the value of a boolean of a boolean expression. Example:
+The _if_ _else_ is already implemented in LLVM by a function that allows jumping to an anchor or another one according to the value of a boolean expression. Example:
 
     def i32 compareTo ( i32 %a, i32 %b){
         entry :
@@ -127,14 +127,14 @@ The ternary if is just another way to write an if.
 
 ## Loops
 
-The _while_ loop works by using three anchors, one for the condition test, one for the heart of the loop and one for exit the loop. We start by testing the condition, if it is false, we jump to the end of the the end of the loop, if it is true, we jump to the heart of the loop, once once this one is finished, we jump to the test of the condition.
+The _while_ loop works by using three anchors, one for the condition test, one for the heart of the loop, and one for exiting the loop. We start by testing the condition, if it is false, we jump to the end of the loop, if it is true, we jump to the heart of the loop, once this one is finished, we jump to the test of the condition.
 
-The _for_ loop is another way to write a _while_ loop by defining a variable with a base value that will define the condition of the define the condition of the loop, this one is that this base value must be value must be less than a maximum defined by the user.
-defined by the user. Finally, after having executed the heart of the loop, you have to increment the value by a number also defined by the user and then jump to the test of the jump to the test of the condition of the loop.
+The _for_ loop is another way to write a _while_ loop by defining a variable with a base value that will define the condition of the loop, this one is that this base value must be less than a maximum defined by the user.
+defined by the user. Finally, after having executed the heart of the loop, you have to increment the value by a number also defined by the user and then jump to the test of the condition of the loop.
 
 ## Implemented language features
 
-As mentioned above, the grammar contains all the elements present in the language, including the functions. As a result, the parser is able to recognize the syntax of all elements of the Iulius language.
+As mentioned above, grammar contains all the elements present in the language, including the functions. As a result, the parser can recognize the syntax of all elements of the Iulius language.
 
 For semantic analysis and code generation, only two data types can be manipulated: booleans and integers.
-Functions are also not available for code generation. The rest of the functionalities are available during the code generation. These features are, for example: the declaration of variables, constants (check that there is no assignment after the original assignment), assignment (and multiple assignment), conversion, basic arithmetic operations (with verification of operations (with verification of the types of each operand in order to check that they are that they are compatible), bit by bit operations, loops (while and for), conditional and for), conditional branches (if, elseif, else), display, retrieval of characters from the input, creation of blocks. The management of the scope of variables is also realized.
+Functions are also not available for code generation. The rest of the functionalities are available during the code generation. These features are, for example, the declaration of variables, constants (check that there is no assignment after the original assignment), assignment (and multiple assignments), conversion, basic arithmetic operations (with verification of operations (with verification of the types of each operand to check that they are compatible), bit by bit operations, loops (while and for), conditional and for), conditional branches (if, elseif, else), display, retrieval of characters from the input, creation of blocks. The management of the scope of variables is also realized.
