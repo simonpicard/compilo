@@ -214,3 +214,86 @@ Dans le tableau suivant, EPSILON\_VALUE ≡ *ϵ*.
 
 [See action table here](/doc/action-table.pdf)
 
+
+
+# Génération de code
+
+## Introduction
+
+Dans la génération code, la prise en charge du type réel et de la
+création de fonction n’a pas été faite car non requise.  
+  
+Pour la génération de code nous somme passé par un parser reccursif
+ordinaire, ce dernier appel des méthode de la classe
+*L**l**v**m**C**o**d**e**G**e**n**e**r**a**t**e* qui générent le code
+correspodant.  
+*L**l**v**m**C**o**d**e**G**e**n**e**r**a**t**e* possède un stack global
+qui permet d’y stocker des expressions, donc des variables, des valeurs
+entières ou booléennes.  
+Ce stack est indispenssable car toute instruction combinée doit être
+divisée en une série d’actions binaires, par exemple :  
+*a* = 1 + 1  
+Il faut commencer par evaluer 1 + 1, sotcker le résultat dans une
+variable temporaire et puis assigner cette variable temporaire à *a*.  
+Le stack permet ici de transférer la variable temporaire.
+
+## Structures conditionnelles
+
+Le *i**f* *e**l**s**e* est déjà implémenté dans LLVM grâce une fonction
+qui permet de jumper à une ancre ou une autre en fonction de la valeur
+d’une expression booléenne.  
+Exemple:
+
+    def i32 compareTo ( i32 %a, i32 %b){
+        entry :
+            % cond = icmp slt i32 %a ,%b
+            br i1 %cond , label %lower , label % greaterORequals
+        lower :
+            ret i32 -1
+        greaterORequals :
+            %1 = sub i32 %a ,%b
+            ret i32 %1
+
+Le *e**l**s**e* *i**f* est une cascade de *i**f* *e**l**s**e* où le
+*e**l**s**e* est une ancre vers le prochaine *i**f*.  
+  
+Le if ternaire n’est qu’une autre façons d’écrire un if.
+
+## Boucles
+
+La boucle *w**h**i**l**e* fonctionne en utilisant trois ancres, une pour
+le test de la condition, une pour le coeur de la boucle et une pour
+sortir de la boucle.  
+On commence par tester la condition, si elle est fausse, on saute à la
+fin de la boucle, si elle est vraie, on saute au coeur de la boucle, une
+fois celui ci terminé, on saute au test de la condition.  
+  
+La boucle *f**o**r* est une autre façons d’écrire une boucle
+*w**h**i**l**e* en définnisant une variable avec une valeur de base qui
+permettra de définir la condition de la boucle, celle ci est que cette
+valeur de base doit être inférieure à un maximum défini par
+l’utilisateur.  
+Enfin, après avoir éxecuter le coeur de la boucle il faut incrémenter la
+valeur de base par un nombre défini lui aussi par l’utilisateur et puis
+sauter au test de la condition de la boucle.
+
+## Fonctionnalités du langages implémentées
+
+Comme mentionné ci-dessus, la grammaire contient tous les élements
+présents dans le langage, en ce compris les fonctions. De ce fait, le
+parser est capable de reconnaitre la syntaxe de tous les éléments du
+langage Iulius.
+
+Pour ce qui est de l’analyse sémantique et la génération de code, seuls
+deux types de données sont manipulables : les booléens et les entiers.
+Les fonctions ne sont également pas disponibles pour la génération de
+code. Le reste des fonctionnalités est quand à lui disponible lors de la
+génération de code. Ces fonctionnalités sont, par exemple : la
+déclaration de variables, de constantes (vérification qu’il n’y a pas
+d’assignation après l’assignation d’origine), l’assignation (et
+l’assignation multiple), la conversion, les opérations arithméthiques de
+base (avec vérification des types de chaque opérande afin de vérifier
+qu’ils sont compatibles), les opérations bits à bits, les boucles (while
+et for), les branchements conditionnels (if, elseif, else), l’affichage,
+la récupération de caractères de l’input, la création de bloc. La
+gestion du scope des variables est également réalisé.
