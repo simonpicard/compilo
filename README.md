@@ -1,10 +1,22 @@
 # Quickstart
 
+Compile and test the compiler
 ```
-java -jar dist/compiler.jar Main test/test.il
+cd more/Compiler/src
+make
+make test
 ```
+Explore results in `more/Compiler/src/test/test.ll`
 
-Explore results in `test/test.ll`
+Usage
+```
+java core/Main Main <file_to_compile>
+```
+E.g.
+```
+java core/Main Main test/Euclide.il
+```
+Explore results in `more/Compiler/src/test/Euclide.ll`
 
 # Introduction
 

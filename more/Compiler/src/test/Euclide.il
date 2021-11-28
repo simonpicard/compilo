@@ -7,7 +7,7 @@ c::Integer
 function main()
 	a = readint()
 	b = readint()
-	while(b)
+	while(b!=0)
 		c=b;
 		while(a >= b) # a mod b
 			a=a-b
