@@ -45,10 +45,10 @@ First, we use the following notations:
 - `[a-z]` means the set of lower case letters from a to z
 - `[A-Z]`means the set of upper case letters from a to z
 - `[0-9]`means the set of numbers from 0 to 9
-- By extension `\[d-y\]` means the set of lower case letters from d to y
+- By extension `[d-y]` means the set of lower case letters from d to y
 - `[.]`means the `.` in regular expressions, i.e. all the characters
 
-Then, in the right part of the initial state in the graph, i.e. the different keywords and identifiers, for more readability, we have not included the transitions from a state that is part of a keyword to an identifier, normally each state of a keyword should contain a transition from itself to the identifier state, the transition includes `{\[a-z\], \[A-Z\], \[0-9\], \_}` excluding the other transitions out of this state.
+Then, in the right part of the initial state in the graph, i.e. the different keywords and identifiers, for more readability, we have not included the transitions from a state that is part of a keyword to an identifier, normally each state of a keyword should contain a transition from itself to the identifier state, the transition includes `{[a-z], [A-Z], [0-9], _}` excluding the other transitions out of this state.
 
 You may edit the DFA using the tool JFLAP 6.4, [available here](https://www.jflap.org/jflaptmp/).
 
@@ -58,13 +58,13 @@ In this part of the project, we are modifying the grammar in order to make it LL
 
 ## Binary and unary operators
 
-The first step in making the grammar LL(1) was to distinguish two types of operators: the binary operators which act on two expressions, one on the left and the other on the right of these operators, and unary operators which act on a single expression located on the right of these operators. It is necessary to differentiate the two types of operators in order not to have expressions like: `\>\>4`, `\*2`, `6\|`,... There are four unary operators: `!` (negation), `∼` (not bit by bit), `+` and `-`. The operators `+` and `-` are also binary operators.
+The first step in making the grammar LL(1) was to distinguish two types of operators: the binary operators which act on two expressions, one on the left and the other on the right of these operators, and unary operators which act on a single expression located on the right of these operators. It is necessary to differentiate the two types of operators in order not to have expressions like: `>>4`, `*2`, `6|`,... There are four unary operators: `!` (negation), `∼` (not bit by bit), `+` and `-`. The operators `+` and `-` are also binary operators.
 
 ## Operator priority and associativity
 
 In this step, we modified the grammar to set the priority and associativity of the different operators, to make the grammar less ambiguous. We noticed that the unary operators had a higher priority than binary operators and that unary operators were all associative on the right, while the binary operators were all associative on the left. To fix the priority, we put the lowest priority operators as high as possible and the highest priority as low as possible.
 
-In the grammar below where the  `start symbol` is `E`, the operator  `+` is considered as "higher" than the operator  `\*` operator in the grammar because it is possible to obtain the  `+` operator by using fewer production rules from the  `start symbol` than obtaining the  `\*` operator.
+In the grammar below where the  `start symbol` is `E`, the operator  `+` is considered as "higher" than the operator  `*` operator in the grammar because it is possible to obtain the  `+` operator by using fewer production rules from the  `start symbol` than obtaining the  `*` operator.
 
 ```
 E->E + T
@@ -85,9 +85,9 @@ This step gathers the production rules of a variable that has a common prefix in
 
 This is necessary because the parser we are going to create is LL(1), so it must be able to choose the right production rule by only looking at the next token that is in input.
 
-## The variables `\<Instruction\>` and `\<InstructionList\>`
+## The variables `<Instruction>` and `<InstructionList>`
 
-In the given grammar, whenever the variable `\<Instruction\>` was in the right part of a production rule except when the left part of the except when the left part of the rule was `\<InstructionList\>`, there was another production rule for this same left this same left part where `\<Instruction\>` was replaced by `\<InstructionList\>`. For example, `\<If\> → \<Expression\> \<Empty\> \<InstructionList\> \<IfEnd\>` and `\<If\> → <Expresion\> \<Empty\> \<Instruction\> \<IfEnd\>`. This makes it possible not to put an `END_OF_INSTRUCTION` at the end of a `\<Instruction\>` when the body of a block (here, the body of the  `if`) contained only one `\<Instruction\>`. The problem posed by the systematic doubling of production rules containing instructions (one rule for `\<Instruction\>` and another one for `\<InstructionList\>`) is that it is not factorized on the left and that the `first` of `\<InstructionList\>` can be `\<Instruction\>`. In order to solve this problem, we decided to only use the variable `\<InstructionList\>` in the other production rules. Thus, we avoid the duplication of the production rules. An `\<InstructionList\>` is a list of `\<Instruction\>` separated by `END_OF_INSTRUCTION`, with the last `\<Instruction\>` not necessarily followed by an `END_OF_INSTRUCTION`. This makes it possible to have a program like : `if(a\>b);a=10 end;` So only a `\<InstructionList\>` allows to produce `\<Instruction\>`. Moreover, since a `\<InstructionList\>` may contain empty instructions (an instruction containing only `END_OF_INSTRUCTION`) the variable `\<Empty\>` variable is no longer necessary because it was only used to indicate that at least one `END_OF_INSTRUCTION` terminal was required.
+In the given grammar, whenever the variable `<Instruction>` was in the right part of a production rule except when the left part of the except when the left part of the rule was `<InstructionList>`, there was another production rule for this same left this same left part where `<Instruction>` was replaced by `<InstructionList>`. For example, `<If> → <Expression> <Empty> <InstructionList> <IfEnd>` and `<If> → <Expresion> <Empty> <Instruction> <IfEnd>`. This makes it possible not to put an `END_OF_INSTRUCTION` at the end of a `<Instruction>` when the body of a block (here, the body of the  `if`) contained only one `<Instruction>`. The problem posed by the systematic doubling of production rules containing instructions (one rule for `<Instruction>` and another one for `<InstructionList>`) is that it is not factorized on the left and that the `first` of `<InstructionList>` can be `<Instruction>`. In order to solve this problem, we decided to only use the variable `<InstructionList>` in the other production rules. Thus, we avoid the duplication of the production rules. An `<InstructionList>` is a list of `<Instruction>` separated by `END_OF_INSTRUCTION`, with the last `<Instruction>` not necessarily followed by an `END_OF_INSTRUCTION`. This makes it possible to have a program like : `if(a>b);a=10 end;` So only a `<InstructionList>` allows to produce `<Instruction>`. Moreover, since a `<InstructionList>` may contain empty instructions (an instruction containing only `END_OF_INSTRUCTION`) the variable `<Empty>` variable is no longer necessary because it was only used to indicate that at least one `END_OF_INSTRUCTION` terminal was required.
 
 ## Functions
 
@@ -95,7 +95,7 @@ Functions provide two additional types of instructions: function definitions and
 
 ## Instructions starting with an identifier
 
-Several instructions start with an identifier. These are assignments, variable declarations, and function calls. For the grammar to be LL(1) we need to factor in these statements. This is why the variable `\<IdfierInstruction\>` was created. This variable represents an instruction that starts with an identifier. The variable `\<IdentifierInstructionTail\>` has also been created to distinguish the different types of instructions that start with an identifier. The distinction is then easily made because when the symbol following the identifier is  `=`, we know that it is an assignment. When this symbol is  `::`, we know that it is a variable declaration. And when this symbol is `(`, we know that it is a function call.
+Several instructions start with an identifier. These are assignments, variable declarations, and function calls. For the grammar to be LL(1) we need to factor in these statements. This is why the variable `<IdfierInstruction>` was created. This variable represents an instruction that starts with an identifier. The variable `<IdentifierInstructionTail>` has also been created to distinguish the different types of instructions that start with an identifier. The distinction is then easily made because when the symbol following the identifier is  `=`, we know that it is an assignment. When this symbol is  `::`, we know that it is a variable declaration. And when this symbol is `(`, we know that it is a function call.
 
 # Grammar
 
