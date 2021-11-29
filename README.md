@@ -1,4 +1,4 @@
-#LL1 Compiler
+# LL1 Compiler
 
 ## Quickstart
 
